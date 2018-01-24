@@ -1,0 +1,33 @@
+API functions.
+
+GET
+  - bestHodlers(numberOfHodlers)
+  - bestHolderOGs(numberOfHodlers)
+  - tokensAirdropped(address)
+  - getHodlStats(address)
+
+POST
+  - submitHodlApplication(address, telegram, email)
+
+
+bestHolders(numberOfHolders) 
+  - This function should return numberOfHolders best hodlers, in descending
+    order.
+  - Should be a straight database query with a sort on numberOfDaysHodled.
+
+bestHolderOGs(numberOfHodlers)
+  - This function should return numberOfHodlers best hodler OGs, in descending
+    order.
+  - Should be a straight database query with a sort on amountOfTokens.
+
+tokensAirdropped(address)
+  - Returns the type and amount of tokens which have been airdropped to the
+    specified address
+
+getHodlStats(address)
+  - Returns all the hodl stats for a given address (not personal information),
+    including the number of tokens the address has been airdropped
+
+submitHodlApplication(address, telegram, email)
+  - Submits the application to the server, which then adds this user to the
+    hodl database.
