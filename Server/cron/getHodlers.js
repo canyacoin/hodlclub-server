@@ -7,10 +7,11 @@
  *  Usage:
  *    node getHodlers.js [-d]
  *
- *  Options:
- *    --hodlDays [alias -d] Number
+ *  Options (alias):
+ *    --hodlDays (-d)
  *      The amount of days a user should be hodling for to be considered part of the club. Users in
  *      the club who no longer meet this requirement will be kicked out (removed from the database).
+ *
  */
 
 const MongoClient = require('mongodb').MongoClient
