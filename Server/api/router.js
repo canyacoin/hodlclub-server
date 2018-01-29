@@ -3,9 +3,9 @@ const qs = require('querystring')
 const fs = require('fs')
 
 const Log = require('../services/Logger')
-const HodlerApi = require('./hodlerApi')
+const HodlerApi = require('./HodlerApi')
 
-function Router () {
+function Router (db) {
   var options = {
     // key: fs.readFileSync('/path/to/privkey.pem'),
     // cert: fs.readFileSync('/path/to/fullchain.pem'),
@@ -14,7 +14,7 @@ function Router () {
 
   this.server = http.createServer((req, res) => this.handleRequest(req, res))
 
-  this.hodlerApi = new HodlerApi()
+  this.hodlerApi = new HodlerApi(db)
   this.ROUTES = {
     '/bestHodlers': this.hodlerApi.bestHodlers,
     '/bestHodlerOGs': this.hodlerApi.bestHodlerOGs,
@@ -47,18 +47,23 @@ Router.prototype.unauthorisedRequest = function (res) {
 
 Router.prototype.parseRequest = async function (req, res) {
   let query
+  let url
   if (req.method === 'GET') {
-    query = this.parseGet(req)
+    let q = this.parseGet(req)
+    query = q.query
+    url = q.url
   } else {
     query = await this.parsePost(req)
+    url = req.url
   }
-  this.routeRequest(req, res, query)
+  this.routeRequest(req, res, url, query)
 }
 
 Router.prototype.parseGet = function (req) {
   let querystring = req.url.substr(req.url.indexOf('?') + 1, req.url.length)
+  let url = req.url.substr(0, req.url.indexOf('?'))
   let parsed = qs.parse(querystring)
-  return parsed
+  return { query: parsed, url: url }
 }
 
 Router.prototype.parsePost = function (req) {
@@ -76,10 +81,10 @@ Router.prototype.parsePost = function (req) {
   })
 }
 
-Router.prototype.routeRequest = function (req, res, data) {
-  if (this.ALLOWED_ENDPOINTS.indexOf(req.url) !== -1) {
-    Log.info('Routing to: ' + req.url)
-    this.ROUTES[req.url](req, res, data)
+Router.prototype.routeRequest = function (req, res, url, data) {
+  if (this.ALLOWED_ENDPOINTS.indexOf(url) !== -1) {
+    Log.info('Routing to: ' + url)
+    this.ROUTES[url](req, res, data)
   } else {
     this.unauthorisedRequest(res)
   }

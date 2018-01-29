@@ -1,0 +1,68 @@
+let APPLICATION_TABLE = require('../../config/database').applicationTable
+
+let HodlApplication = {}
+
+/**
+ *  Tells us whether there is already an application with the specified data
+ *  @param db {Object} Database connection object
+ *  @param data {Object} Object containing the key value pairs we want to check for
+ *  @return {Promise<Boolean>} Whether an application exists with these details already
+ */
+HodlApplication.exists = async (db, data) => {
+  let { ethAddress, telegramHandle, emailAddress } = data
+  let queryObj = {}
+  if (ethAddress) queryObj.ethAddress = ethAddress
+  if (telegramHandle) queryObj.telegramHandle = telegramHandle
+  if (emailAddress) queryObj.emailAddress = emailAddress
+
+  if (Object.keys(queryObj).length === 0) return false
+  return new Promise((resolve, reject) => {
+    db.collection(APPLICATION_TABLE).find({
+      ethAddress: ethAddress.toLowerCase(),
+      telegramHandle: telegramHandle.toLowerCase(),
+      emailAddress: emailAddress.toLowerCase()
+    }).toArray((error, results) => {
+      if (error) return reject(new Error('Query error'))
+      if (results.length === 0) return resolve(false)
+      return resolve(true)
+    })
+  })
+}
+
+/**
+ *  Inserts a new application into the database
+ *  @param db {Object} Database connection object
+ *  @param data {Object} Application object to insert into the database
+ *  @return {Promise<Void>} Resolves when the query is complete
+ */
+HodlApplication.insert = async (db, data) => {
+  return new Promise(async (resolve, reject) => {
+    if (!data.ethAddress || !data.telegramHandle || !data.emailAddress) return reject(new Error('Could not save, missing information'))
+    await db.collection(APPLICATION_TABLE).insertOne({
+      ethAddress: data.ethAddress.toLowerCase(),
+      telegramHandle: data.telegramHandle.toLowerCase(),
+      emailAddress: data.emailAddress.toLowerCase()
+    })
+    resolve()
+  })
+}
+
+/**
+ *  Removes an application from the database
+ *  @param db {Object} Database connection object
+ *  @param data {Object} Application object to remove from the database
+ *  @return {Promise<Void>} Resolves when the deletion is complete
+ */
+HodlApplication.remove = async (db, data) => {
+  return new Promise(async (resolve, reject) => {
+    if (!data.ethAddress || !data.telegramHandle || !data.emailAddress) return reject(new Error('Could not remove, missing information'))
+    await db.collection(APPLICATION_TABLE).findOneAndDelete({
+      ethAddress: data.ethAddress.toLowerCase(),
+      telegramHandle: data.telegramHandle.toLowerCase(),
+      emailAddress: data.emailAddress.toLowerCase()
+    })
+    resolve()
+  })
+}
+
+module.exports = HodlApplication

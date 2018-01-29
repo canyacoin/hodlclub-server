@@ -2,20 +2,26 @@
  *  The purpose of this script is to get all of the addresses which hold CAN, and have held CAN for
  *  45 days or more. These addresses are then inserted into the database.
  *
- *  Note that in it's current form, users are never removed from the database.
- *
  *  Usage:
- *    node getHodlers.js [-d]
+ *    node getHodlers.js [--hodlDays {Number}] (-e)
  *
  *  Options (alias):
  *    --hodlDays (-d)
  *      The amount of days a user should be hodling for to be considered part of the club. Users in
  *      the club who no longer meet this requirement will be kicked out (removed from the database).
  *
+ *    --sendEmails (-e) @TODO(tom)
+ *      Whether the script should send emails or not. If this flag is omitted, details of the emails
+ *      which would have been sent are added to the log file.
+ *
  */
 
+const Email = require('../services/Email')
 const MongoClient = require('mongodb').MongoClient
 const dbConfig = require('../config/database')
+const HODLER_TABLE = dbConfig.hodlerTable
+const LONG_HODLER_TABLE = dbConfig.longHodlerTable
+const HODL_CLUB_APPLICATION_TABLE = dbConfig.applicationTable
 
 const BigNumber = require('bignumber.js')
 const Web3 = require('web3')
@@ -24,11 +30,18 @@ const HodlClubTokenThreshold = new BigNumber(2500000000)
 
 const commandLineArgs = require('command-line-args')
 const optionDefinitions = [
-  { name: 'hodlDays', alias: 'd', type: Number }
+  { name: 'hodlDays', alias: 'd', type: Number },
+  { name: 'sendEmails', alias: 'e', type: Boolean }
 ]
 const OPTIONS = commandLineArgs(optionDefinitions)
 
 if (!OPTIONS.hodlDays) throw new Error('Please specify the number of days required to be a hodler with --hodlDays')
+if (OPTIONS.sendEmails) {
+  // TODO: fill out this address
+  console.log('Emails are set to ON, this script will attempt to send from the address: ')
+} else {
+  console.log('Emails are set to OFF.')
+}
 
 const CAN_DEPLOYMENT_BLOCK = 4332959
 const SECONDS_IN_DAY = 86400
@@ -41,8 +54,9 @@ async function main () {
   let blockNumber = await getCurrentBlockNumber()
   let tokenTransferEvents = await getAllTokenTransferEvents(blockNumber)
   let { hodlers, unfaithful } = await processEvents(tokenTransferEvents)
-  await processHodlers(hodlers, blockNumber, db)
+  let newLongHodlers = await processHodlers(hodlers, blockNumber, db)
   await processUnfaithful(unfaithful, db)
+  await notifyNewLongHolders(newLongHodlers, db)
   process.exit(1)
 }
 
@@ -119,29 +133,33 @@ async function processEvents (events) {
  *  @param db {Object} Database connection, so we can store each hodler in the DB
  */
 async function processHodlers (hodlers, currentBlockNumber, db) {
-  let currentBlockTimestamp = new BigNumber(await getBlockTimestamp(currentBlockNumber))
-  let hodler
-  let becameHodler
-  let hodlerObj = {}
-  let count = 0
-  for (let hodlerAddress in hodlers) {
-    hodler = hodlers[hodlerAddress]
-    if (!hodler.timestampOverThreshold) continue
-    becameHodler = new BigNumber(hodler.timestampOverThreshold)
-    let daysSinceBecameHolder = getDaysBetween(currentBlockTimestamp, becameHodler)
-    if (daysSinceBecameHolder >= OPTIONS.hodlDays) {
-      count++
-      // now put it in the db
+  return new Promise(async (resolve) => {
+    let currentBlockTimestamp = new BigNumber(await getBlockTimestamp(currentBlockNumber))
+    let newLongHodlers = []
+    let hodlerObj = {}
+    let count = 0
+    for (let hodlerAddress in hodlers) {
+      let hodler = hodlers[hodlerAddress]
+      if (!hodler.timestampOverThreshold) continue
+      let becameHodler = new BigNumber(hodler.timestampOverThreshold)
+      let daysSinceBecameHolder = getDaysBetween(currentBlockTimestamp, becameHodler)
       hodlerObj = {
         address: hodlerAddress.toLowerCase(),
         balance: hodler.balance.toNumber(),
         isOG: false,
         becameHodlerAt: hodler.timestampOverThreshold
       }
-      await insertIntoDb(hodlerObj, db)
+      if (daysSinceBecameHolder >= OPTIONS.hodlDays) {
+        count++
+        // now put it in the db
+        let newLongHodler = await insertIntoDb(LONG_HODLER_TABLE, hodlerObj, db)
+        if (newLongHodler) newLongHodlers.push(hodlerObj)
+      }
+      await insertIntoDb(HODLER_TABLE, hodlerObj, db)
     }
-  }
-  console.log('Added ' + count + ' to the database')
+    console.log('Processed ' + count + ' hodlers')
+    resolve(newLongHodlers)
+  })
 }
 
 /**
@@ -156,11 +174,40 @@ async function processUnfaithful (unfaithful, db) {
   return new Promise(async (resolve) => {
     let unfaithfulAddresses = Object.keys(unfaithful)
     try {
-      await db.deleteMany({ address: { $in: unfaithfulAddresses } })
+      await db.collection(LONG_HODLER_TABLE).deleteMany({ address: { $in: unfaithfulAddresses } })
+      await db.collection(HODLER_TABLE).deleteMany({ address: { $in: unfaithfulAddresses } })
     } catch (e) {
       throw new Error(e)
     }
     resolve()
+  })
+}
+
+/**
+ *  Gets the email addresses of the new hodl club members (if they have applied) then sends them an
+ *  email to congratulate them on being part of the hodl club.
+ *  @param newLongHodlers {Array} Array of the new hodlers
+ *  @param db {Object} Database connection object
+ *  @return {Promise<Void>} Resolves when email operations are complete
+ */
+async function notifyNewLongHolders (newLongHodlers, db) {
+  return new Promise(async (resolve, reject) => {
+    let newHolderAddresses = newLongHodlers.map((hodler) => hodler.address.toLowerCase())
+    console.log(newHolderAddresses)
+    db.collection(HODL_CLUB_APPLICATION_TABLE)
+      .find({ address: { $in: newHolderAddresses } })
+      .toArray((e, newHodlMembers) => {
+        // @TODO these are the new HODL members, we need to send them an email (or maybe a telegram in the future!)
+        if (e) return reject(new Error(e))
+        if (!newHodlMembers || newHodlMembers.length === 0) return resolve()
+        for (let newHodler of newHodlMembers) {
+          // @TODO notify each user
+          // @TODO ask Alex to design hodl club acceptance email
+          // console.log(newHodler)
+          // Email.send(newHodler.emailAddress)
+        }
+        resolve()
+      })
   })
 }
 
@@ -200,12 +247,13 @@ function getCurrentBlockNumber () {
 /**
  *  Inserts the hodler into the database
  *  @param hodlerObj {Object} Hodler object to insert into the database
- *  @return {Promise} Resolves when the insert is complete
+ *  @return {Promise<Boolean>} Resolves with whether the operation created a new doc
  */
-function insertIntoDb (hodlerObj, db) {
+function insertIntoDb (table, hodlerObj, db) {
   return new Promise(async (resolve) => {
+    let doc
     try {
-      await db.updateOne(
+      doc = await db.collection(table).updateOne(
         { address: hodlerObj.address },
         { $set: {
           address: hodlerObj.address,
@@ -217,7 +265,7 @@ function insertIntoDb (hodlerObj, db) {
     } catch (e) {
       throw new Error(e)
     }
-    resolve()
+    resolve(doc.upsertedCount > 0)
   })
 }
 
@@ -231,7 +279,7 @@ function connectToDb () {
       if (err) throw new Error(err)
       console.log('Connected to database at ' + dbConfig.url)
       const db = client.db(dbConfig.dbName)
-      resolve(db.collection('hodlers'))
+      resolve(db)
     })
   })
 }
