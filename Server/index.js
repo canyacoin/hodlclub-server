@@ -9,7 +9,7 @@ MongoClient.connect(dbConfig.url, (err, client) => {
   console.log('Connected to database at ' + dbConfig.url)
   const db = client.db(dbConfig.dbName)
   const server = new Router(db)
-  const port = 3000
+  const port = 3001
   server.listen(port)
   Log.info('Server started at port ' + port)
 })

@@ -12,7 +12,10 @@ function Router (db) {
     // ca: fs.readFileSync('/path/to/chain.pem')
   }
 
-  this.server = http.createServer((req, res) => this.handleRequest(req, res))
+  this.server = http.createServer((req, res) => {
+    res.setHeader('Access-Control-Allow-Origin', '*')
+    this.handleRequest(req, res)
+  })
 
   this.hodlerApi = new HodlerApi(db)
   this.ROUTES = {
