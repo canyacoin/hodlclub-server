@@ -5,17 +5,16 @@ const fs = require('fs')
 const Log = require('../services/Logger')
 const HodlerApi = require('./HodlerApi')
 
-function Router (db) {
+function Router (db, proxy = '') {
   var options = {
     // key: fs.readFileSync('/path/to/privkey.pem'),
     // cert: fs.readFileSync('/path/to/fullchain.pem'),
     // ca: fs.readFileSync('/path/to/chain.pem')
   }
 
-  this.server = http.createServer((req, res) => {
-    res.setHeader('Access-Control-Allow-Origin', '*')
-    this.handleRequest(req, res)
-  })
+  this.proxyHost = proxy
+
+  this.server = http.createServer((req, res) => this.handleRequest(req, res))
 
   this.hodlerApi = new HodlerApi(db)
   this.ROUTES = {
@@ -35,7 +34,9 @@ Router.prototype.listen = function (port) {
 }
 
 Router.prototype.handleRequest = function (req, res) {
-  if (req.method === 'POST' || req.method === 'GET') {
+  if (this.proxyHost && req.headers.host.indexOf(this.proxyHost) !== 0) {
+    this.unauthorisedRequest(res)
+  } else if (req.method === 'POST' || req.method === 'GET') {
     this.parseRequest(req, res)
   } else {
     this.unauthorisedRequest(res)

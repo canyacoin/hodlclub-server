@@ -5,7 +5,6 @@ const HodlApplication = require('./models/HodlApplication')
 
 let self
 function HodlerApi (db) {
-  // set up some stuff
   this.db = db
   self = this
 }
