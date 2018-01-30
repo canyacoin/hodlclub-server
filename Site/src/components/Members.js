@@ -2,7 +2,7 @@ import React from 'react';
 import './App.css';
 import ListItem from './ListItem'
 
-class Leaderboard extends React.Component {
+class Members extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -10,7 +10,7 @@ class Leaderboard extends React.Component {
   }
   render() {
     return (
-      <div className="Leaderboard">
+      <div className="Members">
       <div className="ListItem flexrow">
         <div className="listItemData">
           <a className="data">Address</a>
@@ -35,4 +35,4 @@ class Leaderboard extends React.Component {
   }
 }
 
-export default Leaderboard;
+export default Members;
