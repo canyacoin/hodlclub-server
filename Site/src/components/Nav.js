@@ -10,8 +10,8 @@ class Nav extends React.Component {
       <div className="logo">
       </div>
       <div className="flexrow links">
-          <Link to='form'>Join the club</Link>
-          <Link to='/leaderboard'>Members</Link>
+          <Link to='/form'>Join the club</Link>
+          <Link to='/members'>Members</Link>
       </div>
     </div>);
   }
