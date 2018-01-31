@@ -1,7 +1,6 @@
 html {
   box-sizing: border-box;
   font-family: 'Montserrat', sans-serif;
-
 }
 
 h1, h2, h3 {
@@ -26,11 +25,19 @@ hr {
   background-color: #eee;
   margin: 0 15%;
   border: none;
-
 }
 
 .App {
   margin: 0;
+}
+
+.Home {
+  padding: 0 7vw;
+  line-height: 2em;
+}
+
+.Members {
+  padding: 0 5vw;
 }
 
 /* MODIFIERS */
@@ -90,25 +97,34 @@ hr {
   text-decoration: none;
   color: #555;
 }
+
 .Nav a:hover {
-text-decoration: underline;
+  text-decoration: underline;
 }
 
-/* LEADERBOARD */
+/* MEMBERS */
 
 .ListItem {
   padding: 5px 0%;
   align-items: center;
   border-left: 2px solid #eee;
-  margin: 15px;
+  margin: 15px 0;
 }
 
-.listItemData {
-  padding: 5px 5px;
-  margin: auto;
+.listItemBox {
+  padding: 5px 15px;
+  margin: 0 auto 0 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
-.address {
+.nameAddress {
+  max-width: 30%;
+  align-items: left;
+}
+
+.walletId {
   font-family: monospace;
   font-size: 1em;
   color: #3cf;
@@ -116,32 +132,46 @@ text-decoration: underline;
 
 .status {
   width: 15%;
-display: flex;
-  flex-direction: column;
-justify-content: center;
 }
 
-.status, .airdrop, .name {
+/* SEARCHADDRESS */
+
+.SearchAddress {
+border-bottom: solid 2px #eee;
+}
+
+.searchPanel {
+  padding: 0 20px;
+  width: 50%;
+}
+
+.searchInput{
+  width: 90%;
+  padding: 5px;
+  border-radius: 4px;
+  border: solid 1px #ccc;
   font-size: 1em;
-
+  margin: 5px auto;
 }
+
 /* MAIN */
+
 .Main {
   padding: 0 15%;
 }
 
-
 /* FORM */
+
 .Form {
   align-items: left;
 }
 
 .formInput {
-width: 100%;
-padding: 15px;
-border-radius: 4px;
-border: solid 1px #ccc;
-font-size: 1.2em;
+  width: 100%;
+  padding: 15px;
+  border-radius: 4px;
+  border: solid 1px #ccc;
+  font-size: 1.2em;
 }
 
 .formButton {

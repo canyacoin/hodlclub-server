@@ -1,6 +1,7 @@
 import React from 'react';
 import './App.css';
 import ListItem from './ListItem'
+import SearchAddress from './SearchAddress'
 
 class Members extends React.Component {
   constructor(props) {
@@ -11,11 +12,7 @@ class Members extends React.Component {
   render() {
     return (
       <div className="Members">
-      <div className="ListItem flexrow">
-        <div className="listItemData">
-          <a className="data">Address</a>
-        </div>
-      </div>
+      <SearchAddress />
       {
         this.props.hodlClub.map((hodler, index) => {
           return (
@@ -26,6 +23,7 @@ class Members extends React.Component {
               age={hodler.age}
               status={hodler.status}
               key={index}
+              og={true}
             />
           )
         })

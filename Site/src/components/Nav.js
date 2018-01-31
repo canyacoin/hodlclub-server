@@ -7,11 +7,12 @@ class Nav extends React.Component {
   render() {
 
     return (<div className="Nav">
-      <div className="logo">
-      </div>
+      <img className="logo"src={require('./assets/hodl_logo.jpg')}/>
       <div className="flexrow links">
+          <Link to='/'>About</Link>
           <Link to='/form'>Join the club</Link>
           <Link to='/members'>Members</Link>
+          <Link to='/og-members'>OG Members</Link>
       </div>
     </div>);
   }

@@ -3,6 +3,7 @@ import { Switch, Route } from 'react-router-dom'
 import './App.css';
 import Members from './Members';
 import Form from './Form'
+import Home from './Home'
 
 class Main extends React.Component {
 
@@ -14,8 +15,12 @@ class Main extends React.Component {
       <Route path='/members' render={(props) => (
         <Members hodlClub={this.props.hodlClub} />
       )} />
+      <Route path='/og-members' render={(props) => (
+        <Members hodlClub={this.props.hodlClub} />
+      )} />
 
       <Route path='/form' component={Form}/>
+      <Route exactly path='/' component={Home}/>
     </Switch>
     </div>);
   }
