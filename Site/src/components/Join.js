@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 
-class Form extends React.Component {
+class Join extends React.Component {
 
   constructor(props) {
     super(props)
@@ -17,7 +17,7 @@ class Form extends React.Component {
 
   render() {
     return (
-      <div className="flexcol">
+      <div className="Join flexcol">
       <h1>Join the HODL club</h1>
       <p>Lorem ipsum dolor amet pBR&B try-hard humblebrag est dreamcatcher lomo 3 wolf moon. Deep v literally ramps, authentic ipsum meditation tempor art party in put a bird on it pinterest offal adipisicing. Chartreuse squid raclette adaptogen williamsburg tumeric, normcore hammock microdosing pinterest paleo whatever. Consequat blue bottle poke roof party eu. Intelligentsia tote bag banh mi church-key distillery.</p>
       <form className="form flexcol" onSubmit={this.formSubmit}>
@@ -34,4 +34,4 @@ class Form extends React.Component {
   }
 }
 
-export default Form;
+export default Join;

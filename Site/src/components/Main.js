@@ -2,7 +2,7 @@ import React from 'react';
 import { Switch, Route } from 'react-router-dom'
 import './App.css';
 import Members from './Members';
-import Form from './Form'
+import Join from './Join'
 import Home from './Home'
 
 class Main extends React.Component {
@@ -19,7 +19,7 @@ class Main extends React.Component {
         <Members hodlClub={this.props.hodlClub} />
       )} />
 
-      <Route path='/form' component={Form}/>
+      <Route path='/join' component={Join}/>
       <Route exactly path='/' component={Home}/>
     </Switch>
     </div>);
