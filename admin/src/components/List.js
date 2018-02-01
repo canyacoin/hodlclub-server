@@ -11,7 +11,7 @@ class List extends Component {
           this.props.results.map((member, index) => {
             return (
               <ListItem
-              address={member.address}
+              ethAddress={member.ethAddress}
               isOG={member.isOG ? "OG" : "No-OG"}
               balance={member.balance}
               toggleOG={() => this.props.toggleOG(index)}

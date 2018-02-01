@@ -1,5 +1,5 @@
-import React, {Component} from 'react';
-import './App.css';
+import React, {Component} from 'react'
+import './App.css'
 import Header from './components/Header'
 import List from './components/List'
 import Filter from './components/Filter'
@@ -18,6 +18,7 @@ class App extends Component {
 
   async performSearch (ethAddress, telegram, email) {
     let results = await ApiService.search(telegram, email, ethAddress)
+    console.log(results)
     this.setState({ results: results })
   }
 
@@ -31,12 +32,14 @@ class App extends Component {
   }
 
   render() {
-    return (<div className="App">
-      <Header/>
-      <Filter performSearch={this.performSearch} />
-      <List results={this.state.results} blacklist={this.blacklist} toggleOG={this.toggleOG} searchFields={this.state.searchFields} />
-    </div>);
+    return (
+      <div className="App">
+        <Header/>
+        <Filter performSearch={this.performSearch} />
+        <List results={this.state.results} blacklist={this.blacklist} toggleOG={this.toggleOG} searchFields={this.state.searchFields} />
+      </div>
+    )
   }
 }
 
-export default App;
+export default App

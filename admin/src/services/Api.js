@@ -79,6 +79,7 @@ const ApiService = {
           if (hodler.ethAddress === application.ethAddress) {
             Object.assign(merged, hodler)
             Object.assign(merged, application)
+            merged.applied = true
           }
         }
         if (merged.ethAddress) {
