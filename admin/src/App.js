@@ -24,6 +24,11 @@ class App extends Component {
     }
   }
 
+  async componentDidMount () {
+    let result = await ApiService.search('telegramHandle', 'emailAddress', 'ethereumAddress')
+    console.log(result)
+  }
+
   toggleOG (index) {
     console.log("Toggle")
     console.log(this.state.results[index])

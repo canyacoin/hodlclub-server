@@ -1,3 +1,3 @@
 module.exports = {
-  basePath: 'http://localhost:3001/'
+  basePath: 'http://api.localhost:8080/'
 }
