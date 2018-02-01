@@ -9,18 +9,17 @@ RequestProxy.start = (ports) => {
   return new Promise((resolve) => {
     const server = http.createServer((req, res) => {
       let host = req.headers.host
-      if (host.indexOf('api') === 0) {
+      if (host.indexOf('api.') === 0) {
         proxy.web(req, res, { target: 'http://localhost:' + ports.api })
-      } else if (host.indexOf('adminapi') === 0) {
-        proxy.web(req, res, { target: 'http://localhost:' + ports.adminApi })
-      } else if (host.indexOf('admin') === 0) {
+      } else if (host.indexOf('admin.') === 0) {
         proxy.web(req, res, { target: 'http://localhost:' + ports.admin })
       } else {
         proxy.web(req, res, { target: 'http://localhost:' + ports.hodl })
       }
     })
 
-    server.listen(ports.proxy)  
+    server.listen(ports.proxy)
+    console.log('Proxy listening on ' + ports.proxy)
     resolve()
   })
 }
