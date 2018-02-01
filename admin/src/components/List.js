@@ -15,6 +15,7 @@ class List extends Component {
               isOG={member.isOG ? "OG" : "No-OG"}
               balance={member.balance}
               toggleOG={() => this.props.toggleOG(index)}
+              blacklist={() => this.props.blacklist(index)}
               key={index}
               />
             )
