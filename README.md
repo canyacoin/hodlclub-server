@@ -8,4 +8,16 @@ cd into the directories `admin`, `MainApiServer`, `Proxy` and `Site` and run `ya
 
 Start mongo daemon
 
-Run the cron script to populate the hodlers (for this you will need a fully synced blockchain)
+## Run the cron script to populate the hodlers
+
+*For this you will need a fully synced blockchain*, Parity or Geth will do the job.
+
+Export the IPC with `export PARITY_IPC_PATH=/path/to/my/jsonrpc.ipc`
+
+`node ./MainApiServer/cron/getHodlers.js -d 45`
+
+Now you should be able to start the servers
+
+## Start the servers
+
+cd into this repo's root directory and run `node index.js`

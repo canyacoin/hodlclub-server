@@ -49,9 +49,6 @@ const ApiService = {
    *  @return {Promise<JSON>} Response from the call
    */
   post: async (route, params) => {
-    console.log(route)
-    console.log(params)
-    console.log(ApiService.url)
     return new Promise((resolve) => {
       fetch(ApiService.url + route.path, {
         method: 'POST',
@@ -74,7 +71,38 @@ const ApiService = {
   search: async (telegram = '', email = '', ethAddress = '') => {
     return new Promise(async (resolve) => {
       let response = await ApiService.call(ApiService.routes.search, { telegram, email, ethAddress })
-      resolve(response.data)
+      let { applications, hodlers } = response
+      let results = []
+      for (let application of applications) {
+        let merged = {}
+        for (let hodler of hodlers) {
+          if (hodler.ethAddress === application.ethAddress) {
+            Object.assign(merged, hodler)
+            Object.assign(merged, application)
+            merged.applied = true
+          }
+        }
+        if (merged.ethAddress) {
+          results.push(merged)
+        } else {
+          results.push(application)
+        }
+      }
+      resolve(results)
+    })
+  },
+
+  makeOG: async (ethAddress = '') => {
+    return new Promise(async (resolve) => {
+      let response = await ApiService.call(ApiService.routes.makeOG, { ethAddress })
+      resolve(response)
+    })
+  },
+
+  blacklist: async (ethAddress = '') => {
+    return new Promise(async (resolve) => {
+      let response = await ApiService.call(ApiService.routes.blacklist, { ethAddress })
+      resolve(response)
     })
   }
 
