@@ -1,28 +1,76 @@
+/* MODS */
+.flexcol {
+  display: flex;
+  flex-direction: column;
+}
+
+.flexrow {
+  display: flex;
+  flex-direction: row;
+}
+
+.logo {
+}
+
 .App {
   text-align: center;
+  margin: 0;
+  padding: 0 15%;
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 80px;
+.Header {
+  width: 100%;
+  margin: 0;
+  padding: 0 15px;
+  max-height: 15vh;
 }
 
-.App-header {
-  background-color: #222;
-  height: 150px;
-  padding: 20px;
-  color: white;
+/* FILTER */
+
+.Filter {
 }
 
-.App-title {
-  font-size: 1.5em;
+.filterInput {
+  width: 100%;
+  border-radius: 5px;
+  font-size: 1em;
+  font-family: monospace;
+  margin: 15px;
+  padding: 10px 5px;
 }
 
-.App-intro {
-  font-size: large;
+.downloads {
+  width: 100%;
 }
 
-@keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+.filterButton {
+  min-width: 50px;
+  padding: 5px;
+  border-radius:5px;
+  margin: 15px 5px;
+}
+
+.searchButton {
+  min-width: 50px;
+  padding: 5px;
+  border-radius:5px;
+  margin: 15px 5px;
+  background-color: blue;
+}
+
+/* LIST ITEM */
+.ListItem {
+  margin: 15px 0;
+  border: solid 1px #ccc;
+  padding: 10px 5%;
+  align-items: center;
+}
+.data {
+  margin: 0 auto;
+}
+
+.resultButton {
+  min-width: 50px;
+  padding: 5px;
+  border-radius:5px;
 }
