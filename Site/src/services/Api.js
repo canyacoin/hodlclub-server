@@ -51,8 +51,8 @@ const ApiService = {
    */
   post: async (route, params) => {
     return new Promise((resolve) => {
-      fetch(ApiService.url + route.url, {
-        type: 'POST',
+      fetch(ApiService.url + route.path, {
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },

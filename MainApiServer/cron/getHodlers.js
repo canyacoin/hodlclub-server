@@ -22,6 +22,7 @@ const dbConfig = require('../config/database')
 const HODLER_TABLE = dbConfig.hodlerTable
 const LONG_HODLER_TABLE = dbConfig.longHodlerTable
 const HODL_CLUB_APPLICATION_TABLE = dbConfig.applicationTable
+const BLACKLIST_TABLE = dbConfig.blacklistTable
 
 const BigNumber = require('bignumber.js')
 const Web3 = require('web3')
@@ -51,10 +52,11 @@ const tokenMeta = require('./res/token')
 
 async function main () {
   let db = await connectToDb()
+  let blacklist = await getBlacklistedAddresses()
   let blockNumber = await getCurrentBlockNumber()
   let tokenTransferEvents = await getAllTokenTransferEvents(blockNumber)
   let { hodlers, unfaithful } = await processEvents(tokenTransferEvents)
-  let newLongHodlers = await processHodlers(hodlers, blockNumber, db)
+  let newLongHodlers = await processHodlers(hodlers, blockNumber, blacklist, db)
   await processUnfaithful(unfaithful, db)
   await notifyNewLongHolders(newLongHodlers, db)
   process.exit(1)
@@ -130,15 +132,17 @@ async function processEvents (events) {
  *  number of days.
  *  @param hodlers {Object} Hodler object keyed by address
  *  @param currentBlockNumber {Number} Block number that we got events up to, to calculate hodl time
+ *  @param blacklist {Array} Blacklisted addresses 
  *  @param db {Object} Database connection, so we can store each hodler in the DB
  */
-async function processHodlers (hodlers, currentBlockNumber, db) {
+async function processHodlers (hodlers, currentBlockNumber, blacklist, db) {
   return new Promise(async (resolve) => {
     let currentBlockTimestamp = new BigNumber(await getBlockTimestamp(currentBlockNumber))
     let newLongHodlers = []
     let hodlerObj = {}
     let count = 0
     for (let hodlerAddress in hodlers) {
+      if (blacklist.indexOf(hodlerAddress) !== -1) continue
       let hodler = hodlers[hodlerAddress]
       if (!hodler.timestampOverThreshold) continue
       let becameHodler = new BigNumber(hodler.timestampOverThreshold)
@@ -150,12 +154,12 @@ async function processHodlers (hodlers, currentBlockNumber, db) {
         becameHodlerAt: hodler.timestampOverThreshold
       }
       if (daysSinceBecameHolder >= OPTIONS.hodlDays) {
-        count++
         // now put it in the db
         let newLongHodler = await insertIntoDb(LONG_HODLER_TABLE, hodlerObj, db)
         if (newLongHodler) newLongHodlers.push(hodlerObj)
       }
       await insertIntoDb(HODLER_TABLE, hodlerObj, db)
+      count++
     }
     console.log('Processed ' + count + ' hodlers')
     resolve(newLongHodlers)
@@ -255,17 +259,20 @@ function insertIntoDb (table, hodlerObj, db) {
     try {
       doc = await db.collection(table).updateOne(
         { address: hodlerObj.address },
-        { $set: {
-          address: hodlerObj.address,
-          balance: hodlerObj.balance,
-          isOG: hodlerObj.isOG,
-          becameHodlerAt: hodlerObj.becameHodlerAt
-        }},
+        { $set: hodlerObj },
         { upsert: true })
     } catch (e) {
       throw new Error(e)
     }
     resolve(doc.upsertedCount > 0)
+  })
+}
+
+function getBlacklistedAddresses (db) {
+  return new Promise(async (resolve) => {
+    db.collection(BLACKLIST_TABLE).find({}).toArray((e, res) => {
+      resolve(res)
+    })
   })
 }
 

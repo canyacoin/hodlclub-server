@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "express": "^4.16.2",
-    "http-auth": "^3.2.3"
+    "http-auth": "^3.2.3",
+    "mongodb": "^3.0.2"
   }
 }

@@ -1,8 +1,15 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import ApiService from './services/Api'
 
 class App extends Component {
+
+  async componentDidMount () {
+    let result = await ApiService.search('telegramHandle', 'emailAddress', 'ethereumAddress')
+    console.log(result)
+  }
+
   render() {
     return (
       <div className="App">
