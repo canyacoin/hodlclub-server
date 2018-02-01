@@ -52,7 +52,7 @@ const tokenMeta = require('./res/token')
 
 async function main () {
   let db = await connectToDb()
-  let blacklist = await getBlacklistedAddresses()
+  let blacklist = await getBlacklistedAddresses(db)
   let blockNumber = await getCurrentBlockNumber()
   let tokenTransferEvents = await getAllTokenTransferEvents(blockNumber)
   let { hodlers, unfaithful } = await processEvents(tokenTransferEvents)
@@ -148,7 +148,7 @@ async function processHodlers (hodlers, currentBlockNumber, blacklist, db) {
       let becameHodler = new BigNumber(hodler.timestampOverThreshold)
       let daysSinceBecameHolder = getDaysBetween(currentBlockTimestamp, becameHodler)
       hodlerObj = {
-        address: hodlerAddress.toLowerCase(),
+        ethAddress: hodlerAddress.toLowerCase(),
         balance: hodler.balance.toNumber(),
         isOG: false,
         becameHodlerAt: hodler.timestampOverThreshold
@@ -178,8 +178,8 @@ async function processUnfaithful (unfaithful, db) {
   return new Promise(async (resolve) => {
     let unfaithfulAddresses = Object.keys(unfaithful)
     try {
-      await db.collection(LONG_HODLER_TABLE).deleteMany({ address: { $in: unfaithfulAddresses } })
-      await db.collection(HODLER_TABLE).deleteMany({ address: { $in: unfaithfulAddresses } })
+      await db.collection(LONG_HODLER_TABLE).deleteMany({ ethAddress: { $in: unfaithfulAddresses } })
+      await db.collection(HODLER_TABLE).deleteMany({ ethAddress: { $in: unfaithfulAddresses } })
     } catch (e) {
       throw new Error(e)
     }
@@ -196,10 +196,10 @@ async function processUnfaithful (unfaithful, db) {
  */
 async function notifyNewLongHolders (newLongHodlers, db) {
   return new Promise(async (resolve, reject) => {
-    let newHolderAddresses = newLongHodlers.map((hodler) => hodler.address.toLowerCase())
+    let newHolderAddresses = newLongHodlers.map((hodler) => hodler.ethAddress.toLowerCase())
     console.log(newHolderAddresses)
     db.collection(HODL_CLUB_APPLICATION_TABLE)
-      .find({ address: { $in: newHolderAddresses } })
+      .find({ ethAddress: { $in: newHolderAddresses } })
       .toArray((e, newHodlMembers) => {
         // @TODO these are the new HODL members, we need to send them an email (or maybe a telegram in the future!)
         if (e) return reject(new Error(e))
@@ -258,7 +258,7 @@ function insertIntoDb (table, hodlerObj, db) {
     let doc
     try {
       doc = await db.collection(table).updateOne(
-        { address: hodlerObj.address },
+        { ethAddress: hodlerObj.ethAddress },
         { $set: hodlerObj },
         { upsert: true })
     } catch (e) {

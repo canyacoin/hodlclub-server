@@ -90,18 +90,29 @@ HodlerApi.prototype.submitApplication = async (req, res, data) => {
   if (errors.length > 0) return ResponseHandler.badRequest(res, errors)
   let telegramHandle = formatTelegramHandle(data.telegramHandle)
 
+  let isValidHodler
+  try {
+    isValidHodler = await HodlApplication.isValid(self.db, data.ethAddress)
+  } catch (error) {
+    console.log(error)
+    return ResponseHandler.serverError(res)
+  }
+  if (!isValidHodler) return ResponseHandler.badRequest(res, ['Not enough CAN to join the club'])
+
   // TODO: check whether this eth address or telegram handle is already in the database
   // if it is, chuck out an email to CanYa
   let alreadyApplied
   try {
-    alreadyApplied = await HodlApplication.exists(self.db, data.ethAddress, telegramHandle, data.emailAddress)
+    alreadyApplied = await HodlApplication.exists(self.db, { ethAddress: data.ethAddress, telegramHandle: telegramHandle, emailAddress: data.emailAddress })
   } catch (error) {
+    console.log(error)
     return ResponseHandler.serverError(res)
   }
 
   if (alreadyApplied) {
     return ResponseHandler.badRequest(res, ['Already applied to join the Hodl Club'])
   }
+
   // input the application into the database
   await HodlApplication.insert(
     self.db,

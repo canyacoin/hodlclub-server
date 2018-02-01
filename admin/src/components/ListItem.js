@@ -4,7 +4,7 @@ import '../App.css';
 class ListItem extends Component {
   render() {
     return (<div className="ListItem flexrow">
-      <a className="data">{this.props.address}</a>
+      <a className="data">{this.props.ethAddress}</a>
       <a className="data">{this.props.isOG}</a>
       <a className="data">{this.props.balance}</a>
       {

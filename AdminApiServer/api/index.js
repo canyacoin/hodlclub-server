@@ -11,7 +11,11 @@ Api.search = async (req, res, next) => {
   let queryString = telegram + ' ' + email + ' ' + ethAddress
   Api.db.collection(applicationTable).find({ $text: { $search: queryString }}).toArray((e, results) => {
     let applicationResults = results
-    Api.db.collection(hodlerTable).find({ $text: { $search: ethAddress }}).toArray((e, results) => {
+    let applicationAddresses = []
+    for (let application of applicationResults) {
+      applicationAddresses.push(application.ethAddress)
+    }
+    Api.db.collection(hodlerTable).find({ethAddress: { $in: applicationAddresses }}).toArray((e, results) => {
       let hodlerResults = results
       res.json({
         applications: applicationResults,

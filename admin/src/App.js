@@ -3,30 +3,21 @@ import './App.css';
 import Header from './components/Header'
 import List from './components/List'
 import Filter from './components/Filter'
+import ApiService from './services/Api'
 
 class App extends Component {
   constructor(props) {
     super(props)
+    this.performSearch = this.performSearch.bind(this)
     this.toggleOG = this.toggleOG.bind(this)
     this.state = {
-      results: [
-        {
-          address: "0xB543659Ee4eafE6144c8BD58278C30446A7fea9e",
-          isOG: false,
-          balance: "999,999,999"
-      },
-      {
-        address: "0xB543659Ee4eafE6144c8BD58278C30446A7fea9e",
-        isOG: true,
-        balance: "888,888,888"
-    }
-      ]
+      results: []
     }
   }
 
-  async componentDidMount () {
-    let result = await ApiService.search('telegramHandle', 'emailAddress', 'ethereumAddress')
-    console.log(result)
+  async performSearch (ethAddress, telegram, email) {
+    let results = await ApiService.search(telegram, email, ethAddress)
+    this.setState({ results: results })
   }
 
   toggleOG (index) {
@@ -37,7 +28,7 @@ class App extends Component {
   render() {
     return (<div className="App">
       <Header/>
-      <Filter/>
+      <Filter performSearch={this.performSearch} />
       <List results={this.state.results} toggleOG={this.toggleOG}/>
     </div>);
   }
