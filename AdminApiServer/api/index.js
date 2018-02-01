@@ -1,4 +1,5 @@
-const { applicationTable, hodlerTable, longHodlerTable } = require('../config/database')
+const { applicationTable, hodlerTable, longHodlerTable, blacklistTable } = require('../config/database')
+const CsvService = require('./CsvService')
 const Api = {}
 
 Api.setDb = (db) => {
@@ -28,39 +29,72 @@ Api.search = async (req, res, next) => {
 Api.blacklist = async (req, res, next) => {
   let { ethAddress } = req.body
   if (!ethAddress) return res.send(403)
-  await Api.db.collection(blacklistTable).updateOne({
-    address: ethAddress.toLowerCase()
-  }, {
-    $set: {
-      address: ethAddress
-    }
-  }, {
-    upsert: true
-  })
+  let hodler = await Api.db.collection(hodlerTable).findOne({ ethAddress: ethAddress })
+  let setBlacklistStatus = !hodler.blacklisted
+  if (setBlacklistStatus) {
+    await Api.db.collection(blacklistTable).updateOne({
+      address: ethAddress.toLowerCase()
+    }, { $set: { address: ethAddress } }, { upsert: true })
+  } else {
+    await Api.db.collection(blacklistTable).removeOne({ address: ethAddress.toLowerCase() })
+  }
+  await Api.db.collection(hodlerTable).updateOne({
+    ethAddress: ethAddress.toLowerCase()
+  }, { $set: { blacklisted: setBlacklistStatus }})
+  res.json({ success: true })
 }
 
 Api.makeOG = async (req, res, next) => {
   let { ethAddress } = req.body
-  Api.db.collection(hodlerTable).find({ ethAddress: ethAddress }).toArray(async (e, res) => {
-    let hodler = res[0]
-    await Api.db.collection(longHodlerTable).updateOne(
-      { address: ethAddress },
-      { $set: {
-        address: ethAddress,
-        balance: hodler.balance,
-        isOG: true,
-        becameHodlerAt: hodler.becameHodlerAt
-      } },
-      { upsert: true }
-    )
-    await Api.db.collection(hodlerTable).updateOne(
-      { address: ethAddress },
-      { $set: { isOG: true } },
-      { upsert: true }
-    )
+  let hodler = await Api.db.collection(hodlerTable).findOne({ ethAddress: ethAddress })
+  let setOGStatus = !hodler.isOG
+  await Api.db.collection(longHodlerTable).updateOne(
+    { ethAddress: ethAddress },
+    { $set: {
+      ethAddress: ethAddress,
+      balance: hodler.balance,
+      isOG: setOGStatus,
+      becameHodlerAt: hodler.becameHodlerAt
+    } },
+    { upsert: true }
+  )
+  await Api.db.collection(hodlerTable).updateOne(
+    { ethAddress: ethAddress },
+    { $set: { isOG: setOGStatus } },
+    { upsert: true }
+  )
+  res.json({ success: true })
+}
 
-    res.status(200).send()
-  })
+Api.exportAllHodlers = async (req, res, next) => {
+  const cursor = Api.db.collection(hodlerTable).find({})
+  const transform = (doc) => {
+    return { 
+      EthAddress: doc.ethAddress, 
+      CANBalance: doc.balance, 
+      BecameHodlerAt: doc.becameHodlerAt,
+      OG: doc.isOG,
+      blacklisted: doc.blacklisted ? doc.blacklisted : false
+    }
+  }
+  const filename = 'Hodlers-Export-' + new Date()
+  CsvService.download(cursor, transform, filename, res)
+}
+
+Api.exportAllMembers = async (req, res, next) => {
+  const cursor = Api.db.collection(longHodlerTable).find({})
+  const transform = (doc) => {
+    return {
+      EthAddress: doc.ethAddress,
+      CANBalance: doc.balance,
+      BecameHodlerAt: doc.becameHodlerAt,
+      OG: doc.isOG
+    }
+  }
+}
+
+Api.exportAllApplications = async (req, res, next) => {
+
 }
 
 module.exports = Api

@@ -22,9 +22,9 @@ class Filter extends Component {
         <div className="flexrow">
           <input className="filterInput" placeholder="Email"/>
           <div className="downloads flexrow">
-            <button className="filterButton">All</button>
-            <button className="filterButton">45 Days</button>
-            <button className="filterButton">Applications</button>
+            <button className="filterButton" onClick={this.props.downloadAll}>All</button>
+            <button className="filterButton" onClick={this.props.downloadMembers}>45 Days</button>
+            <button className="filterButton" onClick={this.props.downloadApplications}>Applications</button>
             <button type="submit" className="searchButton" 
               onClick={() => this.props.performSearch(this.state.ethAddress, this.state.telegram, this.state.email)}
             >Search</button>

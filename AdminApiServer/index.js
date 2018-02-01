@@ -49,6 +49,9 @@ AdminApiServer.bindRoutes = () => {
   app.post('/search', AdminApi.search)
   app.post('/blacklist', AdminApi.blacklist)
   app.post('/makeOG', AdminApi.makeOG)
+  app.post('/exportHodlers', AdminApi.exportAllHodlers)
+  app.post('/exportMembers', AdminApi.exportAllHodlers)
+  app.post('/exportApplications', AdminApi.exportAllHodlers)
 
   // app.use('/', express.static(path.resolve('./admin/public')))
   // app.use('/', express.static(path.resolve('./admin/build')))

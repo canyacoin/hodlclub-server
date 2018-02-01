@@ -22,21 +22,44 @@ class App extends Component {
     this.setState({ results: results })
   }
 
-  toggleOG (index) {
-    console.log("Toggle")
-    console.log(this.state.results[index])
+  async toggleOG (index) {
+    let hodler = this.state.results[index]
+    await ApiService.makeOG(hodler.ethAddress)
   }
 
-  blacklist (index) {
-    console.log(`Blacklisted this bitch > ${this.state.results[index]}`)
+  async blacklist (index) {
+    let hodler = this.state.results[index]
+    await ApiService.blacklist(hodler.ethAddress)
+  }
+
+  async downloadAll () {
+    await ApiService.exportHodlers()
+  }
+
+  async downloadMembers () {
+    await ApiService.exportMembers()
+  }
+
+  async downloadApplications () {
+    await ApiService.exportApplications()
   }
 
   render() {
     return (
       <div className="App">
         <Header/>
-        <Filter performSearch={this.performSearch} />
-        <List results={this.state.results} blacklist={this.blacklist} toggleOG={this.toggleOG} searchFields={this.state.searchFields} />
+        <Filter 
+          performSearch={this.performSearch}
+          downloadAll={this.downloadAll}
+          downloadMembers={this.downloadMembers}
+          downloadApplications={this.downloadApplications} 
+        />
+        <List
+          results={this.state.results}
+          blacklist={this.blacklist}
+          toggleOG={this.toggleOG}
+          searchFields={this.state.searchFields}
+        />
       </div>
     )
   }

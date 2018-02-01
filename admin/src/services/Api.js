@@ -1,6 +1,7 @@
 import 'whatwg-fetch'
 import ApiConfig from '../config/api'
 import base64 from 'base-64'
+import { saveAs } from 'browser-filesaver'
 
 const ApiService = {
 
@@ -9,7 +10,10 @@ const ApiService = {
   routes: {
     search: { type: 'POST', path: 'search' },
     blacklist: { type: 'POST', path: 'blacklist' },
-    makeOG: { type: 'POST', path: 'makeOG' }
+    makeOG: { type: 'POST', path: 'makeOG' },
+    exportHodlers: { type: 'POST', path: 'exportHodlers', download: true },
+    exportMembers: { type: 'POST', path: 'exportMembers', download: true },
+    exportApplications: { type: 'POST', path: 'exportApplications', download: true }
   },
 
   /**
@@ -38,7 +42,7 @@ const ApiService = {
       if (Object.keys(params)[Object.keys(params).length -1] !== paramName) query += '&'
     }
     return new Promise((resolve) => {
-      fetch(query).then(response => response.json()).then(json => resolve(json))
+      fetch(query).then(response => route.download ? response.blob() : response.json()).then(res => resolve(res))
     })
   },
 
@@ -57,7 +61,7 @@ const ApiService = {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify(params)
-      }).then(response => response.json()).then(json => resolve(json))
+      }).then(response => route.download ? response.blob() : response.json()).then(res => resolve(res))
     })
   },
 
@@ -103,6 +107,30 @@ const ApiService = {
     return new Promise(async (resolve) => {
       let response = await ApiService.call(ApiService.routes.blacklist, { ethAddress })
       resolve(response)
+    })
+  },
+
+  exportHodlers: async () => {
+    return new Promise(async (resolve) => {
+      let csvFile = await ApiService.call(ApiService.routes.exportHodlers)
+      saveAs(csvFile, 'Hodlers-Export-' + new Date() + '.csv')
+      resolve()
+    })
+  },
+
+  exportMembers: async () => {
+    return new Promise(async (resolve) => {
+      let csvFile = await ApiService.call(ApiService.routes.exportMembers)
+      saveAs(csvFile, 'HodlClubMembers-Export-' + new Date() + '.csv')
+      resolve()
+    })
+  },
+
+  exportApplications: async () => {
+    return new Promise(async (resolve) => {
+      let csvFile = await ApiService.call(ApiService.routes.exportApplications)
+      saveAs(csvFile, 'HodlClubApplications-Export-' + new Date() + '.csv')
+      resolve()
     })
   }
 
