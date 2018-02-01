@@ -7,6 +7,7 @@ class ListItem extends Component {
       <a className="data">{this.props.ethAddress}</a>
       <a className="data">{this.props.isOG}</a>
       <a className="data">{this.props.balance}</a>
+      <div className="flexrow buttons">
       {
         !this.props.isOG
           ? <button className="resultButton data" onClick={this.props.toggleOG}>
@@ -15,7 +16,10 @@ class ListItem extends Component {
           : <button className="resultButton data" onClick={this.props.toggleOG}>
           Remove OG</button>
       }
-      <button className="resultButton data">Blacklist</button>
+      <button className="resultButton data" onClick={this.props.blacklist}>
+      Blacklist
+      </button>
+      </div>
     </div>);
   }
 }

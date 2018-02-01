@@ -10,6 +10,7 @@ class App extends Component {
     super(props)
     this.performSearch = this.performSearch.bind(this)
     this.toggleOG = this.toggleOG.bind(this)
+    this.blacklist = this.blacklist.bind(this)
     this.state = {
       results: []
     }
@@ -25,11 +26,15 @@ class App extends Component {
     console.log(this.state.results[index])
   }
 
+  blacklist (index) {
+    console.log(`Blacklisted this bitch > ${this.state.results[index]}`)
+  }
+
   render() {
     return (<div className="App">
       <Header/>
       <Filter performSearch={this.performSearch} />
-      <List results={this.state.results} toggleOG={this.toggleOG}/>
+      <List results={this.state.results} blacklist={this.blacklist} toggleOG={this.toggleOG} searchFields={this.state.searchFields} />
     </div>);
   }
 }
