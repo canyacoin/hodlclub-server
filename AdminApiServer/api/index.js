@@ -2,12 +2,23 @@ const { applicationTable, hodlerTable, longHodlerTable, blacklistTable } = requi
 const CsvService = require('./CsvService')
 const Api = {}
 
+/**
+ *  Sets the DB object that we should be using to access the hodl club
+ *  @param db {Object} Mongo database object
+ */
 Api.setDb = (db) => {
   Api.db = db
   Api.db.collection(applicationTable).createIndex({ '$**': 'text' })
   Api.db.collection(hodlerTable).createIndex({ '$**': 'text' })
 }
 
+/**
+ *  Searches the database for a particular user; all params are req.body params
+ *  @param telegram {String} Telegram handle to search for
+ *  @param email {String} Email address to search for
+ *  @param ethAddress {String} Ethereum address to search for
+ *  @return {Object} JSON object with applications & hodlers
+ */
 Api.search = async (req, res, next) => {
   let { telegram, email, ethAddress } = req.body
   let queryString = telegram + ' ' + email + ' ' + ethAddress
@@ -29,32 +40,46 @@ Api.search = async (req, res, next) => {
   })
 }
 
+/**
+ *  Toggles the blacklist status for a particular Ethereum address, this address will no longer be
+ *  included in the list of hodlers on the customer-facing site; all params are req.body params
+ *  @param ethAddress {String} Ethereum address to blacklist
+ *  @return {Object} JSON object detailing whether the operation was successful
+ */
 Api.blacklist = async (req, res, next) => {
   let { ethAddress } = req.body
-  if (!ethAddress) return res.send(403)
-  let hodler = await Api.db.collection(hodlerTable).findOne({ ethAddress: ethAddress })
+  if (!ethAddress) return res.status(403).json({success: false, error: 'Please specify an ETH address'})
+  const lowerCaseAddress = ethAddress.toLowerCase()
+  let hodler = await Api.db.collection(hodlerTable).findOne({ ethAddress: lowerCaseAddress })
   let setBlacklistStatus = !hodler.blacklisted
   if (setBlacklistStatus) {
     await Api.db.collection(blacklistTable).updateOne({
-      address: ethAddress.toLowerCase()
-    }, { $set: { address: ethAddress } }, { upsert: true })
+      address: lowerCaseAddress
+    }, { $set: { address: lowerCaseAddress } }, { upsert: true })
   } else {
-    await Api.db.collection(blacklistTable).removeOne({ address: ethAddress.toLowerCase() })
+    await Api.db.collection(blacklistTable).removeOne({ address: lowerCaseAddress })
   }
   await Api.db.collection(hodlerTable).updateOne({
-    ethAddress: ethAddress.toLowerCase()
+    ethAddress: lowerCaseAddress
   }, { $set: { blacklisted: setBlacklistStatus }})
   res.json({ success: true })
 }
 
+/**
+ *  Toggles the OG status for the user; all params are req.body properties
+ *  @param ethAddress {String} Ethereum address to toggle the OG status of
+ *  @return {Object} JSON object with whether the operation was successful or not
+ */
 Api.makeOG = async (req, res, next) => {
   let { ethAddress } = req.body
-  let hodler = await Api.db.collection(hodlerTable).findOne({ ethAddress: ethAddress })
+  if (!ethAddress) return res.status(403).json({success: false, error: 'Please specify an ETH address'})
+  const lowerCaseAddress = ethAddress.toLowerCase()
+  let hodler = await Api.db.collection(hodlerTable).findOne({ ethAddress: lowerCaseAddress })
   let setOGStatus = !hodler.isOG
   await Api.db.collection(longHodlerTable).updateOne(
-    { ethAddress: ethAddress },
+    { ethAddress: lowerCaseAddress },
     { $set: {
-      ethAddress: ethAddress,
+      ethAddress: lowerCaseAddress,
       balance: hodler.balance,
       isOG: setOGStatus,
       becameHodlerAt: hodler.becameHodlerAt
@@ -62,13 +87,16 @@ Api.makeOG = async (req, res, next) => {
     { upsert: true }
   )
   await Api.db.collection(hodlerTable).updateOne(
-    { ethAddress: ethAddress },
+    { ethAddress: lowerCaseAddress },
     { $set: { isOG: setOGStatus } },
     { upsert: true }
   )
   res.json({ success: true })
 }
 
+/**
+ *  Exports everyone from the hodlers table as a CSV
+ */
 Api.exportAllHodlers = async (req, res, next) => {
   const cursor = Api.db.collection(hodlerTable).find({})
   const transform = (doc) => {
@@ -84,6 +112,9 @@ Api.exportAllHodlers = async (req, res, next) => {
   CsvService.download(cursor, transform, filename, res)
 }
 
+/**
+ *  Exports everyone from the longHodlers table as a CSV
+ */
 Api.exportAllMembers = async (req, res, next) => {
   const cursor = Api.db.collection(longHodlerTable).find({})
   const transform = (doc) => {
@@ -98,6 +129,9 @@ Api.exportAllMembers = async (req, res, next) => {
   CsvService.download(cursor, transform, filename, res)
 }
 
+/**
+ *  Exports everyone from the applications table, joined with the hodlers table
+ */
 Api.exportAllApplications = async (req, res, next) => {
   const cursor = Api.db.collection(applicationTable).aggregate([{ $lookup: { 
     from: hodlerTable,

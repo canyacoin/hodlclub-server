@@ -16,6 +16,12 @@ const basic = auth.basic({
   file: path.resolve('./AdminApiServer/users.htpasswd')
 })
 
+/**
+ *  Starts the Admin API server on a given port
+ *  @param port {Number} Port number to start the server on
+ *  @param proxyHost {String} Hostname of the proxy which all requests should come through
+ *  @return {Promise<Void>} Resolves when the server has started
+ */
 AdminApiServer.start = async (port, proxyHost = '') => {
   AdminApiServer.proxyHost = proxyHost
   AdminApiServer.bindRoutes()
@@ -31,6 +37,9 @@ AdminApiServer.start = async (port, proxyHost = '') => {
   })
 }
 
+/**
+ *  Binds the routes for this API.
+ */
 AdminApiServer.bindRoutes = () => {
 
   app.use(cors())
