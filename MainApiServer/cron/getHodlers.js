@@ -85,7 +85,8 @@ async function getAllTokenTransferEvents (upToBlock) {
  *  events and removes from the club anyone who has sent any CAN. Then it looks at the receiver of
  *  the xfer, and provisionally adds them to the club. As long as they send no txs after this, they
  *  will remain in the club. Adds the timestamp at which they exceeded the 2.5k CAN threshold.
- *  @param events {Array} Array of web3 transfer events
+ *  @param events {Array} Web3 transfer events
+ *  @param blacklist {Array} Blacklisted addresses
  *  @return {Object} Object of hodl club members, keyed by the address of the member
  */
 async function processEvents (events, blacklist) {
@@ -256,6 +257,7 @@ function getCurrentBlockNumber () {
 
 /**
  *  Inserts the hodler into the database
+ *  @param table {String} Table name to insert record into
  *  @param hodlerObj {Object} Hodler object to insert into the database
  *  @return {Promise<Boolean>} Resolves with whether the operation created a new doc
  */
@@ -274,6 +276,9 @@ function insertIntoDb (table, hodlerObj, db) {
   })
 }
 
+/**
+ *  Gets the blacklisted addresses from the DB
+ */
 function getBlacklistedAddresses (db) {
   return new Promise(async (resolve) => {
     db.collection(BLACKLIST_TABLE).find({}).toArray((e, res) => {

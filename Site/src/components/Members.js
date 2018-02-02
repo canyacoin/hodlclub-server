@@ -12,7 +12,7 @@ class Members extends React.Component {
   render() {
     return (
       <div className="Members">
-      <SearchAddress />
+      <SearchAddress search={this.props.search}/>
       {
         this.props.hodlClub.map((hodler, index) => {
           return (

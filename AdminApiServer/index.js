@@ -38,7 +38,7 @@ AdminApiServer.start = async (port, proxyHost = '') => {
 }
 
 /**
- *  Binds the routes for this API.
+ *  Binds the routes for this API
  */
 AdminApiServer.bindRoutes = () => {
 

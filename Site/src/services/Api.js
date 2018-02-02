@@ -94,7 +94,7 @@ const ApiService = {
    */
   getStats: async (address) => {
     return new Promise(async (resolve) => {
-      let response = await ApiService.call(ApiService.routes.getStats, { address: address })
+      let response = await ApiService.call(ApiService.routes.getStats, { hodlerAddress: address })
       resolve(response.data)
     })
   },
