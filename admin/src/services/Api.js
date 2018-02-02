@@ -77,6 +77,7 @@ const ApiService = {
       let response = await ApiService.call(ApiService.routes.search, { telegram, email, ethAddress })
       let { applications, hodlers } = response
       let results = []
+      if (applications.length === 0) return resolve(hodlers)
       for (let application of applications) {
         let merged = {}
         for (let hodler of hodlers) {
@@ -96,6 +97,11 @@ const ApiService = {
     })
   },
 
+  /**
+   *  Toggles the user's OG status
+   *  @param ethAddress {String} Ethereum address of the hodler
+   *  @return {Promise<Object>} Resolves with the result of the operation
+   */
   makeOG: async (ethAddress = '') => {
     return new Promise(async (resolve) => {
       let response = await ApiService.call(ApiService.routes.makeOG, { ethAddress })
@@ -103,6 +109,11 @@ const ApiService = {
     })
   },
 
+  /**
+   *  Toggles the user's blacklist status
+   *  @param ethAddress {String} Ethereum address of the hodler
+   *  @return {Promise<Object>} Resolves with the result of the operation
+   */
   blacklist: async (ethAddress = '') => {
     return new Promise(async (resolve) => {
       let response = await ApiService.call(ApiService.routes.blacklist, { ethAddress })
@@ -110,6 +121,11 @@ const ApiService = {
     })
   },
 
+  /**
+   *  Downloads a list of all the hodlers in the DB (everyone with more than a 2.5k balance, and
+   *  whose last interaction with the CAN contract was to receive CAN)
+   *  @return {Promise<Void>} Resolves when the download is complete/cancelled
+   */
   exportHodlers: async () => {
     return new Promise(async (resolve) => {
       let csvFile = await ApiService.call(ApiService.routes.exportHodlers)
@@ -118,6 +134,10 @@ const ApiService = {
     })
   },
 
+  /**
+   *  Downloads a list of all the members of the hodl club
+   *  @return {Promise<Void>} Resolves when the download is complete/cancelled
+   */
   exportMembers: async () => {
     return new Promise(async (resolve) => {
       let csvFile = await ApiService.call(ApiService.routes.exportMembers)
@@ -126,6 +146,10 @@ const ApiService = {
     })
   },
 
+  /**
+   *  Downloads a list of all applications for the hodl club
+   *  @return {Promise<Void>} Resolves when the download is complete/cancelled
+   */
   exportApplications: async () => {
     return new Promise(async (resolve) => {
       let csvFile = await ApiService.call(ApiService.routes.exportApplications)

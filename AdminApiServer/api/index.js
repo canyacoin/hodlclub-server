@@ -5,14 +5,17 @@ const Api = {}
 Api.setDb = (db) => {
   Api.db = db
   Api.db.collection(applicationTable).createIndex({ '$**': 'text' })
+  Api.db.collection(hodlerTable).createIndex({ '$**': 'text' })
 }
 
 Api.search = async (req, res, next) => {
   let { telegram, email, ethAddress } = req.body
   let queryString = telegram + ' ' + email + ' ' + ethAddress
+
   Api.db.collection(applicationTable).find({ $text: { $search: queryString }}).toArray((e, results) => {
     let applicationResults = results
     let applicationAddresses = []
+    if (ethAddress) applicationAddresses.push(ethAddress)
     for (let application of applicationResults) {
       applicationAddresses.push(application.ethAddress)
     }
@@ -91,10 +94,34 @@ Api.exportAllMembers = async (req, res, next) => {
       OG: doc.isOG
     }
   }
+  const filename = 'HodlClubMembers-Export-' + new Date()
+  CsvService.download(cursor, transform, filename, res)
 }
 
 Api.exportAllApplications = async (req, res, next) => {
-
+  const cursor = Api.db.collection(applicationTable).aggregate([{ $lookup: { 
+    from: hodlerTable,
+    localField: 'ethAddress',
+    foreignField: 'ethAddress',
+    as: 'mergeApplications'
+  }}, { 
+    $replaceRoot: { newRoot: { $mergeObjects: [ { $arrayElemAt: ['$mergeApplications', 0] }, "$$ROOT" ] } }
+  }, {
+    $project: { mergeApplications: 0 } 
+  }])
+  const transform = (doc) => {
+    return {
+      EthAddress: doc.ethAddress,
+      CANBalance: doc.balance,
+      BecameHodlerAt: doc.becameHodlerAt,
+      OG: doc.isOG,
+      blacklisted: doc.blacklisted ? doc.blacklisted : false,
+      telegramHandle: doc.telegramHandle,
+      emailAddress: doc.emailAddress
+    }
+  }
+  const filename = 'HodlClubApplications-Export-' + new Date()
+  CsvService.download(cursor, transform, filename, res)
 }
 
 module.exports = Api

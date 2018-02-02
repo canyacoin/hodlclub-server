@@ -18,7 +18,6 @@ class App extends Component {
 
   async performSearch (ethAddress, telegram, email) {
     let results = await ApiService.search(telegram, email, ethAddress)
-    console.log(results)
     this.setState({ results: results })
   }
 
