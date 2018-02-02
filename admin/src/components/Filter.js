@@ -20,7 +20,7 @@ class Filter extends Component {
           <input className="filterInput" placeholder="Ether Wallet" onChange={(e) => this.setState({ethAddress: e.target.value})} />
         </div>
         <div className="flexrow">
-          <input className="filterInput" placeholder="Email"/>
+          <input className="filterInput" placeholder="Email" onChange={(e) => this.setState({email: e.target.value})}/>
           <div className="downloads flexrow">
             <button className="filterButton" onClick={this.props.downloadAll}>All</button>
             <button className="filterButton" onClick={this.props.downloadMembers}>45 Days</button>
