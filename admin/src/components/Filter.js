@@ -20,11 +20,11 @@ class Filter extends Component {
           <input className="filterInput" placeholder="Ether Wallet" onChange={(e) => this.setState({ethAddress: e.target.value})} />
         </div>
         <div className="flexrow">
-          <input className="filterInput" placeholder="Email"/>
+          <input className="filterInput" placeholder="Email" onChange={(e) => this.setState({email: e.target.value})}/>
           <div className="downloads flexrow">
-            <button className="filterButton">All</button>
-            <button className="filterButton">45 Days</button>
-            <button className="filterButton">Applications</button>
+            <button className="filterButton" onClick={this.props.downloadAll}>All</button>
+            <button className="filterButton" onClick={this.props.downloadMembers}>45 Days</button>
+            <button className="filterButton" onClick={this.props.downloadApplications}>Applications</button>
             <button type="submit" className="searchButton" 
               onClick={() => this.props.performSearch(this.state.ethAddress, this.state.telegram, this.state.email)}
             >Search</button>

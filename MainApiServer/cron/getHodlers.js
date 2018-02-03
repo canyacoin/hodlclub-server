@@ -55,7 +55,7 @@ async function main () {
   let blacklist = await getBlacklistedAddresses(db)
   let blockNumber = await getCurrentBlockNumber()
   let tokenTransferEvents = await getAllTokenTransferEvents(blockNumber)
-  let { hodlers, unfaithful } = await processEvents(tokenTransferEvents)
+  let { hodlers, unfaithful } = await processEvents(tokenTransferEvents, blacklist)
   let newLongHodlers = await processHodlers(hodlers, blockNumber, blacklist, db)
   await processUnfaithful(unfaithful, db)
   await notifyNewLongHolders(newLongHodlers, db)
@@ -85,10 +85,11 @@ async function getAllTokenTransferEvents (upToBlock) {
  *  events and removes from the club anyone who has sent any CAN. Then it looks at the receiver of
  *  the xfer, and provisionally adds them to the club. As long as they send no txs after this, they
  *  will remain in the club. Adds the timestamp at which they exceeded the 2.5k CAN threshold.
- *  @param events {Array} Array of web3 transfer events
+ *  @param events {Array} Web3 transfer events
+ *  @param blacklist {Array} Blacklisted addresses
  *  @return {Object} Object of hodl club members, keyed by the address of the member
  */
-async function processEvents (events) {
+async function processEvents (events, blacklist) {
   let receivers = {}
   let receiver = {}
   let kickedOut = {}
@@ -98,12 +99,18 @@ async function processEvents (events) {
     if (event.event !== 'Transfer') continue
     receiver = {}
     timestamp = 0
-    if (receivers[event.args.from]) {
+    let sendingAddress = event.args.from.toLowerCase()
+    let receivingAddress = event.args.to.toLowerCase()
+    if (receivers[sendingAddress]) {
       // kick this user out of the club
-      kickedOut[event.args.from] = true
-      delete receivers[event.args.from]
+      kickedOut[sendingAddress] = true
+      delete receivers[sendingAddress]
     }
-    if (!receivers[event.args.to]) {
+    if (blacklist.indexOf(receivingAddress) !== -1) {
+      kickedOut[receivingAddress] = true
+      continue
+    }
+    if (!receivers[receivingAddress]) {
       // we don't have this user yet
       if (event.args.value.gte(HodlClubTokenThreshold)) {
         // this person has enough to be in the hodl club at this point!!!
@@ -111,17 +118,17 @@ async function processEvents (events) {
         receiver.timestampOverThreshold = timestamp
       }
       receiver.balance = event.args.value
-      receivers[event.args.to] = receiver
-      delete kickedOut[event.args.to]
+      receivers[receivingAddress] = receiver
+      delete kickedOut[receivingAddress]
     } else {
-      receiver = receivers[event.args.to]
+      receiver = receivers[receivingAddress]
       receiver.balance = receiver.balance.add(event.args.value)
       if (!receiver.timestampOverThreshold && receiver.balance.gte(HodlClubTokenThreshold)) {
         timestamp = await getBlockTimestamp(event.blockNumber)
         receiver.timestampOverThreshold = timestamp
       }
-      receivers[event.args.to] = receiver
-      delete kickedOut[event.args.to]
+      receivers[receivingAddress] = receiver
+      delete kickedOut[receivingAddress]
     }
   }
   return { hodlers: receivers, unfaithful: kickedOut }
@@ -132,7 +139,7 @@ async function processEvents (events) {
  *  number of days.
  *  @param hodlers {Object} Hodler object keyed by address
  *  @param currentBlockNumber {Number} Block number that we got events up to, to calculate hodl time
- *  @param blacklist {Array} Blacklisted addresses 
+ *  @param blacklist {Array} Blacklisted addresses
  *  @param db {Object} Database connection, so we can store each hodler in the DB
  */
 async function processHodlers (hodlers, currentBlockNumber, blacklist, db) {
@@ -250,6 +257,7 @@ function getCurrentBlockNumber () {
 
 /**
  *  Inserts the hodler into the database
+ *  @param table {String} Table name to insert record into
  *  @param hodlerObj {Object} Hodler object to insert into the database
  *  @return {Promise<Boolean>} Resolves with whether the operation created a new doc
  */
@@ -268,10 +276,13 @@ function insertIntoDb (table, hodlerObj, db) {
   })
 }
 
+/**
+ *  Gets the blacklisted addresses from the DB
+ */
 function getBlacklistedAddresses (db) {
   return new Promise(async (resolve) => {
     db.collection(BLACKLIST_TABLE).find({}).toArray((e, res) => {
-      resolve(res)
+      resolve(res.map((el) => el.address.toLowerCase()))
     })
   })
 }

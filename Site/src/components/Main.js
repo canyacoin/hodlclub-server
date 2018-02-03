@@ -13,10 +13,10 @@ class Main extends React.Component {
       <div className="Main">
       <Switch>
       <Route path='/members' render={(props) => (
-        <Members hodlClub={this.props.hodlClub} />
+        <Members hodlClub={this.props.hodlClub} search={this.props.search}/>
       )} />
       <Route path='/og-members' render={(props) => (
-        <Members hodlClub={this.props.hodlClub} />
+        <Members hodlClub={this.props.hodlClub} search={this.props.search}/>
       )} />
 
       <Route path='/join' component={Join}/>

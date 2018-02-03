@@ -14,7 +14,9 @@ function Router (db, proxy = '') {
 
   this.proxyHost = proxy
 
-  this.server = http.createServer((req, res) => this.handleRequest(req, res))
+  this.server = http.createServer((req, res) => {
+    return this.handleRequest(req, res)
+  })
 
   this.hodlerApi = new HodlerApi(db)
   this.ROUTES = {

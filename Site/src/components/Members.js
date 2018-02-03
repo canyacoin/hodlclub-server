@@ -36,7 +36,7 @@ class Members extends React.Component {
   }
   render() {
     return (<div className="Members">
-      <SearchAddress/>
+      <SearchAddress search={this.props.search}/>
       <ListHeader />
       {
         this.state.hodlClub.map((hodler, index) => {

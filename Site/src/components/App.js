@@ -24,11 +24,17 @@ class App extends React.Component {
     this.setState({ hodlClub: hodlers })
   }
 
+  async getStats (address) {
+    return new Promise(async (resolve) => {
+      resolve(await ApiService.getStats(address))
+    })
+  }
+
   render() {
     return (<div className="App">
       <Nav/>
       <hr />
-      <Main hodlClub={this.state.hodlClub}/>
+      <Main hodlClub={this.state.hodlClub} search={this.getStats} />
     </div>);
   }
 }

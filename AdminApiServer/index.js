@@ -16,6 +16,12 @@ const basic = auth.basic({
   file: path.resolve('./AdminApiServer/users.htpasswd')
 })
 
+/**
+ *  Starts the Admin API server on a given port
+ *  @param port {Number} Port number to start the server on
+ *  @param proxyHost {String} Hostname of the proxy which all requests should come through
+ *  @return {Promise<Void>} Resolves when the server has started
+ */
 AdminApiServer.start = async (port, proxyHost = '') => {
   AdminApiServer.proxyHost = proxyHost
   AdminApiServer.bindRoutes()
@@ -31,6 +37,9 @@ AdminApiServer.start = async (port, proxyHost = '') => {
   })
 }
 
+/**
+ *  Binds the routes for this API
+ */
 AdminApiServer.bindRoutes = () => {
 
   app.use(cors())
@@ -49,8 +58,11 @@ AdminApiServer.bindRoutes = () => {
   app.post('/search', AdminApi.search)
   app.post('/blacklist', AdminApi.blacklist)
   app.post('/makeOG', AdminApi.makeOG)
+  app.post('/exportHodlers', AdminApi.exportAllHodlers)
+  app.post('/exportMembers', AdminApi.exportAllMembers)
+  app.post('/exportApplications', AdminApi.exportAllApplications)
 
-  // app.use('/', express.static(path.resolve('./admin/public')))
+  // @todo use this for the live version
   // app.use('/', express.static(path.resolve('./admin/build')))
 
 }

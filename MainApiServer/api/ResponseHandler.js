@@ -6,7 +6,7 @@ let ResponseHandler = {}
 ResponseHandler.success = (res, data) => {
   Log.info('Returning success with data:')
   Log.info(data)
-  res.writeHead(200, {'Content-Type': 'text/json'})
+  res.writeHead(200, {'Content-Type': 'text/json', 'Access-Control-Allow-Origin': '*'})
   res.write(JSON.stringify({success: true, data: data}))
   res.end()
 }

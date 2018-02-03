@@ -1,6 +1,7 @@
 import 'whatwg-fetch'
 import ApiConfig from '../config/api'
 import base64 from 'base-64'
+import { saveAs } from 'browser-filesaver'
 
 const ApiService = {
 
@@ -9,7 +10,10 @@ const ApiService = {
   routes: {
     search: { type: 'POST', path: 'search' },
     blacklist: { type: 'POST', path: 'blacklist' },
-    makeOG: { type: 'POST', path: 'makeOG' }
+    makeOG: { type: 'POST', path: 'makeOG' },
+    exportHodlers: { type: 'POST', path: 'exportHodlers', download: true },
+    exportMembers: { type: 'POST', path: 'exportMembers', download: true },
+    exportApplications: { type: 'POST', path: 'exportApplications', download: true }
   },
 
   /**
@@ -38,7 +42,7 @@ const ApiService = {
       if (Object.keys(params)[Object.keys(params).length -1] !== paramName) query += '&'
     }
     return new Promise((resolve) => {
-      fetch(query).then(response => response.json()).then(json => resolve(json))
+      fetch(query).then(response => route.download ? response.blob() : response.json()).then(res => resolve(res))
     })
   },
 
@@ -57,7 +61,7 @@ const ApiService = {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify(params)
-      }).then(response => response.json()).then(json => resolve(json))
+      }).then(response => route.download ? response.blob() : response.json()).then(res => resolve(res))
     })
   },
 
@@ -73,6 +77,7 @@ const ApiService = {
       let response = await ApiService.call(ApiService.routes.search, { telegram, email, ethAddress })
       let { applications, hodlers } = response
       let results = []
+      if (applications.length === 0) return resolve(hodlers)
       for (let application of applications) {
         let merged = {}
         for (let hodler of hodlers) {
@@ -92,6 +97,11 @@ const ApiService = {
     })
   },
 
+  /**
+   *  Toggles the user's OG status
+   *  @param ethAddress {String} Ethereum address of the hodler
+   *  @return {Promise<Object>} Resolves with the result of the operation
+   */
   makeOG: async (ethAddress = '') => {
     return new Promise(async (resolve) => {
       let response = await ApiService.call(ApiService.routes.makeOG, { ethAddress })
@@ -99,10 +109,52 @@ const ApiService = {
     })
   },
 
+  /**
+   *  Toggles the user's blacklist status
+   *  @param ethAddress {String} Ethereum address of the hodler
+   *  @return {Promise<Object>} Resolves with the result of the operation
+   */
   blacklist: async (ethAddress = '') => {
     return new Promise(async (resolve) => {
       let response = await ApiService.call(ApiService.routes.blacklist, { ethAddress })
       resolve(response)
+    })
+  },
+
+  /**
+   *  Downloads a list of all the hodlers in the DB (everyone with more than a 2.5k balance, and
+   *  whose last interaction with the CAN contract was to receive CAN)
+   *  @return {Promise<Void>} Resolves when the download is complete/cancelled
+   */
+  exportHodlers: async () => {
+    return new Promise(async (resolve) => {
+      let csvFile = await ApiService.call(ApiService.routes.exportHodlers)
+      saveAs(csvFile, 'Hodlers-Export-' + new Date() + '.csv')
+      resolve()
+    })
+  },
+
+  /**
+   *  Downloads a list of all the members of the hodl club
+   *  @return {Promise<Void>} Resolves when the download is complete/cancelled
+   */
+  exportMembers: async () => {
+    return new Promise(async (resolve) => {
+      let csvFile = await ApiService.call(ApiService.routes.exportMembers)
+      saveAs(csvFile, 'HodlClubMembers-Export-' + new Date() + '.csv')
+      resolve()
+    })
+  },
+
+  /**
+   *  Downloads a list of all applications for the hodl club
+   *  @return {Promise<Void>} Resolves when the download is complete/cancelled
+   */
+  exportApplications: async () => {
+    return new Promise(async (resolve) => {
+      let csvFile = await ApiService.call(ApiService.routes.exportApplications)
+      saveAs(csvFile, 'HodlClubApplications-Export-' + new Date() + '.csv')
+      resolve()
     })
   }
 

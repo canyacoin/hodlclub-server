@@ -65,15 +65,16 @@ HodlerApi.prototype.tokensAirdropped = (req, res, data) => {
  *  @param hodlerAddress {String} Address of the hodler
  *  @return {Object} Detailed hodl stats for the address in question
  */
-HodlerApi.prototype.getHodlStats = (req, res, data) => {
+HodlerApi.prototype.getHodlStats = async (req, res, data) => {
   if (!data.hodlerAddress) return ResponseHandler.badRequest(res, ['hodlerAddress should be a String'])
-  self.db.collection('hodlers')
-    .find({ address: data.hodlerAddress.toLowerCase() })
-    .toArray((error, results) => {
-      if (error) return ResponseHandler.serverError(res, error)
-      if (results.length === 0) ResponseHandler.notFound(res)
-      ResponseHandler.success(res, results)
-    })
+  let hodler
+  try {
+    hodler = await self.db.collection('hodlers').findOne({ ethAddress: data.hodlerAddress.toLowerCase() })
+  } catch (error) {
+    return ResponseHandler.serverError(res)
+  }
+  if (!hodler) return ResponseHandler.notFound(res)
+  return ResponseHandler.success(res, hodler)
 }
 
 /**
@@ -94,7 +95,6 @@ HodlerApi.prototype.submitApplication = async (req, res, data) => {
   try {
     isValidHodler = await HodlApplication.isValid(self.db, data.ethAddress)
   } catch (error) {
-    console.log(error)
     return ResponseHandler.serverError(res)
   }
   if (!isValidHodler) return ResponseHandler.badRequest(res, ['Not enough CAN to join the club'])
