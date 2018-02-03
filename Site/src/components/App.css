@@ -130,6 +130,30 @@ hr {
   width: 15%;
 }
 
+.threewords{
+  text-transform: capitalize;
+}
+
+/* LISTHEADER */
+
+.ListHeader {
+
+}
+
+.listHeader-Wallet {
+  width: 50%;
+  margin: 10px;
+}
+
+.listHeader-Data {
+  margin: 15px;
+  width: 50%;
+}
+
+.listHeader-Data-a {
+  margin-left: 25px;
+}
+
 /* SEARCHADDRESS */
 
 .SearchAddress {
