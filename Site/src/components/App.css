@@ -134,6 +134,10 @@ hr {
   text-transform: capitalize;
 }
 
+.isOG{
+  margin: 0 10px;
+}
+
 /* LISTHEADER */
 
 .ListHeader {

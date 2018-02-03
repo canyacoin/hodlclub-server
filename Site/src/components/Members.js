@@ -14,22 +14,19 @@ class Members extends React.Component {
           address: '0xB543659Ee4eafE6144c8BD58278C30446A7fea9e',
           balance: 999,
           age: 45,
-          status: 'isOG',
-          og: true
+          isOG: false,
         }, {
           name: 'Adjective Adjective Noun',
           address: '0xB543659Ee4eafE6144c8BD58278C30446A7fea9e',
           balance: 999,
           age: 45,
-          status: 'isOG',
-          og: true
+          isOG: false,
         }, {
           name: 'Adjective Adjective Noun',
           address: '0xB543659Ee4eafE6144c8BD58278C30446A7fea9e',
           balance: 999,
           age: 45,
-          status: 'isOG',
-          og: true
+          isOG: false,
         }
       ]
     }
@@ -40,7 +37,7 @@ class Members extends React.Component {
       <ListHeader />
       {
         this.state.hodlClub.map((hodler, index) => {
-          return (<ListItem name={hodler.name} address={hodler.address} balance={hodler.balance} age={hodler.age} status={hodler.status} key={index} og={hodler.og}/>)
+          return (<ListItem name={hodler.name} address={hodler.address} balance={hodler.balance} age={hodler.age} isOG={hodler.isOG} key={index} og={hodler.og}/>)
         })
       }
     </div>);

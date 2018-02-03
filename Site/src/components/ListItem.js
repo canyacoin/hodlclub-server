@@ -13,6 +13,9 @@ class ListItem extends React.Component {
 
     return (
       <div className="ListItem flexrow">
+      {this.props.isOG ?
+        <a className="isOG">{'\uD83D\uDC51'}</a> :
+        ""}
         <div className="listItemBox flexcol">
           <a className="threewords">{formattedThreeWordsName}</a>
           <a className="walletId">{this.props.address}</a>
