@@ -15,7 +15,7 @@ class Members extends React.Component {
       <ListHeader />
       {
         this.props.hodlClub.map((hodler, index) => {
-          return (<ListItem name={hodler.name} address={hodler.address} balance={hodler.balance} age={hodler.age} isOG={hodler.isOG} key={index} og={hodler.og}/>)
+          return (<ListItem hodler={hodler} key={index} />)
         })
       }
     </div>);

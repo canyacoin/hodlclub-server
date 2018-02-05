@@ -25,7 +25,6 @@ class SearchAddress extends React.Component {
     return days
   }
 
-
   render() {
     return (<div className="SearchAddress flexrow">
       <div className="searchPanel flexcol">
@@ -43,7 +42,10 @@ class SearchAddress extends React.Component {
             Search
           </button>
         </div>
-        <Status getDaysHodled={this.getDaysHodled}stats={this.state.stats}/>
+        {
+          Object.keys(this.state.stats).length !== 0 &&
+          <Status getDaysHodled={this.getDaysHodled}stats={this.state.stats}/>
+        }
       </div>
     </div>);
   }
