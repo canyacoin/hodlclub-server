@@ -12,6 +12,9 @@ class ListItem extends React.Component {
     return days
   }
 
+  getEtherscanUrl (address) {
+    return "https://etherscan.io/address/" + address
+  }
 
   render() {
     const hodler = this.props.hodler
@@ -27,7 +30,7 @@ class ListItem extends React.Component {
         ""}
         <div className="listItemBox flexcol">
           <a className="threewords">{formattedThreeWordsName}</a>
-          <a className="walletId">{hodler.ethAddress}</a>
+          <a className="walletId" href={this.getEtherscanUrl(hodler.ethAddress)}>{hodler.ethAddress}</a>
           </div>
         <div className="listItemBox">
           {this.getDaysHodled(hodler.becameHodlerAt)} Days

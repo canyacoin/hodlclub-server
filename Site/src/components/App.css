@@ -124,6 +124,7 @@ hr {
   font-family: monospace;
   font-size: 1em;
   color: #3cf;
+  text-decoration: none;
 }
 
 .status {

@@ -65,12 +65,8 @@ class Status extends React.Component {
     return this.props.stats.isOG
   }
 
-  componentDidMount() {
-    console.log(this.returnDays())
-  }
   giveStatus() {
     let stats = this.props.stats
-    console.log(stats)
     if (Object.keys(stats).length !== 0) {
       if (stats.applied) {
         if (this.isHodl45()) {
