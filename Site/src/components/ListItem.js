@@ -30,7 +30,7 @@ class ListItem extends React.Component {
         ""}
         <div className="listItemBox flexcol">
           <a className="threewords">{formattedThreeWordsName}</a>
-          <a className="walletId" href={this.getEtherscanUrl(hodler.ethAddress)}>{hodler.ethAddress}</a>
+          <a className="walletId" href={this.getEtherscanUrl(hodler.ethAddress)} target="_blank">{hodler.ethAddress}</a>
           </div>
         <div className="listItemBox">
           {this.getDaysHodled(hodler.becameHodlerAt)} Days
