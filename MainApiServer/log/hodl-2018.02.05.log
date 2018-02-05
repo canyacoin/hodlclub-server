@@ -14,3 +14,5 @@
 11:08:40.534 INFO  Routing to: /getHodlStats 
 11:08:40.536 INFO  Returning success with data: 
 11:08:40.536 INFO  {"_id":"5a72ab961d8fb7c4f38f5a33","ethAddress":"0xddfdacea2fb6404fcd56fa9e920a1911693d5a7e","balance":2600000000,"becameHodlerAt":1517287265,"isOG":false,"blacklisted":false} 
+15:38:38.559 INFO  Listening at 3001 
+

@@ -27,7 +27,7 @@ HodlerApi.prototype.bestHodlers = (req, res, data) => {
       skip: (Number(sanitise(data.skip)) || 0)
     }).toArray((error, results) => {
       if (error) return ResponseHandler.serverError(res)
-      if (results.length === 0) return ResponseHandler.notFound(res)
+      if (results.length === 0) return ResponseHandler.success(res, [])
       ResponseHandler.success(res, results)
     })
 }
