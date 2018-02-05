@@ -73,6 +73,7 @@ class Status extends React.Component {
         </div>
       </div>
       {this.giveStatus()}
+      <button onClick={() => console.log(this.props.stats)} />
     </div>);
   }
 }

@@ -34,7 +34,12 @@ class SearchAddress extends React.Component {
         <h3>Check your HODL status.</h3>
         <div className="flexrow">
           <input className="searchInput monospace" placeholder="wallet address 0x" onChange={(e) => this.setState({address: e.target.value})}/>
-          <button type="submit" className="searchButton" onClick={() => this.getStats(this.state.address)}>Search</button>
+          <button
+            type="submit"
+            className="searchButton"
+            onClick={() => this.getStats(this.state.address)}>
+            Search
+          </button>
         </div>
         <Status getDaysHodled={this.getDaysHodled}stats={this.state.stats}/>
       </div>
