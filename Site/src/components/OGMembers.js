@@ -1,7 +1,6 @@
 import React from 'react';
 import './App.css';
 import ListItem from './ListItem'
-import ListHeader from './ListHeader'
 
 class OGMembers extends React.Component {
 constructor(props) {

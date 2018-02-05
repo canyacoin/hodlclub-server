@@ -42,10 +42,7 @@ class SearchAddress extends React.Component {
             Search
           </button>
         </div>
-        {
-          Object.keys(this.state.stats).length !== 0 &&
-          <Status getDaysHodled={this.getDaysHodled}stats={this.state.stats}/>
-        }
+        <Status getDaysHodled={this.getDaysHodled}stats={this.state.stats}/>
       </div>
     </div>);
   }

@@ -5,10 +5,7 @@ import SearchAddress from './SearchAddress'
 import ListHeader from './ListHeader'
 
 class Members extends React.Component {
-  constructor(props) {
-    super(props)
 
-  }
   render() {
     return (<div className="Members">
       <SearchAddress search={this.props.search}/>
