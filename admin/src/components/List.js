@@ -14,6 +14,7 @@ class List extends Component {
               ethAddress={member.ethAddress}
               isOG={member.isOG}
               balance={member.balance}
+              becameHodlerAt={member.becameHodlerAt}
               toggleOG={() => this.props.toggleOG(index)}
               blacklist={() => this.props.blacklist(index)}
               key={index}

@@ -7,11 +7,19 @@ import ApiService from '../services/Api'
 
 class ListItem extends Component {
 
+  getDaysHodled (timestamp) {
+    let now = Math.floor(Date.now() / 1000)
+    let diff = now - timestamp
+    let days = Math.floor(diff / 86400)
+    return days
+  }
+
   render() {
     console.log(this.props)
     return (<div className="ListItem flexrow">
       <a className="data">{this.props.ethAddress}</a>
-      <a className="data">{this.props.isOG}</a>
+      <a className="data">{this.getDaysHodled(this.props.becameHodlerAt)}</a>
+      <a className="data">{this.props.isOG ? 'OG' : 'Non-OG'}</a>
       <a className="data">{this.props.balance}</a>
       <div className="flexrow buttons">
       <button className="resultButton data" onClick={() => this.props.toggleOG(this.props.ethAddress)}>
