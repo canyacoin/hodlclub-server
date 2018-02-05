@@ -87,7 +87,7 @@ async function getAllTokenTransferEvents (upToBlock) {
  *  will remain in the club. Adds the timestamp at which they exceeded the 2.5k CAN threshold.
  *  @param events {Array} Web3 transfer events
  *  @param blacklist {Array} Blacklisted addresses
- *  @return {Object} Object of hodl club members, keyed by the address of the member
+ *  @return {Object} Hodl club members `hodlers` and `unfaithful`
  */
 async function processEvents (events, blacklist) {
   let receivers = {}
@@ -141,6 +141,7 @@ async function processEvents (events, blacklist) {
  *  @param currentBlockNumber {Number} Block number that we got events up to, to calculate hodl time
  *  @param blacklist {Array} Blacklisted addresses
  *  @param db {Object} Database connection, so we can store each hodler in the DB
+ *  @return {Promise<Array>} List of new hodl club members
  */
 async function processHodlers (hodlers, currentBlockNumber, blacklist, db) {
   return new Promise(async (resolve) => {
@@ -177,7 +178,7 @@ async function processHodlers (hodlers, currentBlockNumber, blacklist, db) {
  *  Ensures that nobody who has moved their tokens in the last --hodlDays days is in the database
  *  @param unfaithful {Object} Users who have moved tokens, keyed by address
  *  @param db {Object} Database connection object
- *  @return {Promise} Resolves when the query is complete
+ *  @return {Promise<Void>} Resolves when the query is complete
  */
 async function processUnfaithful (unfaithful, db) {
   // get whether we're in the hodl club

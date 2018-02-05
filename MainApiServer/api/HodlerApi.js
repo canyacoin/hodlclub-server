@@ -68,12 +68,15 @@ HodlerApi.prototype.tokensAirdropped = (req, res, data) => {
 HodlerApi.prototype.getHodlStats = async (req, res, data) => {
   if (!data.hodlerAddress) return ResponseHandler.badRequest(res, ['hodlerAddress should be a String'])
   let hodler
+  let applicant
   try {
     hodler = await self.db.collection('hodlers').findOne({ ethAddress: data.hodlerAddress.toLowerCase() })
+    applicant = await self.db.collection('hodlerApplications').findOne({ 'ethAddress': data.hodlerAddress.toLowerCase() })
   } catch (error) {
     return ResponseHandler.serverError(res)
   }
   if (!hodler) return ResponseHandler.notFound(res)
+  if (applicant) hodler.applied = true
   return ResponseHandler.success(res, hodler)
 }
 
