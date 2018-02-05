@@ -9,17 +9,20 @@ class Status extends React.Component {
     this.renderNotApplied = this.renderNotApplied.bind(this)
     this.renderApplied = this.renderApplied.bind(this)
     this.isHodl45 = this.isHodl45.bind(this)
-    this.isMember = this.isMember.bind(this)
+    this.returnMember = this.returnMember.bind(this)
     this.returnDays = this.returnDays.bind(this)
+    this.renderDefault = this.renderDefault.bind(this)
     this.state = {
-      stats: {
-        balance: 38100000000,
-        becameHodlerAt: 1507679477,
-        ethAddress: '0x834df7fc8adef83b6e3609bcd1d0871daeffe821',
-        isOG: true,
-        applied: false
-      }
+      default: true
     }
+  }
+
+  renderDefault () {
+    return (
+      <p className="searchStatus monospace">
+      Search any address in the field above to see it's standing with the HODL Club.
+      The minimum requirements are to have made no CAN withdrawals for 45 days and to have completed the sign up process.</p>
+    )
   }
 
   renderApplied() {
@@ -40,9 +43,6 @@ class Status extends React.Component {
       You're an {'\uD83D\uDC51'} OG Hodler {'\uD83D\uDC51'}
     </p>)
   }
-  isHodl45() {
-    return this.props.getDaysHodled(this.props.stats.becameHodlerAt) > 45
-  }
 
   returnDays () {
     let requiredDays = (45 - this.props.getDaysHodled(this.props.stats.becameHodlerAt))
@@ -53,12 +53,16 @@ class Status extends React.Component {
     }
   }
 
-  isOG() {
-    return this.props.stats.isOG
+  returnMember() {
+    return (<p className="searchStatus monospace">Approved HODL Club Member.</p>)
   }
 
-  isMember() {
-    return (<p className="searchStatus monospace">Approved HODL Club Member.</p>)
+  isHodl45() {
+    return this.props.getDaysHodled(this.props.stats.becameHodlerAt) > 45
+  }
+
+  isOG() {
+    return this.props.stats.isOG
   }
 
   componentDidMount() {
@@ -66,27 +70,32 @@ class Status extends React.Component {
   }
   giveStatus() {
     let stats = this.props.stats
-    if (stats.applied) {
-      if (this.isHodl45()) {
-        return this.isMember()
-      } else {
-        return this.renderApplied()
+    console.log(stats)
+    if (Object.keys(stats).length !== 0) {
+      if (stats.applied) {
+        if (this.isHodl45()) {
+          return this.returnMember()
+        } else {
+          return this.renderApplied()
+        }
       }
-    }
-    else {
-      if (this.isOG()) {
-        return (this.renderIsOG())
-      } else {
-        return (this.renderNotApplied())
+      else {
+        if (this.isOG()) {
+          return (this.renderIsOG())
+        } else {
+          return (this.renderNotApplied())
+        }
       }
+    } else {
+      return this.renderDefault()
     }
   }
-    render() {
 
+    render() {
       return (<div className="Status">
         <div className="flexrow aligncentre">
           <div className="balance">
-            Balance: {this.props.stats.balance / (Math.pow(10, 6))}
+            Balance: {Math.floor(this.props.stats.balance / (Math.pow(10, 6)))}
           </div>
           <div>
             Days HODL'd: {this.props.getDaysHodled(this.props.becameHodlerAt)}

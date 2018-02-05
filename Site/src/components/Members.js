@@ -6,9 +6,6 @@ import ListHeader from './ListHeader'
 import InfiniteScroll from 'react-infinite-scroller'
 
 class Members extends React.Component {
-  constructor(props) {
-    super(props)
-  }
 
   render() {
     return (
@@ -24,10 +21,7 @@ class Members extends React.Component {
           loader={<div className="loader" key={0}>Loading ...</div>}
           useWindow={true}
         >
-          {
-            this.props.hodlClub.map((hodler, index) => <ListItem hodler={hodler} key={index} />)
-            })
-          }
+          { this.props.hodlClub.map((hodler, index) => <ListItem hodler={hodler} key={index} />) }
         </InfiniteScroll>
       </div>
     )

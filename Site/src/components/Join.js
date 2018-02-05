@@ -1,6 +1,5 @@
 import React from 'react';
 import './App.css';
-var FA = require('react-fontawesome');
 
 class Join extends React.Component {
 

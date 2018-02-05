@@ -10,7 +10,6 @@ class ListHeader extends React.Component {
           </div>
         <div className="listHeader-Data">
         <a className="listHeader-Data-a">Days HODL'd:</a>
-        <a className="listHeader-Data-a"/>
         <a className="listHeader-Data-a">Token Balance:</a>
         </div>
     </div>);

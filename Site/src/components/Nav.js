@@ -7,7 +7,7 @@ class Nav extends React.Component {
   render() {
 
     return (<div className="Nav">
-      <img className="logo"src={require('./assets/hodl_logo.jpg')}/>
+      <img className="logo" alt="HODL_CLUB" src={require('./assets/hodl_logo.jpg')}/>
       <div className="flexrow links">
           <Link to='/'>About</Link>
           <Link to='/join'>Join the club</Link>

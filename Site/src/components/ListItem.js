@@ -27,13 +27,13 @@ class ListItem extends React.Component {
         ""}
         <div className="listItemBox flexcol">
           <a className="threewords">{formattedThreeWordsName}</a>
-          <a className="walletId">{hodler.address}</a>
+          <a className="walletId">{hodler.ethAddress}</a>
           </div>
         <div className="listItemBox">
           {this.getDaysHodled(hodler.becameHodlerAt)} Days
         </div>
         <div className="listItemBox">
-          {hodler.balance / (Math.pow(10, 6))}  CAN
+          {Math.floor(hodler.balance / (Math.pow(10, 6)))}  CAN
         </div>
     </div>);
   }
