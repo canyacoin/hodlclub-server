@@ -9,11 +9,11 @@ module.exports = {
   },
 
   fqdns: {
-    hodl: 'localhost',
-    api: 'api.localhost',
-    admin: 'admin.localhost',
-    adminpanel: 'adminpanel.localhost',
-    proxy: 'localhost'
+    hodl: 'hodl.canya.com',
+    api: 'api.hodl.canya.com',
+    admin: 'admin.hodl.canya.com',
+    adminpanel: 'adminpanel.hodl.canya.com',
+    proxy: 'hodl.canya.com'
   }
 
 }
