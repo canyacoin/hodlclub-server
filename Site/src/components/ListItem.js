@@ -1,18 +1,31 @@
 import React from 'react';
 import './App.css';
+const threewords = require('threewords');
+
 
 class ListItem extends React.Component {
   render() {
-    return (<div className="ListItem flexrow">
-      <div className="listItemBox flexcol">
-        <a>{this.props.name}</a>
-        <a className="walletId">{this.props.address}</a>
-      </div>
-      <div className="listItemBox">
-        {this.props.age}
-        Days
-      </div>
-      {this.props.airdrop}
+
+    const threeWordsName = threewords(this.props.address)
+    const newchar = ' '
+    const formattedThreeWordsName = threeWordsName.split('-').join(newchar);
+
+
+    return (
+      <div className="ListItem flexrow">
+      {this.props.isOG ?
+        <a className="isOG">{'\uD83D\uDC51'}</a> :
+        ""}
+        <div className="listItemBox flexcol">
+          <a className="threewords">{formattedThreeWordsName}</a>
+          <a className="walletId">{this.props.address}</a>
+          </div>
+        <div className="listItemBox">
+          {this.props.age} Days
+        </div>
+        <div className="listItemBox">
+          {this.props.balance}  CAN
+        </div>
     </div>);
   }
 }
