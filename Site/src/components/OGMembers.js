@@ -39,7 +39,6 @@ constructor(props) {
           <a className="data">Address</a>
         </div>
       </div>
-      <ListHeader />
       {
         this.state.hodlClub.map((hodler, index) => {
           return (
