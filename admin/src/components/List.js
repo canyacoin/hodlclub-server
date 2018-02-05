@@ -12,7 +12,7 @@ class List extends Component {
             return (
               <ListItem
               ethAddress={member.ethAddress}
-              isOG={member.isOG ? "OG" : "No-OG"}
+              isOG={member.isOG}
               balance={member.balance}
               toggleOG={() => this.props.toggleOG(index)}
               blacklist={() => this.props.blacklist(index)}

@@ -23,12 +23,16 @@ class App extends Component {
 
   async toggleOG (index) {
     let hodler = this.state.results[index]
-    await ApiService.makeOG(hodler.ethAddress)
+    let result = await ApiService.makeOG(hodler.ethAddress)
+    if (result.success) this.state.results[index].isOG = !hodler.isOG
+    this.forceUpdate()
   }
 
   async blacklist (index) {
     let hodler = this.state.results[index]
-    await ApiService.blacklist(hodler.ethAddress)
+    let result = await ApiService.blacklist(hodler.ethAddress)
+    if (result.success) this.state.results[index].blacklisted = !hodler.blacklisted
+    this.forceUpdate()
   }
 
   async downloadAll () {
@@ -47,11 +51,11 @@ class App extends Component {
     return (
       <div className="App">
         <Header/>
-        <Filter 
+        <Filter
           performSearch={this.performSearch}
           downloadAll={this.downloadAll}
           downloadMembers={this.downloadMembers}
-          downloadApplications={this.downloadApplications} 
+          downloadApplications={this.downloadApplications}
         />
         <List
           results={this.state.results}
