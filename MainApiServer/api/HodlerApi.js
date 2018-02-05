@@ -1,3 +1,4 @@
+const sanitise = require('mongo-sanitize')
 const Log = require('../services/Logger')
 const ResponseHandler = require('./ResponseHandler')
 
@@ -21,9 +22,9 @@ HodlerApi.prototype.bestHodlers = (req, res, data) => {
   self.db.collection('longHodlers').createIndex({ becameHodlerAt: 1 })
   self.db.collection('longHodlers')
     .find({}, {
-      limit: Number(data.numberOfHodlers),
+      limit: Number(sanitise(data.numberOfHodlers)),
       sort: [['becameHodlerAt', 1]],
-      skip: (Number(data.skip) || 0)
+      skip: (Number(sanitise(data.skip)) || 0)
     }).toArray((error, results) => {
       if (error) return ResponseHandler.serverError(res)
       if (results.length === 0) return ResponseHandler.notFound(res)
@@ -41,7 +42,7 @@ HodlerApi.prototype.bestHodlerOGs = (req, res, data) => {
   self.db.collection('longHodlers').createIndex({ becameHodlerAt: 1 })
   self.db.collection('longHodlers')
     .find({ isOG: true }, {
-      limit: Number(data.numberOfHodlers),
+      limit: Number(sanitise(data.numberOfHodlers)),
       sort: [['becameHodlerAt', 1]]
     }).toArray((error, results) => {
       if (error) return ResponseHandler.serverError(res)
@@ -68,12 +69,15 @@ HodlerApi.prototype.tokensAirdropped = (req, res, data) => {
 HodlerApi.prototype.getHodlStats = async (req, res, data) => {
   if (!data.hodlerAddress) return ResponseHandler.badRequest(res, ['hodlerAddress should be a String'])
   let hodler
+  let applicant
   try {
-    hodler = await self.db.collection('hodlers').findOne({ ethAddress: data.hodlerAddress.toLowerCase() })
+    hodler = await self.db.collection('hodlers').findOne({ ethAddress: sanitise(data.hodlerAddress).toLowerCase() })
+    applicant = await self.db.collection('hodlerApplications').findOne({ 'ethAddress': sanitise(data.hodlerAddress).toLowerCase() })
   } catch (error) {
     return ResponseHandler.serverError(res)
   }
   if (!hodler) return ResponseHandler.notFound(res)
+  if (applicant) hodler.applied = true
   return ResponseHandler.success(res, hodler)
 }
 
@@ -85,15 +89,15 @@ HodlerApi.prototype.getHodlStats = async (req, res, data) => {
  */
 HodlerApi.prototype.submitApplication = async (req, res, data) => {
   let errors = []
-  if (!isValidEmail(data.emailAddress)) errors.push('Invalid email address')
-  if (!isValidEthAddress(data.ethAddress)) errors.push('Invalid Ethereum address')
-  if (!isValidTelegramHandle(data.telegramHandle)) errors.push('Invalid Telegram handle')
+  if (!isValidEmail(sanitise(data.emailAddress))) errors.push('Invalid email address')
+  if (!isValidEthAddress(sanitise(data.ethAddress))) errors.push('Invalid Ethereum address')
+  if (!isValidTelegramHandle(sanitise(data.telegramHandle))) errors.push('Invalid Telegram handle')
   if (errors.length > 0) return ResponseHandler.badRequest(res, errors)
-  let telegramHandle = formatTelegramHandle(data.telegramHandle)
+  let telegramHandle = formatTelegramHandle(sanitise(data.telegramHandle))
 
   let isValidHodler
   try {
-    isValidHodler = await HodlApplication.isValid(self.db, data.ethAddress)
+    isValidHodler = await HodlApplication.isValid(self.db, sanitise(data.ethAddress))
   } catch (error) {
     return ResponseHandler.serverError(res)
   }
@@ -103,9 +107,8 @@ HodlerApi.prototype.submitApplication = async (req, res, data) => {
   // if it is, chuck out an email to CanYa
   let alreadyApplied
   try {
-    alreadyApplied = await HodlApplication.exists(self.db, { ethAddress: data.ethAddress, telegramHandle: telegramHandle, emailAddress: data.emailAddress })
+    alreadyApplied = await HodlApplication.exists(self.db, { ethAddress: sanitise(data.ethAddress), telegramHandle: sanitise(telegramHandle), emailAddress: sanitise(data.emailAddress) })
   } catch (error) {
-    console.log(error)
     return ResponseHandler.serverError(res)
   }
 
@@ -117,9 +120,9 @@ HodlerApi.prototype.submitApplication = async (req, res, data) => {
   await HodlApplication.insert(
     self.db,
     {
-      ethAddress: data.ethAddress,
-      telegramHandle: telegramHandle,
-      emailAddress: data.emailAddress
+      ethAddress: sanitise(data.ethAddress),
+      telegramHandle: sanitise(telegramHandle),
+      emailAddress: sanitise(data.emailAddress)
     }
   )
   Log.info('New Hodl Club application. ETH: ' + data.ethAddress + ', telegram: ' + telegramHandle + ', email: ' + data.emailAddress)

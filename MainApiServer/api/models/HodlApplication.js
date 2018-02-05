@@ -1,5 +1,6 @@
-let HODLER_TABLE = require('../../config/database').hodlerTable
-let APPLICATION_TABLE = require('../../config/database').applicationTable
+const sanitise = require('mongo-sanitize')
+const HODLER_TABLE = require('../../config/database').hodlerTable
+const APPLICATION_TABLE = require('../../config/database').applicationTable
 
 let HodlApplication = {}
 
@@ -12,9 +13,9 @@ let HodlApplication = {}
 HodlApplication.exists = async (db, data) => {
   let { ethAddress, telegramHandle, emailAddress } = data
   let queryObj = {}
-  if (ethAddress) queryObj.ethAddress = ethAddress
-  if (telegramHandle) queryObj.telegramHandle = telegramHandle
-  if (emailAddress) queryObj.emailAddress = emailAddress
+  if (ethAddress) queryObj.ethAddress = sanitise(ethAddress)
+  if (telegramHandle) queryObj.telegramHandle = sanitise(telegramHandle)
+  if (emailAddress) queryObj.emailAddress = sanitise(emailAddress)
 
   if (Object.keys(queryObj).length === 0) return false
   return new Promise((resolve, reject) => {
@@ -28,7 +29,7 @@ HodlApplication.exists = async (db, data) => {
 
 HodlApplication.isValid = async (db, ethAddress) => {
   return new Promise(async (resolve) => {
-    let hodler = await db.collection(HODLER_TABLE).findOne({ethAddress: ethAddress})
+    let hodler = await db.collection(HODLER_TABLE).findOne({ethAddress: sanitise(ethAddress)})
     if (hodler) {
       resolve(true)
     } else {
@@ -47,9 +48,9 @@ HodlApplication.insert = async (db, data) => {
   return new Promise(async (resolve, reject) => {
     if (!data.ethAddress || !data.telegramHandle || !data.emailAddress) return reject(new Error('Could not save, missing information'))
     await db.collection(APPLICATION_TABLE).insertOne({
-      ethAddress: data.ethAddress.toLowerCase(),
-      telegramHandle: data.telegramHandle.toLowerCase(),
-      emailAddress: data.emailAddress.toLowerCase()
+      ethAddress: sanitise(data.ethAddress).toLowerCase(),
+      telegramHandle: sanitise(data.telegramHandle).toLowerCase(),
+      emailAddress: sanitise(data.emailAddress).toLowerCase()
     })
     resolve()
   })
@@ -65,9 +66,9 @@ HodlApplication.remove = async (db, data) => {
   return new Promise(async (resolve, reject) => {
     if (!data.ethAddress || !data.telegramHandle || !data.emailAddress) return reject(new Error('Could not remove, missing information'))
     await db.collection(APPLICATION_TABLE).findOneAndDelete({
-      ethAddress: data.ethAddress.toLowerCase(),
-      telegramHandle: data.telegramHandle.toLowerCase(),
-      emailAddress: data.emailAddress.toLowerCase()
+      ethAddress: sanitise(data.ethAddress).toLowerCase(),
+      telegramHandle: sanitise(data.telegramHandle).toLowerCase(),
+      emailAddress: sanitise(data.emailAddress).toLowerCase()
     })
     resolve()
   })

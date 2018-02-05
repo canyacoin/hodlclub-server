@@ -1,3 +1,4 @@
+require('dotenv').config()
 const config = require('./config')
 const ports = config.ports
 const fqdns = config.fqdns
