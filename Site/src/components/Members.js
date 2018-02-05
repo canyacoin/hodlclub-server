@@ -11,25 +11,26 @@ class Members extends React.Component {
   }
 
   render() {
-    return (<div className="Members">
-      <SearchAddress search={this.props.search}/>
-      <ListHeader />
-      <InfiniteScroll
-        pageStart={0}
-        loadMore={async (page) => {
-          let result = await this.props.loadMore()
-        }}
-        hasMore={this.props.moreToLoad}
-        loader={<div className="loader" key={0}>Loading ...</div>}
-        useWindow={true}
-      >
-        {
-          this.props.hodlClub.map((hodler, index) => {
-            return (<ListItem hodler={hodler} key={index} />)
-          })
-        }
-      </InfiniteScroll>
-    </div>);
+    return (
+      <div className="Members">
+        <SearchAddress search={this.props.search} />
+        <ListHeader />
+        <InfiniteScroll
+          pageStart={0}
+          loadMore={async (page) => {
+            await this.props.loadMore()
+          }}
+          hasMore={this.props.moreToLoad}
+          loader={<div className="loader" key={0}>Loading ...</div>}
+          useWindow={true}
+        >
+          {
+            this.props.hodlClub.map((hodler, index) => <ListItem hodler={hodler} key={index} />)
+            })
+          }
+        </InfiniteScroll>
+      </div>
+    )
   }
 }
 
