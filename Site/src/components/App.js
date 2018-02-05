@@ -12,8 +12,7 @@ class App extends React.Component {
     this.state = {
       showMe: true,
       hodlClub: []
-    }
-    console.log(this.state.hodlClub)
+    } 
   }
 
   /**

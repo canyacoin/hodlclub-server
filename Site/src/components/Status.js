@@ -8,74 +8,93 @@ class Status extends React.Component {
     super(props)
     this.renderNotApplied = this.renderNotApplied.bind(this)
     this.renderApplied = this.renderApplied.bind(this)
-    this.renderDaysRemaining = this.renderDaysRemaining.bind(this)
-    this.renderAppliedDaysRemaining = this.renderAppliedDaysRemaining.bind(this)
+    this.isHodl45 = this.isHodl45.bind(this)
+    this.isMember = this.isMember.bind(this)
+    this.returnDays = this.returnDays.bind(this)
     this.state = {
       stats: {
         balance: 38100000000,
         becameHodlerAt: 1507679477,
         ethAddress: '0x834df7fc8adef83b6e3609bcd1d0871daeffe821',
-        isOG: false,
-        isApplied: true
+        isOG: true,
+        applied: false
       }
     }
   }
 
   renderApplied() {
     return (<p className="searchStatus monospace">
-      It looks like you've successfully applied to join.
+      Thanks! You've successfully applied to join. You just need to wait {this.returnDays()} Days until you're in the club.
     </p>)
   }
 
   renderNotApplied() {
     return (<p className="searchStatus monospace">
-      It looks like the owner of this address is yet to apply.&nbsp;
+      It looks like you've already HODL'd for {this.returnDays()} days, you just need to apply.&nbsp;
       <Link to='/join'>Click here to begin.</Link>
     </p>)
   }
 
-  renderDaysRemaining() {
+  renderIsOG() {
     return (<p className="searchStatus monospace">
-      You're also {45 - this.props.getDaysHodled(this.state.stats.becameHodlerAt)}
-      &nbsp;days away from HODL Club membership, HODL those CanYa tokens!
+      You're an {'\uD83D\uDC51'} OG Hodler {'\uD83D\uDC51'}
     </p>)
   }
-
-  renderAppliedDaysRemaining() {
-    return (<p className="searchStatus monospace">
-      You're {45 - this.props.getDaysHodled(this.props.stats.becameHodlerAt)}
-      &nbsp;days away from HODL Club membership, HODL those CanYa tokens!
-    </p>)
+  isHodl45() {
+    return this.props.getDaysHodled(this.props.stats.becameHodlerAt) > 45
   }
 
-  giveStatus() {
-    let stats = this.state.stats
-    if (stats.isApplied && this.props.getDaysHodled(this.state.becameHodlerAt)) {
-      return this.renderAppliedDaysRemaining()
+  returnDays () {
+    let requiredDays = (45 - this.props.getDaysHodled(this.props.stats.becameHodlerAt))
+    if (requiredDays > 0) {
+      return requiredDays
+    } else {
+      return this.props.getDaysHodled(this.props.stats.becameHodlerAt)
     }
   }
-  // @todo (alex) make a component which will handle each state
-  // - not a hodler
-  // - hodler for less than 45 days & not applied
-  // - hodler for more than 45 days & not applied
-  // - hodler for more than 45 days & applied (member!!)
-  // - OG
-  // - hodler for less than 45 days & already applied
 
-  render() {
-    return (<div className="Status">
-      <div className="flexrow aligncentre">
-        <div className="balance">
-          Balance: {this.props.stats.balance / (Math.pow(10, 6))}
-        </div>
-        <div className="">
-          Days HODL'd: {this.props.getDaysHodled(this.props.becameHodlerAt)}
-        </div>
-      </div>
-      {this.giveStatus()}
-      <button onClick={() => console.log(this.props.stats)} />
-    </div>);
+  isOG() {
+    return this.props.stats.isOG
   }
-}
 
-export default Status;
+  isMember() {
+    return (<p className="searchStatus monospace">Approved HODL Club Member.</p>)
+  }
+
+  componentDidMount() {
+    console.log(this.returnDays())
+  }
+  giveStatus() {
+    let stats = this.props.stats
+    if (stats.applied) {
+      if (this.isHodl45()) {
+        return this.isMember()
+      } else {
+        return this.renderApplied()
+      }
+    }
+    else {
+      if (this.isOG()) {
+        return (this.renderIsOG())
+      } else {
+        return (this.renderNotApplied())
+      }
+    }
+  }
+    render() {
+
+      return (<div className="Status">
+        <div className="flexrow aligncentre">
+          <div className="balance">
+            Balance: {this.props.stats.balance / (Math.pow(10, 6))}
+          </div>
+          <div>
+            Days HODL'd: {this.props.getDaysHodled(this.props.becameHodlerAt)}
+          </div>
+        </div>
+        {this.giveStatus()}
+      </div>)
+    }
+  }
+
+  export default Status;

@@ -18,11 +18,13 @@ class SearchAddress extends React.Component {
     this.setState({ stats: stats })
   }
 
-  // @todo (tom) implement this function
-  getDaysHodled (pastTimestamp) {
-    return 45
-    //Cheers cunt
+  getDaysHodled(timestamp) {
+    let now = Math.floor(Date.now() / 1000)
+    let diff = now - timestamp
+    let days = Math.floor(diff / 86400)
+    return days
   }
+
 
   render() {
     return (<div className="SearchAddress flexrow">
