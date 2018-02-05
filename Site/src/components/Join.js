@@ -1,5 +1,6 @@
 import React from 'react';
 import './App.css';
+var FA = require('react-fontawesome');
 
 class Join extends React.Component {
 
@@ -27,6 +28,12 @@ class Join extends React.Component {
         <input className="formInput monospace" placeholder="person@email.com"/>
         <h2>Your wallet address:</h2>
         <input className="formInput monospace" placeholder="0x00123456789abcdefedcba987654321"/>
+        <h2>Your Discord Username:</h2>
+        <div className="flexrow">
+        <input className="formInput monospace" id="discord1" placeholder="Rising_Phoenix33" />
+        <input className="discordHash" placeholder="#" readOnly="readOnly"/>
+        <input className="formInput monospace" type="number" id="discord2"placeholder="5929" />
+        </div>
         <button className="formButton" type="submit">Sign Up</button>
       </form>
       </div>
