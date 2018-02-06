@@ -21,7 +21,11 @@ class Join extends React.Component {
     let { email, ethAddress, discordName, discordNumber } = this.state
     let discordHandle = discordName + '#' + discordNumber
     let result = await ApiService.submitApplication(email, discordHandle, ethAddress)
-    console.log(result)
+    if (result.success) {
+      // do something nice
+    } else {
+      // something failed, print the message
+    }
   }
 
   async formSubmit () {

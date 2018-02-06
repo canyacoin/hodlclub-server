@@ -46,7 +46,7 @@ HodlerApi.prototype.bestHodlerOGs = (req, res, data) => {
       sort: [['becameHodlerAt', 1]]
     }).toArray((error, results) => {
       if (error) return ResponseHandler.serverError(res)
-      if (results.length === 0) return ResponseHandler.notFound(res)
+      if (results.length === 0) return ResponseHandler.success(res, [])
       ResponseHandler.success(res, results)
     })
 }
@@ -92,7 +92,7 @@ HodlerApi.prototype.submitApplication = async (req, res, data) => {
   if (!isValidEmail(sanitise(data.emailAddress))) errors.push('Invalid email address')
   if (!isValidEthAddress(sanitise(data.ethAddress))) errors.push('Invalid Ethereum address')
   if (!isValidDiscordHandle(sanitise(data.discordHandle))) errors.push('Invalid Discord handle')
-  if (errors.length > 0) return ResponseHandler.badRequest(res, errors)
+  if (errors.length > 0) return ResponseHandler.fail(res, errors)
 
   let isValidHodler
   try {
@@ -100,7 +100,7 @@ HodlerApi.prototype.submitApplication = async (req, res, data) => {
   } catch (error) {
     return ResponseHandler.serverError(res)
   }
-  if (!isValidHodler) return ResponseHandler.badRequest(res, ['Not enough CAN to join the club'])
+  if (!isValidHodler) return ResponseHandler.fail(res, ['Not enough CAN to join the club'])
 
   // TODO: check whether this eth address or discord handle is already in the database
   // if it is, chuck out an email to CanYa
@@ -112,7 +112,7 @@ HodlerApi.prototype.submitApplication = async (req, res, data) => {
   }
 
   if (alreadyApplied) {
-    return ResponseHandler.badRequest(res, ['Already applied to join the Hodl Club'])
+    return ResponseHandler.fail(res, ['Already applied to join the Hodl Club'])
   }
 
   // input the application into the database
@@ -125,7 +125,7 @@ HodlerApi.prototype.submitApplication = async (req, res, data) => {
     }
   )
   Log.info('New Hodl Club application. ETH: ' + data.ethAddress + ', discord: ' + data.discordHandle + ', email: ' + data.emailAddress)
-  ResponseHandler.ok(res)
+  ResponseHandler.success(res, [])
 }
 
 /**

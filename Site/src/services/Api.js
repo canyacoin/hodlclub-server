@@ -54,7 +54,7 @@ const ApiService = {
       fetch(ApiService.url + route.path, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'text/plain'
         },
         body: JSON.stringify(params)
       }).then(response => response.json()).then(json => resolve(json))
