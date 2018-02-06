@@ -1,11 +1,13 @@
 import React from 'react';
 import './App.css';
+import ApiService from '../services/Api'
 
 class Join extends React.Component {
 
   constructor(props) {
     super(props)
     this.formSubmit = this.formSubmit.bind(this)
+    this.submitApplication = this.submitApplication.bind(this)
     this.state = {
       email: '',
       ethAddress: '',
@@ -15,14 +17,21 @@ class Join extends React.Component {
     }
   }
 
-  formSubmit () {
-    console.log(this.state)
-    console.log("You've submitted the Form")
+  async submitApplication () {
+    let { email, ethAddress, discordName, discordNumber } = this.state
+    let discordHandle = discordName + '#' + discordNumber
+    let result = await ApiService.submitApplication(email, discordHandle, ethAddress)
+    console.log(result)
+  }
+
+  async formSubmit () {
     this.validateEmail(this.state.email)
     this.validateEthAddress(this.state.ethAddress)
     this.validateDiscordName(this.state.discordName)
     this.validateDiscordNumber(this.state.discordNumber)
-    console.log(this.state.invalidFields)
+    if (this.state.invalidFields.length === 0) {
+      await this.submitApplication()
+    }
   }
 
   validateEmail (input) {

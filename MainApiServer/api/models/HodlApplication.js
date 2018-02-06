@@ -11,10 +11,10 @@ let HodlApplication = {}
  *  @return {Promise<Boolean>} Whether an application exists with these details already
  */
 HodlApplication.exists = async (db, data) => {
-  let { ethAddress, telegramHandle, emailAddress } = data
+  let { ethAddress, discordHandle, emailAddress } = data
   let queryObj = {}
   if (ethAddress) queryObj.ethAddress = sanitise(ethAddress)
-  if (telegramHandle) queryObj.telegramHandle = sanitise(telegramHandle)
+  if (discordHandle) queryObj.discordHandle = sanitise(discordHandle)
   if (emailAddress) queryObj.emailAddress = sanitise(emailAddress)
 
   if (Object.keys(queryObj).length === 0) return false
@@ -46,10 +46,10 @@ HodlApplication.isValid = async (db, ethAddress) => {
  */
 HodlApplication.insert = async (db, data) => {
   return new Promise(async (resolve, reject) => {
-    if (!data.ethAddress || !data.telegramHandle || !data.emailAddress) return reject(new Error('Could not save, missing information'))
+    if (!data.ethAddress || !data.discordHandle || !data.emailAddress) return reject(new Error('Could not save, missing information'))
     await db.collection(APPLICATION_TABLE).insertOne({
       ethAddress: sanitise(data.ethAddress).toLowerCase(),
-      telegramHandle: sanitise(data.telegramHandle).toLowerCase(),
+      discordHandle: sanitise(data.discordHandle).toLowerCase(),
       emailAddress: sanitise(data.emailAddress).toLowerCase()
     })
     resolve()
@@ -64,10 +64,10 @@ HodlApplication.insert = async (db, data) => {
  */
 HodlApplication.remove = async (db, data) => {
   return new Promise(async (resolve, reject) => {
-    if (!data.ethAddress || !data.telegramHandle || !data.emailAddress) return reject(new Error('Could not remove, missing information'))
+    if (!data.ethAddress || !data.discordHandle || !data.emailAddress) return reject(new Error('Could not remove, missing information'))
     await db.collection(APPLICATION_TABLE).findOneAndDelete({
       ethAddress: sanitise(data.ethAddress).toLowerCase(),
-      telegramHandle: sanitise(data.telegramHandle).toLowerCase(),
+      discordHandle: sanitise(data.discordHandle).toLowerCase(),
       emailAddress: sanitise(data.emailAddress).toLowerCase()
     })
     resolve()

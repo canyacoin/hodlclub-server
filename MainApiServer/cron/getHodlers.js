@@ -217,7 +217,7 @@ async function notifyNewLongHolders (newLongHodlers, db) {
     db.collection(HODL_CLUB_APPLICATION_TABLE)
       .find({ ethAddress: { $in: newHolderAddresses } })
       .toArray((e, newHodlMembers) => {
-        // @TODO these are the new HODL members, we need to send them an email (or maybe a telegram in the future!)
+        // @TODO these are the new HODL members, we need to send them an email (or maybe a discord in the future!)
         if (e) return reject(new Error(e))
         if (!newHodlMembers || newHodlMembers.length === 0) return resolve()
         for (let newHodler of newHodlMembers) {
