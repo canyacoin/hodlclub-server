@@ -14,10 +14,13 @@ class ListItem extends Component {
     return days
   }
 
+  getEtherscanLink (address) {
+    return "https://etherscan.io/address/" + address
+  }
+
   render() {
-    console.log(this.props)
     return (<div className="ListItem flexrow">
-      <a className="data">{this.props.ethAddress}</a>
+      <a className="data" href={this.getEtherscanLink(this.props.ethAddress)} target="_blank">{this.props.ethAddress}</a>
       <a className="data">{this.getDaysHodled(this.props.becameHodlerAt)}</a>
       <a className="data">{this.props.isOG ? 'OG' : 'Non-OG'}</a>
       <a className="data">{this.props.balance}</a>

@@ -124,6 +124,7 @@ hr {
   font-family: monospace;
   font-size: 1em;
   color: #3cf;
+  text-decoration: none;
 }
 
 .status {
@@ -282,3 +283,10 @@ border-bottom: solid 2px #eee;
 .Footer a:visited, .Footer a:active, .Footer a:link {
   color: #888;
 }
+
+.formError {
+  border: 1px solid red;
+}
+
+.formErrorDescription {
+  color: red;

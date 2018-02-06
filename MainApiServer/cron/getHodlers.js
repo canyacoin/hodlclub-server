@@ -101,10 +101,18 @@ async function processEvents (events, blacklist) {
     timestamp = 0
     let sendingAddress = event.args.from.toLowerCase()
     let receivingAddress = event.args.to.toLowerCase()
+    let canAmount = event.args.value
     if (receivers[sendingAddress]) {
       // kick this user out of the club
-      kickedOut[sendingAddress] = true
-      delete receivers[sendingAddress]
+      // @TODO don't kick them out if they have more than 2.5k CAN, just reset the timer
+      receivers[sendingAddress].balance = receivers[sendingAddress].balance.sub(canAmount)
+      if (receivers[sendingAddress].balance.gte(HodlClubTokenThreshold)) {
+        timestamp = await getBlockTimestamp(event.blockNumber)
+        receivers[sendingAddress].timestampOverThreshold = timestamp
+      } else {
+        kickedOut[sendingAddress] = true
+        delete receivers[sendingAddress]
+      }
     }
     if (blacklist.indexOf(receivingAddress) !== -1) {
       kickedOut[receivingAddress] = true
@@ -112,17 +120,17 @@ async function processEvents (events, blacklist) {
     }
     if (!receivers[receivingAddress]) {
       // we don't have this user yet
-      if (event.args.value.gte(HodlClubTokenThreshold)) {
+      if (canAmount.gte(HodlClubTokenThreshold)) {
         // this person has enough to be in the hodl club at this point!!!
         timestamp = await getBlockTimestamp(event.blockNumber)
         receiver.timestampOverThreshold = timestamp
       }
-      receiver.balance = event.args.value
+      receiver.balance = canAmount
       receivers[receivingAddress] = receiver
       delete kickedOut[receivingAddress]
     } else {
       receiver = receivers[receivingAddress]
-      receiver.balance = receiver.balance.add(event.args.value)
+      receiver.balance = receiver.balance.add(canAmount)
       if (!receiver.timestampOverThreshold && receiver.balance.gte(HodlClubTokenThreshold)) {
         timestamp = await getBlockTimestamp(event.blockNumber)
         receiver.timestampOverThreshold = timestamp

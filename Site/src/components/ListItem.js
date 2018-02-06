@@ -12,6 +12,9 @@ class ListItem extends React.Component {
     return days
   }
 
+  getEtherscanUrl (address) {
+    return "https://etherscan.io/address/" + address
+  }
 
   render() {
     const hodler = this.props.hodler
@@ -19,23 +22,21 @@ class ListItem extends React.Component {
     const newchar = ' '
     const formattedThreeWordsName = threeWordsName.split('-').join(newchar);
 
-
     return (
       <div className="ListItem flexrow">
-      {hodler.isOG ?
-        <a className="isOG">{'\uD83D\uDC51'}</a> :
-        ""}
+        { hodler.isOG ? <a className="isOG">{'\uD83D\uDC51'}</a> : "" }
         <div className="listItemBox flexcol">
-          <a className="threewords">{formattedThreeWordsName}</a>
-          <a className="walletId">{hodler.ethAddress}</a>
-          </div>
-        <div className="listItemBox">
-          {this.getDaysHodled(hodler.becameHodlerAt)} Days
+          <a className="threewords">{ formattedThreeWordsName }</a>
+          <a className="walletId" href={this.getEtherscanUrl(hodler.ethAddress)} target="_blank">{hodler.ethAddress}</a>
         </div>
         <div className="listItemBox">
-          {Math.floor(hodler.balance / (Math.pow(10, 6)))}  CAN
+          { this.getDaysHodled(hodler.becameHodlerAt) } Days
         </div>
-    </div>);
+        <div className="listItemBox">
+          { Math.floor(hodler.balance / (Math.pow(10, 6))) }  CAN
+        </div>
+      </div>
+    )
   }
 }
 
