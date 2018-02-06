@@ -257,3 +257,11 @@ border-bottom: solid 2px #eee;
   border: solid 1px #ccc;
   background-color: #ddd;
 }
+
+.formError {
+  border: 1px solid red;
+}
+
+.formErrorDescription {
+  color: red;
+}
