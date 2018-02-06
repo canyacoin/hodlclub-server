@@ -20,7 +20,7 @@ HodlApplication.exists = async (db, data) => {
 
   if (Object.keys(queryObj).length === 0) return false
   return new Promise((resolve, reject) => {
-    db.collection(APPLICATION_TABLE).find(queryObj).toArray((error, results) => {
+    db.collection(APPLICATION_TABLE).find({$or: [queryObj]}).toArray((error, results) => {
       if (error) return reject(new Error('Query error'))
       if (results.length === 0) return resolve(false)
       return resolve(true)

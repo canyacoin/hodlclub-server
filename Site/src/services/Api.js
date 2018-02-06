@@ -110,7 +110,7 @@ const ApiService = {
   submitApplication: async (email, discord, ethAddress) => {
     return new Promise(async (resolve) => {
       let response = await ApiService.call(ApiService.routes.submitApplication, { emailAddress: email, discordHandle: discord, ethAddress: ethAddress })
-      resolve(response.data)
+      resolve(response)
     })
   }
 

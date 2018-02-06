@@ -1,6 +1,8 @@
 import React from 'react';
 import './App.css';
+import { renderToStaticMarkup } from 'react-dom/server';
 import ApiService from '../services/Api'
+import SweetAlert from 'sweetalert-react'
 
 class Join extends React.Component {
 
@@ -13,18 +15,50 @@ class Join extends React.Component {
       ethAddress: '',
       discordName: '',
       discordNumber: '',
-      invalidFields: []
+      invalidFields: [],
+      disableInputs: false,
+      showAlert: false,
+      alert: {
+        title: '',
+        text: ''
+      }
     }
+    this.successHtml =
+      <div>
+        <div className="alertText">
+          You're in the Hodl Club!, click this Discord link to join the server and an Admin will give 
+          you access to the exclusive Hodl Club chat!
+        </div>
+        <a href="https://discord.gg/55Guqtk" target="_blank">https://discord.gg/55Guqtk</a>
+      </div>
+  }
+
+  renderFailMessage (failText) {
+    return (
+      <div>
+        <div className="alertText">
+          There was an error submitting your application.<br/>
+          {failText}
+        </div>
+      </div>
+    )
   }
 
   async submitApplication () {
+    this.setState({disableInputs: true})
     let { email, ethAddress, discordName, discordNumber } = this.state
     let discordHandle = discordName + '#' + discordNumber
     let result = await ApiService.submitApplication(email, discordHandle, ethAddress)
     if (result.success) {
-      // do something nice
+      // do something nice and clear the inputs
+      this.setState({email: '', ethAddress: '', discordName: '', discordNumber: '', disableInputs: false, showAlert: true})
+      this.setState({
+        alert: {
+          title: 'Success!',
+          text: this.successHtml}})
     } else {
       // something failed, print the message
+      this.setState({disableInputs: false, showAlert: true, alert: {title: 'Oops!', text: this.renderFailMessage(result.errors[0])}})
     }
   }
 
@@ -80,6 +114,8 @@ class Join extends React.Component {
           type="email"
           className={`formInput monospace ${this.state.invalidFields.indexOf('email') === -1 ? '' : 'formError'}`}
           placeholder="hodlertilidie@gmail.com"
+          value={this.state.email}
+          disabled={this.state.disableInputs}
           onChange={(e) => {
             let invalidFields = this.state.invalidFields
             invalidFields.splice(invalidFields.indexOf('email'), 1)
@@ -94,6 +130,8 @@ class Join extends React.Component {
         <input 
           className={`formInput monospace ${this.state.invalidFields.indexOf('ethAddress') === -1 ? '' : 'formError'}`}
           placeholder="0xfB6916095ca1df60bB79Ce92cE3Ea74c37c5d359"
+          value={this.state.ethAddress}
+          disabled={this.state.disableInputs}
           onChange={(e) => {
             let invalidFields = this.state.invalidFields
             invalidFields.splice(invalidFields.indexOf('ethAddress'), 1)
@@ -111,6 +149,8 @@ class Join extends React.Component {
               className={`formInput monospace ${this.state.invalidFields.indexOf('discordName') === -1 ? '' : 'formError'}`}
               id="discord1"
               placeholder="OGCoinBoy"
+              value={this.state.discordName}
+              disabled={this.state.disableInputs}
               onChange={(e) => {
                 let invalidFields = this.state.invalidFields
                 invalidFields.splice(invalidFields.indexOf('discordName'), 1)
@@ -133,6 +173,8 @@ class Join extends React.Component {
                 min="0"
                 max="9999"
                 step="1"
+                value={this.state.discordNumber}
+                disabled={this.state.disableInputs}
                 onChange={(e) => {
                   let invalidFields = this.state.invalidFields
                   invalidFields.splice(invalidFields.indexOf('discordNumber'), 1)
@@ -147,6 +189,13 @@ class Join extends React.Component {
           </div>
         </div>
         <button className="formButton" type="submit" onClick={this.formSubmit}>Sign Up</button>
+        <SweetAlert
+          show={this.state.showAlert}
+          title={this.state.alert.title}
+          html
+          text={renderToStaticMarkup(this.state.alert.text)}
+          onConfirm={() => this.setState({ showAlert: false })}
+        />
       </div>
     )
   }
