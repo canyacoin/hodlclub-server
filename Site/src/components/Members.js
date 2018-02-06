@@ -11,7 +11,9 @@ class Members extends React.Component {
     return (
       <div className="Members">
         <SearchAddress search={this.props.search} />
-        <ListHeader />
+      {
+        // <ListHeader />
+      }
         <InfiniteScroll
           pageStart={0}
           loadMore={async (page) => {
