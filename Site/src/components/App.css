@@ -1,3 +1,77 @@
+
+@media (max-width: 600px) {
+
+  .listItemBox {
+    display: flex;
+  }
+
+  .listItemRow {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .ListItem {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .listItemBalance {
+    flex-direction: row;
+    justify-content: flex-end;
+  }
+  .listItemAddress {
+    align-items: baseline;
+  }
+
+  .listItemDays {
+    flex-direction: row;
+    align-content: flex-end;
+  }
+
+  .Main {
+    padding: 0 2vw;
+  }
+
+
+}
+
+@media (min-width: 600px) {
+  .Main {
+    padding: 0 20vw;
+  }
+
+
+  .listItemBox {
+    display: flex;
+  }
+
+  .ListItem {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .listItemBalance {
+    flex-direction: row;
+    justify-content: flex-end;
+    min-width: 115px;
+  }
+
+  .listItemAddress {
+    min-width: 350px;
+    align-items: baseline;
+  }
+
+  .listItemDays {
+    min-width: 115px;
+    flex-direction: row;
+    align-content: flex-end;
+  }
+
+}
+
+
 html {
   box-sizing: border-box;
   font-family: 'Montserrat', sans-serif;
@@ -101,23 +175,10 @@ hr {
 /* MEMBERS */
 
 .ListItem {
-  padding: 5px 0%;
-  align-items: center;
+  padding: 5px 15px;
   border-left: 2px solid #eee;
   margin: 15px 0;
-}
-
-.listItemBox {
-  padding: 5px 15px;
-  margin: 0 auto 0 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.nameAddress {
-  max-width: 30%;
-  align-items: left;
+  justify-content: space-between;
 }
 
 .walletId {
@@ -133,6 +194,7 @@ hr {
 
 .threewords{
   text-transform: capitalize;
+ /* white-space: nowrap; */
 }
 
 .isOG{
@@ -205,10 +267,6 @@ border-bottom: solid 2px #eee;
 
 /* MAIN */
 
-.Main {
-  padding: 0 20vw;
-}
-
 /* JOIN */
 
 
@@ -267,14 +325,14 @@ border-bottom: solid 2px #eee;
 
 /* FOOTER  */
 .Footer {
-  height: 50px;
+  height: 30px;
   font-family: monospace;
   font-size: .8em;
   color: #999;
   border-top: 2px dotted #ddd;
 }
 .footerContent{
-  margin: 0 auto;
+  margin:auto;
   display: flex;
   flex-direction: row;
   justify-content: center;
