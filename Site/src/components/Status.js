@@ -20,8 +20,7 @@ class Status extends React.Component {
   renderDefault () {
     return (
       <p className="searchStatus monospace">
-      Search any address in the field above to see it's standing with the HODL Club.
-      The minimum requirements are to have made no CAN withdrawals for 45 days and to have completed the sign up process.</p>
+      Search any address in the field above to see it's standing with the HODL Club. <Link to='/about'>Find out about the minimum requirements to join here.</Link> </p>
     )
   }
 
@@ -94,12 +93,6 @@ class Status extends React.Component {
     render() {
       return (<div className="Status">
         <div className="flexrow aligncentre">
-          <div className="balance">
-            Balance: {Math.floor(this.props.stats.balance / (Math.pow(10, 6)))}
-          </div>
-          <div>
-            Days HODL'd: {this.props.getDaysHodled(this.props.becameHodlerAt)}
-          </div>
         </div>
         {this.giveStatus()}
       </div>)

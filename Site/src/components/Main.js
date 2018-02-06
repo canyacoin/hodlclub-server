@@ -17,7 +17,7 @@ class Main extends React.Component {
         <Members hodlClub={this.props.hodlClub} search={this.props.search} loadMore={this.props.loadMore} moreToLoad={this.props.moreToLoad} />
       )} />
       <Route path='/og-members' render={(props) => (
-        <OGMembers hodlClub={this.props.hodlClub} search={this.props.search}/>
+        <Members hodlClub={this.props.hodlOG} loadMore={this.props.loadMoreOG} search={this.props.search}/>
       )} />
 
       <Route path='/join' component={Join}/>

@@ -22,7 +22,7 @@ class Members extends React.Component {
       >
         {
           this.props.hodlClub.map((hodler, index) => {
-            return (<ListItem hodler={hodler} key={index} />)
+            return (<ListItem onlyOG={this.props.onlyOG} hodler={hodler} key={index} />)
           })
         }
       </InfiniteScroll>
