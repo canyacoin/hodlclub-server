@@ -46,7 +46,7 @@ HodlerApi.prototype.bestHodlerOGs = (req, res, data) => {
       sort: [['becameHodlerAt', 1]]
     }).toArray((error, results) => {
       if (error) return ResponseHandler.serverError(res)
-      if (results.length === 0) return ResponseHandler.notFound(res)
+      if (results.length === 0) return ResponseHandler.success(res, [])
       ResponseHandler.success(res, results)
     })
 }
@@ -83,7 +83,7 @@ HodlerApi.prototype.getHodlStats = async (req, res, data) => {
 
 /**
  *  Submits an application to the hodl club
- *  @param telegramHandle {String} Telegram username for the hodler who is applying
+ *  @param discordHandle {String} Discord username for the hodler who is applying
  *  @param emailAddress {String} Email address for the applicant
  *  @param ethAddress {String} Ethereum address where the user has their tokens
  */
@@ -91,9 +91,8 @@ HodlerApi.prototype.submitApplication = async (req, res, data) => {
   let errors = []
   if (!isValidEmail(sanitise(data.emailAddress))) errors.push('Invalid email address')
   if (!isValidEthAddress(sanitise(data.ethAddress))) errors.push('Invalid Ethereum address')
-  if (!isValidTelegramHandle(sanitise(data.telegramHandle))) errors.push('Invalid Telegram handle')
-  if (errors.length > 0) return ResponseHandler.badRequest(res, errors)
-  let telegramHandle = formatTelegramHandle(sanitise(data.telegramHandle))
+  if (!isValidDiscordHandle(sanitise(data.discordHandle))) errors.push('Invalid Discord handle')
+  if (errors.length > 0) return ResponseHandler.fail(res, errors)
 
   let isValidHodler
   try {
@@ -101,19 +100,19 @@ HodlerApi.prototype.submitApplication = async (req, res, data) => {
   } catch (error) {
     return ResponseHandler.serverError(res)
   }
-  if (!isValidHodler) return ResponseHandler.badRequest(res, ['Not enough CAN to join the club'])
+  if (!isValidHodler) return ResponseHandler.fail(res, ['Not enough CAN to join the club'])
 
-  // TODO: check whether this eth address or telegram handle is already in the database
+  // TODO: check whether this eth address or discord handle is already in the database
   // if it is, chuck out an email to CanYa
   let alreadyApplied
   try {
-    alreadyApplied = await HodlApplication.exists(self.db, { ethAddress: sanitise(data.ethAddress), telegramHandle: sanitise(telegramHandle), emailAddress: sanitise(data.emailAddress) })
+    alreadyApplied = await HodlApplication.exists(self.db, { ethAddress: sanitise(data.ethAddress), discordHandle: sanitise(data.discordHandle), emailAddress: sanitise(data.emailAddress) })
   } catch (error) {
     return ResponseHandler.serverError(res)
   }
 
   if (alreadyApplied) {
-    return ResponseHandler.badRequest(res, ['Already applied to join the Hodl Club'])
+    return ResponseHandler.fail(res, ['Already applied to join the Hodl Club'])
   }
 
   // input the application into the database
@@ -121,12 +120,12 @@ HodlerApi.prototype.submitApplication = async (req, res, data) => {
     self.db,
     {
       ethAddress: sanitise(data.ethAddress),
-      telegramHandle: sanitise(telegramHandle),
+      discordHandle: sanitise(data.discordHandle),
       emailAddress: sanitise(data.emailAddress)
     }
   )
-  Log.info('New Hodl Club application. ETH: ' + data.ethAddress + ', telegram: ' + telegramHandle + ', email: ' + data.emailAddress)
-  ResponseHandler.ok(res)
+  Log.info('New Hodl Club application. ETH: ' + data.ethAddress + ', discord: ' + data.discordHandle + ', email: ' + data.emailAddress)
+  ResponseHandler.success(res, [])
 }
 
 /**
@@ -162,23 +161,13 @@ function isValidEthAddress (ethAddress) {
 
 /**
  *  Basically just checks that the passed arg isn't undefined and is a string. Pretty useless really
- *  @param telegramHandle {String} String we should check
- *  @return {Boolean} Whether it should be considered a valid telegram handle
+ *  @param discordHandle {String} String we should check
+ *  @return {Boolean} Whether it should be considered a valid discord handle
  */
-function isValidTelegramHandle (telegramHandle) {
-  if (!telegramHandle) return false
-  if (typeof telegramHandle !== 'string') return false
+function isValidDiscordHandle (discordHandle) {
+  if (!discordHandle) return false
+  if (typeof discordHandle !== 'string') return false
   return true
-}
-
-/**
- *  Removes any '@' char from the front of a string
- *  @param telegramHandle {String} String to remove @ from
- *  @return {String} Formatted String
- */
-function formatTelegramHandle (telegramHandle) {
-  if (telegramHandle.indexOf('@') === 0) return telegramHandle.substr(1, telegramHandle.length)
-  return telegramHandle
 }
 
 module.exports = HodlerApi

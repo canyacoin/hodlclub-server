@@ -33,24 +33,28 @@ class SearchAddress extends React.Component {
       </div>
       <div className="searchPanel">
         <h3>Check your HODL status.</h3>
-        <Status getDaysHodled={this.getDaysHodled}stats={this.state.stats}/>
         <div className="flexrow">
           <input className="searchInput monospace" placeholder="wallet address 0x" onChange={(e) => this.setState({address: e.target.value})}/>
           <button
             type="submit"
             className="searchButton"
-            onClick={() => this.getStats(this.state.address)}>
+            onClick={() => this.getStats(this.state.address)}
+          >
             Search
           </button>
         </div>
-        <div className="flexrow aligncentre">
-        <div className="balance monospace">
-        Balance: {Math.floor(this.state.stats.balance / (Math.pow(10, 6)))}
-        </div>
-        <div className="monospace">
-        Days HODL'd: {this.getDaysHodled(this.state.stats.becameHodlerAt)}
-        </div>
-      </div>
+        <Status getDaysHodled={this.getDaysHodled}stats={this.state.stats}/>
+        {
+          Object.keys(this.state.stats).length !== 0 &&
+          <div className="flexrow aligncentre">
+            <div className="balance monospace">
+            Balance: {Math.floor(this.state.stats.balance / (Math.pow(10, 6)))}
+            </div>
+            <div className="monospace">
+            Days HODL'd: {this.getDaysHodled(this.state.stats.becameHodlerAt)}
+            </div>
+          </div>
+        }
       </div>
     </div>);
   }

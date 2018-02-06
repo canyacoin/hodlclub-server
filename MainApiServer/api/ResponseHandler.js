@@ -11,6 +11,15 @@ ResponseHandler.success = (res, data) => {
   res.end()
 }
 
+// 200 OK
+ResponseHandler.fail = (res, data) => {
+  Log.info('Returning failure with data:')
+  Log.info(data)
+  res.writeHead(200, {'Content-Type': 'text/json', 'Access-Control-Allow-Origin': '*'})
+  res.write(JSON.stringify({success: false, errors: data}))
+  res.end()
+}
+
 // 400 Bad Request
 ResponseHandler.badRequest = (res, errors) => {
   Log.info('Returning bad request with errors')

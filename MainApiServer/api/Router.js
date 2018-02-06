@@ -81,7 +81,7 @@ Router.prototype.parsePost = function (req) {
     req.on('end', () => {
       if (!requestBody) requestBody = ''
       requestBody = requestBody.replace('undefined', '')
-      let postData = qs.parse(requestBody)
+      let postData = JSON.parse(requestBody)
       resolve(postData)
     })
   })

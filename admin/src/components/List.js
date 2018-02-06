@@ -11,13 +11,13 @@ class List extends Component {
           this.props.results.map((member, index) => {
             return (
               <ListItem
-              ethAddress={member.ethAddress}
-              isOG={member.isOG}
-              balance={member.balance}
-              becameHodlerAt={member.becameHodlerAt}
-              toggleOG={() => this.props.toggleOG(index)}
-              blacklist={() => this.props.blacklist(index)}
-              key={index}
+                ethAddress={member.ethAddress}
+                isOG={member.isOG}
+                balance={member.balance}
+                becameHodlerAt={member.becameHodlerAt}
+                toggleOG={() => this.props.toggleOG(index)}
+                blacklist={() => this.props.blacklist(index)}
+                key={index}
               />
             )
           })

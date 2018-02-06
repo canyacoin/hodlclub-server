@@ -54,7 +54,7 @@ const ApiService = {
       fetch(ApiService.url + route.path, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'text/plain'
         },
         body: JSON.stringify(params)
       }).then(response => response.json()).then(json => resolve(json))
@@ -103,13 +103,13 @@ const ApiService = {
   /**
    *  Submits a hodl club application
    *  @param email {String} Email address of the applicant
-   *  @param telegram {String} Telegram handle of the applicant
+   *  @param discord {String} Discord handle of the applicant
    *  @param ethAddress {String} Eth address of the applicant
    *  @return {Promise<Object>} Whether or not the application was submitted
    */
-  submitApplication: async (email, telegram, ethAddress) => {
+  submitApplication: async (email, discord, ethAddress) => {
     return new Promise(async (resolve) => {
-      let response = await ApiService.call(ApiService.routes.submitApplication, { emailAddress: email, telegramHandle: telegram, ethAddress: ethAddress })
+      let response = await ApiService.call(ApiService.routes.submitApplication, { emailAddress: email, discordHandle: discord, ethAddress: ethAddress })
       resolve(response.data)
     })
   }
