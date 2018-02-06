@@ -115,6 +115,16 @@ HodlerApi.prototype.submitApplication = async (req, res, data) => {
     return ResponseHandler.fail(res, ['Already applied to join the Hodl Club'])
   }
 
+  let canJoinInstantly
+  try {
+    canJoinInstantly = await HodlApplication.canJoinInstantly(self.db, { ethAddress: sanitise(data.ethAddress) })
+  } catch (error) {
+    return ResponseHandler.serverError(res)
+  }
+  if (canJoinInstantly) {
+    sendJoinNotificationEmail(data.emailAddress, data.ethAddress, data.discordHandle)
+  }
+
   // input the application into the database
   await HodlApplication.insert(
     self.db,
@@ -125,7 +135,7 @@ HodlerApi.prototype.submitApplication = async (req, res, data) => {
     }
   )
   Log.info('New Hodl Club application. ETH: ' + data.ethAddress + ', discord: ' + data.discordHandle + ', email: ' + data.emailAddress)
-  ResponseHandler.success(res, [])
+  ResponseHandler.success(res, {canJoinInstantly: canJoinInstantly})
 }
 
 /**
@@ -168,6 +178,16 @@ function isValidDiscordHandle (discordHandle) {
   if (!discordHandle) return false
   if (typeof discordHandle !== 'string') return false
   return true
+}
+
+/**
+ *  Sends a join notification email
+ *  @param emailAddress {String} Email address to send to
+ *  @param ethAddress {String} Ethereum address of the hodler
+ *  @param discordHandle {String} Discord handle of the hodler
+ */
+function sendJoinNotificationEmail (emailAddress, ethAddress, discordHandle) {
+  // @TODO
 }
 
 module.exports = HodlerApi
