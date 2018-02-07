@@ -375,10 +375,8 @@ hr {
 }
 
 .isOG{
-  margin: 0 10px;
-  position: relative;
-  left: 40px;
-  bottom: 22px;
+  margin: -22px 10px;
+  position: absolute;
 }
 
 /* LISTHEADER */

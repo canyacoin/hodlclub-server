@@ -24,12 +24,12 @@ class ListItem extends React.Component {
 
     return (<div className="ListItem">
     <div className="listItemStack">
-      <div className="blockies">
-      {
-        hodler.isOG
-        ? <a className="isOG">{'\uD83D\uDC51'}</a>
-        : ""
-      }
+      <div className="blockies flexcol">
+        {
+          hodler.isOG
+          ? <a className="isOG">{'\uD83D\uDC51'}</a>
+          : ""
+        }
         <Blockies seed={hodler.ethAddress}/>
       </div>
       <div className="listItemBox listItemAddress flexcol">
