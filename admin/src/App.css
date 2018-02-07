@@ -30,32 +30,39 @@
 .Filter {
 }
 
-.filterInput {
+.filterInputs {
   width: 100%;
+}
+
+.filterInput {
   border-radius: 5px;
   font-size: 1em;
   font-family: monospace;
-  margin: 15px;
+  margin: 5px 5px;
   padding: 10px 5px;
 }
 
 .downloads {
-  width: 100%;
+
+}
+
+.buttonContainer {
+  justify-content: space-between;
 }
 
 .filterButton {
   min-width: 50px;
   padding: 5px;
   border-radius:5px;
-  margin: 15px 5px;
+  margin: 5px 5px;
 }
 
-.searchButton {
-  min-width: 50px;
-  padding: 5px;
+.actionButton {
+  padding: 15px;
   border-radius:5px;
   margin: 15px 5px;
-  background-color: blue;
+  background-color: #3cf;
+  color: white;
 }
 
 /* LIST ITEM */

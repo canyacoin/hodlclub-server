@@ -1,9 +1,6 @@
-import React, {Component} from 'react';
-import '../App.css';
-// import SweetAlert from 'sweetalert'
-import swal from 'sweetalert'
+import React, {Component} from 'react'
+import '../App.css'
 import ApiService from '../services/Api'
-// import 'sweetalert/dist/sweetalert.css'
 
 class ListItem extends Component {
 
@@ -22,7 +19,11 @@ class ListItem extends Component {
     let hodler = this.props.hodler
     return (
       <div className="ListItem flexrow">
-        <a className="data" href={this.getEtherscanLink(hodler.ethAddress)} target="_blank">{hodler.ethAddress}</a>
+        <div className="data flexcol">
+          <a className="data" href={this.getEtherscanLink(hodler.ethAddress)} target="_blank">{hodler.ethAddress}</a>
+          <a className="data">{hodler.emailAddress}</a>
+          <a className="data">{hodler.discordHandle}</a>
+        </div>
         <a className="data">{this.getDaysHodled(hodler.becameHodlerAt)}</a>
         <a className="data">{hodler.isOG ? 'OG' : 'Non-OG'}</a>
         <a className="data">{hodler.balance}</a>
