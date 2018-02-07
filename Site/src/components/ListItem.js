@@ -32,7 +32,7 @@ class ListItem extends React.Component {
         <Blockies seed={hodler.address}/>
       </div>
       <div className="listItemBox listItemAddress flexcol">
-        <a className="threewords">{formattedThreeWordsName}</a>
+        <span className="threewords">{formattedThreeWordsName}</span>
         <a className="walletId" href={this.getEtherscanUrl(hodler.ethAddress)} target="_blank">{hodler.ethAddress}</a>
       </div>
       <div className="listItemRow">
