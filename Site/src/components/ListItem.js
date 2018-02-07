@@ -1,6 +1,7 @@
-import React from 'react';
-import './App.css';
-import threewords from 'threewords-happy';
+import React from 'react'
+import './App.css'
+import Blockies from 'react-blockies'
+import threewords from 'threewords-happy'
 
 class ListItem extends React.Component {
 
@@ -27,8 +28,11 @@ class ListItem extends React.Component {
             ? <a className="isOG">{'\uD83D\uDC51'}</a>
             : ""
         }
+      <div className="blockies">
+        <Blockies seed={hodler.address}/>
+      </div>
       <div className="listItemBox listItemAddress flexcol">
-        <a className="threewords">{formattedThreeWordsName}</a>
+        <span className="threewords">{formattedThreeWordsName}</span>
         <a className="walletId" href={this.getEtherscanUrl(hodler.ethAddress)} target="_blank">{hodler.ethAddress}</a>
       </div>
       <div className="listItemRow">

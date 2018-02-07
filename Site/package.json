@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "react": "^16.2.0",
+    "react-blockies": "^1.2.2",
     "react-burger-menu": "^2.2.3",
     "react-dom": "^16.2.0",
     "react-fontawesome": "^1.6.1",
