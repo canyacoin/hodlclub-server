@@ -23,17 +23,19 @@ class ListItem extends React.Component {
     const formattedThreeWordsName = threeWordsName.split('-').join(newchar);
 
     return (<div className="ListItem">
+    <div className="listItemStack">
+      <div className="blockies">
+        <Blockies seed={hodler.ethAddress}/>
         {
           hodler.isOG
             ? <a className="isOG">{'\uD83D\uDC51'}</a>
             : ""
         }
-      <div className="blockies">
-        <Blockies seed={hodler.ethAddress}/>
       </div>
       <div className="listItemBox listItemAddress flexcol">
         <span className="threewords">{formattedThreeWordsName}</span>
         <a className="walletId" href={this.getEtherscanUrl(hodler.ethAddress)} target="_blank">{hodler.ethAddress}</a>
+      </div>
       </div>
       <div className="listItemRow">
       <div className="listItemBox listItemDays">

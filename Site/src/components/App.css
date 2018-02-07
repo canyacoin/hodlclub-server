@@ -115,6 +115,18 @@
 
 @media (min-width: 600px) {
 
+  .listItemStack {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+  }
+
+  .blockies {
+    display: flex;
+    margin-right: 20px;
+  }
+
   .walletId {
     font-family: monospace;
     font-size: 1em;
@@ -353,6 +365,7 @@ hr {
 
 .isOG{
   margin: 0 10px;
+  position: absolute;
 }
 
 /* LISTHEADER */
