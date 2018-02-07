@@ -1,4 +1,5 @@
 MainApiServer/log/*
 AdminApiServer/log/*
 Site/node_modules/*
-*/config/*
+Site/src/config/api.js
+admin/src/config/api.js
