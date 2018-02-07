@@ -29,7 +29,7 @@ class ListItem extends React.Component {
             : ""
         }
       <div className="blockies">
-        <Blockies seed={hodler.address}/>
+        <Blockies seed={hodler.ethAddress}/>
       </div>
       <div className="listItemBox listItemAddress flexcol">
         <span className="threewords">{formattedThreeWordsName}</span>
