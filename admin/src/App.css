@@ -1,35 +1,58 @@
 .App {
-  text-align: center;
+  display: flex;
+  flex-direction: column;
   margin: 0;
   padding: 0 15%;
+
 }
 
 .Header {
-  width: 100%;
+  display: flex;
+  flex-direction: row;
   margin: 0;
   padding: 0 15px;
-  max-height: 15vh;
+  height: 100px;
+  justify-content: space-around;
 }
 
+.flexcol {
+  display: flex;
+  flex-direction: column;
+}
+
+.flexrow {
+  display: flex;
+  flex-direction: row;
+}
 /* FILTER */
 
 .Filter {
+  display: flex;
+  flex-direction: column;
 }
 
 .filterInputs {
-  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
 }
 
 .filterInput {
-  
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
 }
 .filterInput input{
   border-radius: 4px;
   border: 1px solid #ddd;
   font-size: 1em;
   font-family: monospace;
-  margin: 5px 5px;
-  padding: 10px 5px;
+  margin: 10px 0;
+  padding: 10px;
+}
+
+.longInput {
+  width: 300px;
 }
 
 .downloads {

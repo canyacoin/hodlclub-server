@@ -55,6 +55,16 @@
   justify-content: center;
   }
 
+  .listItemStack {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+  }
+
+  .blockies{
+    margin-right: 20px;
+  }
+
   .listItemBox {
     display: flex;
   }
@@ -62,7 +72,8 @@
   .listItemRow {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: space-around;
+    align-items: flex-start;
   }
 
   .ListItem {
@@ -366,7 +377,7 @@ hr {
 }
 
 .isOG{
-  margin: 0 10px;
+  margin: -22px 10px;
   position: absolute;
 }
 
