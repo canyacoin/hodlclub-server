@@ -26,7 +26,7 @@ class SearchAddress extends React.Component {
   }
 
   render() {
-    return (<div className="SearchAddress flexrow">
+    return (<div className="SearchAddress">
       <div className="searchPanel flexcol">
         <h3>HODL Club Members List</h3>
         <p>Over the next 6 months HODL club members will be air-dropped 500,000 CAN tokens at random times. You will also be part of an awesome community via our HODL website and invite only Discord Server.</p>

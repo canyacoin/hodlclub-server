@@ -1,6 +1,60 @@
 
 @media (max-width: 600px) {
 
+  .walletId {
+    font-family: monospace;
+    font-size: .9em;
+    color: #3cf;
+    text-decoration: none;
+  }
+
+  .formInput {
+    padding: 15px;
+    border-radius: 4px;
+    border: solid 1px #ccc;
+    font-size: 1em;
+  }
+
+  .Nav {
+    display: flex;
+    flex-direction: column;
+    padding: 0 15px;
+    margin: 15px 0;
+  }
+
+  .mobileLinks{
+    display: flex;
+    flex-direction:column;
+    justify-content: space-around;
+    height: 150px;
+    align-items: center;
+  }
+  .logo {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .searchPanel {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 5px;
+  }
+
+  .links {
+    margin-right: 15%;
+    justify-content: flex-end;
+    width: 100%
+  }
+
+  .SearchAddress {
+  border-bottom: solid 2px #eee;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  }
+
   .listItemBox {
     display: flex;
   }
@@ -33,11 +87,112 @@
   .Main {
     padding: 0 2vw;
   }
+  /* FOOTER  */
+  .Footer {
+    height: 30px;
+    font-family: monospace;
+    font-size: .8em;
+    color: #999;
+    border-top: 2px dotted #ddd;
+    margin-top: 15px;
+  }
+  .footerContent{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    padding-top: 10px;
+  }
 
+  .Footer a:visited, .Footer a:active, .Footer a:link {
+    color: #888;
+  }
 
+  .formError {
+    border: 1px solid red;
+  }
 }
 
 @media (min-width: 600px) {
+
+  .walletId {
+    font-family: monospace;
+    font-size: 1em;
+    color: #3cf;
+    text-decoration: none;
+  }
+
+  .formInput {
+    width: 100%;
+    padding: 15px;
+    border-radius: 4px;
+    border: solid 1px #ccc;
+    font-size: 1.2em;
+  }
+
+
+  .Nav {
+    display: flex;
+    flex-direction: row;
+    max-height: 100px;
+    margin: 0;
+    height: 100px;
+    padding: 0 15px;
+  }
+
+  .logo {
+    margin-left: 15%;
+    display: flex;
+    align-items: center;
+  }
+
+  .links {
+    margin-right: 15%;
+    justify-content: flex-end;
+    width: 100%
+  }
+
+  .listItemRow {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  /* FOOTER  */
+  .Footer {
+    height: 30px;
+    font-family: monospace;
+    font-size: .8em;
+    color: #999;
+    border-top: 2px dotted #ddd;
+  }
+  .footerContent{
+    margin:auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  .Footer a:visited, .Footer a:active, .Footer a:link {
+    color: #888;
+  }
+
+  .formError {
+    border: 1px solid red;
+  }
+
+  .searchPanel {
+    padding: 0 20px;
+    width: 50%;
+  }
+
+  .SearchAddress {
+  border-bottom: solid 2px #eee;
+  display: flex;
+  flex-direction: row;
+  }
+
+
   .Main {
     padding: 0 20vw;
   }
@@ -110,6 +265,13 @@ hr {
   margin: 0;
 }
 
+.loader {
+  margin: 5px auto;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  font-size: 1.5em;
+}
 
 /* MODIFIERS */
 
@@ -132,29 +294,8 @@ hr {
 }
 /* NAV */
 
-.Nav {
-  display: flex;
-  flex-direction: row;
-  max-height: 100px;
-  margin: 0;
-  height: 100px;
-  padding: 0 15px;
-}
 
-.logo {
-  background-image: url('./assets/CanYa_Logo_MAIN.png');
-  background-size: contain;
-  background-position: center;
-  background-repeat: no-repeat;
-  min-width: 100px;
-  margin: 15px 15%;
-}
 
-.links {
-  margin-right: 15%;
-  justify-content: flex-end;
-  width: 100%
-}
 
 .Nav a {
   margin: auto 15px;
@@ -181,12 +322,7 @@ hr {
   justify-content: space-between;
 }
 
-.walletId {
-  font-family: monospace;
-  font-size: 1em;
-  color: #3cf;
-  text-decoration: none;
-}
+
 
 .status {
   width: 15%;
@@ -225,11 +361,6 @@ hr {
 
 .SearchAddress {
 border-bottom: solid 2px #eee;
-}
-
-.searchPanel {
-  padding: 0 20px;
-  width: 50%;
 }
 
 .searchInput{
@@ -274,14 +405,6 @@ border-bottom: solid 2px #eee;
   align-items: left;
 }
 
-.formInput {
-  width: 100%;
-  padding: 15px;
-  border-radius: 4px;
-  border: solid 1px #ccc;
-  font-size: 1.2em;
-}
-
 .formButton {
   background-color: #3cf;
   height: 50px;
@@ -321,31 +444,4 @@ border-bottom: solid 2px #eee;
   align-self: center;
   margin: auto;
   display: block;
-}
-
-/* FOOTER  */
-.Footer {
-  height: 30px;
-  font-family: monospace;
-  font-size: .8em;
-  color: #999;
-  border-top: 2px dotted #ddd;
-}
-.footerContent{
-  margin:auto;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-}
-
-.Footer a:visited, .Footer a:active, .Footer a:link {
-  color: #888;
-}
-
-.formError {
-  border: 1px solid red;
-}
-
-.formErrorDescription {
-  color: red;
 }
