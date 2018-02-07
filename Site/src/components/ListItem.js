@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-const threewords = require('threewords');
+import threewords from 'threewords-happy';
 
 class ListItem extends React.Component {
 

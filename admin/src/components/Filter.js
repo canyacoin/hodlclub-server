@@ -9,21 +9,24 @@ class Filter extends Component {
     this.state = {
       discord: '',
       ethAddress: '',
-      email: ''  
+      email: ''
     }
   }
 
   render() {
     return (
-      <div className="Filter flexrow">
-        <div className="filterInputs flexcol">
-          <input className="filterInput" placeholder="Discord" onChange={(e) => this.setState({discord: e.target.value})} />
+      <div className="Filter">
+        <div className="filterInputs">
+        <div className="filterInput">
+        <a>Discord Handle:</a>
+          <input placeholder="Discord" onChange={(e) => this.setState({discord: e.target.value})} />
+        </div>
           <input className="filterInput" placeholder="Email" onChange={(e) => this.setState({email: e.target.value})}/>
           <input className="filterInput" placeholder="Ether Wallet" onChange={(e) => this.setState({ethAddress: e.target.value})} />
-          <div className="buttonContainer flexrow">
+          <div className="buttonContainer">
             <div class="searchContainer">
               <button
-                className="actionButton" 
+                className="actionButton"
                 onClick={() => this.props.performSearch(this.state.ethAddress, this.state.discord, this.state.email)}
               >
                 <FA name="search" /> Search
