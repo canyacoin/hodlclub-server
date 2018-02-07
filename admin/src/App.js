@@ -45,7 +45,7 @@ class App extends Component {
 
   async downloadApplications () {
     await ApiService.exportApplications()
-  }
+  } 
 
   render() {
     return (

@@ -1,7 +1,7 @@
 import React from 'react'
 import './App.css'
 import Blockies from 'react-blockies'
-import threewords from 'threewords'
+import threewords from 'threewords-happy'
 
 class ListItem extends React.Component {
 
