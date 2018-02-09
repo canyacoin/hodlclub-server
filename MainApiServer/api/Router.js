@@ -59,8 +59,13 @@ Router.prototype.parseRequest = async function (req, res) {
     query = q.query
     url = q.url
   } else {
-    query = await this.parsePost(req)
-    url = req.url
+    try {
+      query = await this.parsePost(req)
+      url = req.url
+    } catch (error) {
+      Log.niceError(error)
+      return this.unauthorisedRequest(res)
+    }
   }
   this.routeRequest(req, res, url, query)
 }

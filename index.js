@@ -8,11 +8,14 @@ const AdminApiServer = require('./AdminApiServer')
 const RequestProxy = require('./Proxy')
 
 async function main () {
-  // now figure out how to start the react sites from inside this script
-  await MainApiServer.start(ports.api, fqdns.api + ':' + ports.proxy)
-  await AdminApiServer.start(ports.admin, fqdns.admin + ':' + ports.proxy)
-  await RequestProxy.start(ports)
-
+  try {
+    await MainApiServer.start(ports.api, fqdns.api + ':' + ports.proxy)
+    await AdminApiServer.start(ports.admin, fqdns.admin + ':' + ports.proxy)
+    await RequestProxy.start(ports)
+  } catch (error) {
+    throw new Error(error)
+    process.exit(1)
+  }
 }
 
 main()

@@ -21,7 +21,7 @@ HodlApplication.exists = async (db, data) => {
   if (Object.keys(queryObj).length === 0) return false
   return new Promise((resolve, reject) => {
     db.collection(APPLICATION_TABLE).find({$or: [queryObj]}).toArray((error, results) => {
-      if (error) return reject(new Error('Query error'))
+      if (error) return reject(Error(error))
       if (results.length === 0) return resolve(false)
       return resolve(true)
     })
@@ -35,13 +35,15 @@ HodlApplication.exists = async (db, data) => {
  *  @return {Promise<Boolean>} Resolved with whether the application is valid or not
  */
 HodlApplication.isValid = async (db, ethAddress) => {
-  return new Promise(async (resolve) => {
-    let hodler = await db.collection(HODLER_TABLE).findOne({ethAddress: sanitise(ethAddress)})
-    if (hodler) {
-      resolve(true)
-    } else {
-      resolve(false)
+  return new Promise(async (resolve, reject) => {
+    let hodler
+    try {
+      hodler = await db.collection(HODLER_TABLE).findOne({ethAddress: sanitise(ethAddress)})
+    } catch (error) {
+      return reject(Error(error))
     }
+    if (hodler) return resolve(true)
+    resolve(false)
   })
 }
 
@@ -52,13 +54,15 @@ HodlApplication.isValid = async (db, ethAddress) => {
  *  @return {Promise<Boolean>} Resolved with whether the user is a longHodler or not
  */
 HodlApplication.canJoinInstantly = async (db, ethAddress) => {
-  return new Promise(async (resolve) => {
-    let longHodler = await db.collection(LONG_HODLER_TABLE).findOne({ethAddress: sanitise(ethAddress)})
-    if (longHodler) {
-      resolve(true)
-    } else {
-      resolve(false)
+  return new Promise(async (resolve, reject) => {
+    let longHodler
+    try {
+      longHodler = await db.collection(LONG_HODLER_TABLE).findOne({ethAddress: sanitise(ethAddress)})
+    } catch (error) {
+      return reject(Error(error))
     }
+    if (longHodler) return resolve(true)
+    resolve(false)
   })
 }
 
@@ -71,11 +75,15 @@ HodlApplication.canJoinInstantly = async (db, ethAddress) => {
 HodlApplication.insert = async (db, data) => {
   return new Promise(async (resolve, reject) => {
     if (!data.ethAddress || !data.discordHandle || !data.emailAddress) return reject(new Error('Could not save, missing information'))
-    await db.collection(APPLICATION_TABLE).insertOne({
-      ethAddress: sanitise(data.ethAddress).toLowerCase(),
-      discordHandle: sanitise(data.discordHandle).toLowerCase(),
-      emailAddress: sanitise(data.emailAddress).toLowerCase()
-    })
+    try {
+      await db.collection(APPLICATION_TABLE).insertOne({
+        ethAddress: sanitise(data.ethAddress).toLowerCase(),
+        discordHandle: sanitise(data.discordHandle).toLowerCase(),
+        emailAddress: sanitise(data.emailAddress).toLowerCase()
+      })
+    } catch (error) {
+      return reject(Error(error))
+    }
     resolve()
   })
 }
@@ -89,11 +97,15 @@ HodlApplication.insert = async (db, data) => {
 HodlApplication.remove = async (db, data) => {
   return new Promise(async (resolve, reject) => {
     if (!data.ethAddress || !data.discordHandle || !data.emailAddress) return reject(new Error('Could not remove, missing information'))
-    await db.collection(APPLICATION_TABLE).findOneAndDelete({
-      ethAddress: sanitise(data.ethAddress).toLowerCase(),
-      discordHandle: sanitise(data.discordHandle).toLowerCase(),
-      emailAddress: sanitise(data.emailAddress).toLowerCase()
-    })
+    try {
+      await db.collection(APPLICATION_TABLE).findOneAndDelete({
+        ethAddress: sanitise(data.ethAddress).toLowerCase(),
+        discordHandle: sanitise(data.discordHandle).toLowerCase(),
+        emailAddress: sanitise(data.emailAddress).toLowerCase()
+      })
+    } catch (error) {
+      return reject(Error(error))
+    }
     resolve()
   })
 }

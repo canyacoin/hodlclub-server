@@ -57,7 +57,6 @@ HodlerApi.prototype.bestHodlerOGs = (req, res, data) => {
  *  @return {Object} Details of any airdrops which have been given to this user
  */
 HodlerApi.prototype.tokensAirdropped = (req, res, data) => {
-  console.log(data.hodlerAddress)
   ResponseHandler.notFound(res)
 }
 
@@ -74,6 +73,7 @@ HodlerApi.prototype.getHodlStats = async (req, res, data) => {
     hodler = await self.db.collection('hodlers').findOne({ ethAddress: sanitise(data.hodlerAddress).toLowerCase() })
     applicant = await self.db.collection('hodlerApplications').findOne({ 'ethAddress': sanitise(data.hodlerAddress).toLowerCase() })
   } catch (error) {
+    Log.niceError(error)
     return ResponseHandler.serverError(res)
   }
   if (!hodler) return ResponseHandler.notFound(res)
@@ -98,6 +98,7 @@ HodlerApi.prototype.submitApplication = async (req, res, data) => {
   try {
     isValidHodler = await HodlApplication.isValid(self.db, sanitise(data.ethAddress))
   } catch (error) {
+    Log.niceError(error)
     return ResponseHandler.serverError(res)
   }
   if (!isValidHodler) return ResponseHandler.fail(res, ['Not enough CAN to join the club'])
@@ -108,17 +109,19 @@ HodlerApi.prototype.submitApplication = async (req, res, data) => {
   try {
     alreadyApplied = await HodlApplication.exists(self.db, { ethAddress: sanitise(data.ethAddress), discordHandle: sanitise(data.discordHandle), emailAddress: sanitise(data.emailAddress) })
   } catch (error) {
+    Log.niceError(error)
     return ResponseHandler.serverError(res)
   }
 
   if (alreadyApplied) {
-    return ResponseHandler.fail(res, ['Already applied to join the Hodl Club'])
+    return ResponseHandler.fail(res, ['Already applied to join the HODL Club'])
   }
 
   let canJoinInstantly
   try {
     canJoinInstantly = await HodlApplication.canJoinInstantly(self.db, { ethAddress: sanitise(data.ethAddress) })
   } catch (error) {
+    Log.niceError(error)
     return ResponseHandler.serverError(res)
   }
   if (canJoinInstantly) {
@@ -126,16 +129,21 @@ HodlerApi.prototype.submitApplication = async (req, res, data) => {
   }
 
   // input the application into the database
-  await HodlApplication.insert(
-    self.db,
-    {
-      ethAddress: sanitise(data.ethAddress),
-      discordHandle: sanitise(data.discordHandle),
-      emailAddress: sanitise(data.emailAddress)
-    }
-  )
-  Log.info('New Hodl Club application. ETH: ' + data.ethAddress + ', discord: ' + data.discordHandle + ', email: ' + data.emailAddress)
-  ResponseHandler.success(res, {canJoinInstantly: canJoinInstantly})
+  try {
+    await HodlApplication.insert(
+      self.db,
+      {
+        ethAddress: sanitise(data.ethAddress),
+        discordHandle: sanitise(data.discordHandle),
+        emailAddress: sanitise(data.emailAddress)
+      }
+    )
+  } catch (error) {
+    Log.niceError(error)
+    return ResponseHandler.serverError(res)
+  }
+  Log.info('New HODL Club application. ETH: ' + data.ethAddress + ', discord: ' + data.discordHandle + ', email: ' + data.emailAddress)
+  ResponseHandler.success(res, { canJoinInstantly: canJoinInstantly })
 }
 
 /**

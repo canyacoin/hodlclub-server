@@ -9,5 +9,12 @@ const opts = {
 }
 
 const log = Log.createRollingFileLogger(opts)
+log.niceError = function (e) {
+  if (e.toString) {
+    log.error(e.toString())
+  } else {
+    log.error(e)
+  }
+}
 
 module.exports = log
