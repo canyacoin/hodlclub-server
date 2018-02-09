@@ -31,25 +31,25 @@ class Filter extends Component {
           </div>
         </div>
         <div className="buttonContainer">
-        <div class="searchContainer">
-        <button
-        className="actionButton"
-        onClick={() => this.props.performSearch(this.state.ethAddress, this.state.discord, this.state.email)}
-        >
-        <FA name="search" /> Search
-        </button>
-        </div>
-        <div className="downloadContainer">
-        <button className="filterButton actionButton" onClick={this.props.downloadAll}>
-        <FA name="download" /> All
-        </button>
-        <button className="filterButton actionButton" onClick={this.props.downloadMembers}>
-        <FA name="download" /> 45 Days
-        </button>
-        <button className="filterButton actionButton" onClick={this.props.downloadApplications}>
-        <FA name="download" /> Applications
-        </button>
-        </div>
+          <div class="searchContainer">
+            <button
+              className="actionButton"
+              onClick={() => this.props.performSearch(this.state.ethAddress, this.state.discord, this.state.email)}
+            >
+              <FA name="search" /> Search
+            </button>
+          </div>
+          <div className="downloadContainer">
+            <button className="filterButton actionButton" onClick={this.props.downloadAll}>
+              <FA name="download" /> All
+            </button>
+            <button className="filterButton actionButton" onClick={this.props.downloadMembers}>
+              <FA name="download" /> 45 Days
+            </button>
+            <button className="filterButton actionButton" onClick={this.props.downloadApplications}>
+              <FA name="download" /> Applications
+            </button>
+          </div>
         </div>
       </div>
     )
