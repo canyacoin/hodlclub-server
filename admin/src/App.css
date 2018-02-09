@@ -97,6 +97,25 @@
   padding: 5px;
   border-radius:5px;
   margin: 0 20px;
+  color: white;
+}
+
+.resultButton.add {
+  background-color: #2CFDCE;
+}
+
+.resultButton.remove {
+  background-color: #FC6669;
+}
+
+.resultButton.blacklist {
+  background-color: black;
+  color: white;
+}
+
+.resultButton.whitelist {
+  background-color: white;
+  color: black;
 }
 
 .alignLeft {

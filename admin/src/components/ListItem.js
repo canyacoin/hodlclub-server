@@ -28,12 +28,12 @@ class ListItem extends Component {
         <a className="data">{hodler.isOG ? 'OG' : 'Non-OG'}</a>
         <a className="data">{hodler.balance}</a>
         <div className="flexrow buttons">
-        <button className="resultButton data" onClick={() => this.props.toggleOG(hodler.ethAddress)}>
-          { !hodler.isOG ? 'Make OG' : 'Remove OG' }
-        </button>
-        <button className="resultButton data" onClick={() => this.props.toggleBlacklist(hodler.address)}>
-          Blacklist
-        </button>
+          <button className={"resultButton data " + (hodler.isOG ? 'remove' : 'add')} onClick={() => this.props.toggleOG(hodler.ethAddress)}>
+            { !hodler.isOG ? 'Make OG' : 'Remove OG' }
+          </button>
+          <button className={"resultButton data " + (hodler.blacklisted ? 'whitelist' : 'blacklist')} onClick={() => this.props.toggleBlacklist(hodler.address)}>
+            { hodler.blacklisted ? 'Un-blacklist' : 'Blacklist' }
+          </button>
         </div>
       </div>
     )
