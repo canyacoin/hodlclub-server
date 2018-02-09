@@ -107,7 +107,7 @@ class Join extends React.Component {
   render() {
     return (
       <div className="Join flexcol">
-        <h1>Join the HODL Club</h1>
+        <h3>Join the HODL Club</h3>
         <p>
           Members of the HODL Club get access to the <b>private discord channel</b>, as well as <b>exclusive airdrops</b>. In order to be eligible to apply for the HODL Club, make sure you have 2.5k CAN in your wallet, and wait at least a couple of hours before going through the application process. Once we see that you've hodled your tokens for 45 days, we'll invite you to the Discord, where the real party happens!
         </p>

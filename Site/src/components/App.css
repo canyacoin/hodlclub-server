@@ -217,7 +217,8 @@
 
 
   .Main {
-    padding: 0 20vw;
+    margin-left: 15%;
+    margin-right: 15%;
   }
 
 
@@ -492,4 +493,8 @@ border-bottom: solid 2px #eee;
 
 ::placeholder {
   color: #485f6477;
+}
+
+.Main {
+  margin-top: 20px;
 }

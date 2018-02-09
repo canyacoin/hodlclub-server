@@ -25,15 +25,15 @@ class Nav extends React.Component {
   desktopNav () {
     return (
       <div className="Nav">
-      <div className="logo">
-      <img height="50%" alt="HODL_CLUB" src={require('./assets/hodl_logo.jpg')}/>
-      </div>
-      <div className="flexrow links">
-      <Link to='/'>About</Link>
-      <Link to='/join'>Join the club</Link>
-      <Link to='/members'>Members</Link>
-      <Link to='/og-members'>OG Members</Link>
-      </div>
+        <div className="logo">
+          <img height="50%" alt="HODL_CLUB" src={require('./assets/hodl_logo.jpg')}/>
+        </div>
+        <div className="flexrow links">
+          <Link to='/'>About</Link>
+          <Link to='/join'>Join the club</Link>
+          <Link to='/members'>Members</Link>
+          <Link to='/og-members'>OG Members</Link>
+        </div>
       </div>
     )
   }
