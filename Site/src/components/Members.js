@@ -11,7 +11,6 @@ class Members extends React.Component {
   constructor (props) {
     super(props)
     this.setSort = this.setSort.bind(this)
-    this.sortList = this.sortList.bind(this)
     this.state = {
       sort: '',
       hodlClub: this.props.hodlClub
@@ -22,40 +21,23 @@ class Members extends React.Component {
     this.setState({ hodlClub: props.hodlClub })
   }
 
-  componentDidUpdate (prevProps, prevState) {
-    if (prevState.sort !== this.state.sort) {
-      this.sortList()
-    }
-  }
-
   setSort (by) {
     if (by === 'days') {
       this.setState({ sort: 'days' })
+      this.props.loadMore(0, 'days')
     } else if (by === 'balance') {
       this.setState({ sort: 'balance' })
+      this.props.loadMore(0, 'balance')
     }
-  }
-
-  sortList () {
-    let sortBy = this.state.sort
-    let currentList = this.state.hodlClub
-    let newList = []
-    if (sortBy === 'days') {
-      newList = _.sortBy(currentList, [(hodler) => hodler.becameHodlerAt])
-    } else if (sortBy === 'balance') {
-      newList = _.sortBy(currentList, [(hodler) => hodler.balance]).reverse()
-    }
-    this.setState({ hodlClub: newList })
   }
 
   render() {
     return (
       <div className="Members">
         <SearchAddress search={this.props.search} />
-      {
-        <ListHeader sort={this.setSort} />
-      }
-
+        {
+          <ListHeader sort={this.setSort} />
+        }
         <InfiniteScroll
           pageStart={0}
           loadMore={async (page) => {

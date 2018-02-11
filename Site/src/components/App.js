@@ -28,24 +28,24 @@ class App extends React.Component {
   /**
    *  Fetches the hodl club from the API
    */
-  async getHodlClubMembers () {
+  async getHodlClubMembers (sort) {
     if (this.state.loading) return
     this.setState({ loading: true })
     let oldHodlers = this.state.hodlClub
     let numberToGet = 40
     let numberToSkip = this.state.hodlClub.length
-    let hodlers = await ApiService.getHodlers(numberToGet, numberToSkip)
+    let hodlers = await ApiService.getHodlers(numberToGet, numberToSkip, sort)
     if (hodlers.length === 0) return this.setState({ moreToLoad: false, loading: false })
     this.setState({ hodlClub: oldHodlers.concat(hodlers), loading: false })
   }
 
-  async getHodlOGMembers () {
+  async getHodlOGMembers (sort) {
     if (this.state.loadingOG) return
     this.setState({ loadingOG: true })
     let oldHodlers = this.state.hodlOG
     let numberToGet = 40
     let numberToSkip = this.state.hodlOG.length
-    let OGhodlers = await ApiService.getHodlerOGs(numberToGet, numberToSkip)
+    let OGhodlers = await ApiService.getHodlerOGs(numberToGet, numberToSkip, sort)
     if (OGhodlers.length === 0) return this.setState({ moreToOGLoad: false, loadingOG: false })
     this.setState({ hodlOG: oldHodlers.concat(OGhodlers), loadingOG: false })
   }
@@ -65,8 +65,8 @@ class App extends React.Component {
         hodlClub={this.state.hodlClub}
         hodlOG={this.state.hodlOG}
         search={this.getStats}
-        loadMore={(page) => this.getHodlClubMembers(page)}
-        loadMoreOG={(page) => this.getHodlOGMembers(page)}
+        loadMore={(sort) => this.getHodlClubMembers(sort)}
+        loadMoreOG={(sort) => this.getHodlOGMembers(sort)}
         moreToLoad={this.state.moreToLoad}
       />
       <Footer />

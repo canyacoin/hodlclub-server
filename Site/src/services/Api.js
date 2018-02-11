@@ -65,11 +65,12 @@ const ApiService = {
    *  Gets the hodlers from the API
    *  @param number {Number} Number of hodlers to retrieve
    *  @param skip {Number} Number of records to skip
+   *  @param sort {String} Param by which to sort the results
    *  @return {Promise<Array>} Hodlers from the API
    */
-  getHodlers: async (number = 10, skip = 0) => {
+  getHodlers: async (number = 10, skip = 0, sort = 'days') => {
     return new Promise(async (resolve) => {
-      let response = await ApiService.call(ApiService.routes.getHodlers, { numberOfHodlers: number, skip: skip })
+      let response = await ApiService.call(ApiService.routes.getHodlers, { numberOfHodlers: number, skip: skip, sort: sort })
       resolve(response.data)
     })
   },
@@ -78,11 +79,12 @@ const ApiService = {
    *  Gets the hodler OGs from the API
    *  @param number {Number} Number of hodler OGs to retrieve
    *  @param skip {Number} Number of records to skip
+   *  @param sort {String} Param by which to sort the results
    *  @return {Promise<Array>} Hodlers from the API
    */
-  getHodlerOGs: async (number = 10, skip = 0) => {
+  getHodlerOGs: async (number = 10, skip = 0, sort = 'days') => {
     return new Promise(async (resolve) => {
-      let response = await ApiService.call(ApiService.routes.getHodlerOGs, { numberOfHodlers: number, skip: skip })
+      let response = await ApiService.call(ApiService.routes.getHodlerOGs, { numberOfHodlers: number, skip: skip, sort: sort })
       resolve(response.data)
     })
   },
