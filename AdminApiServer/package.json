@@ -5,7 +5,8 @@
     "fast-csv": "^2.4.1",
     "http-auth": "^3.2.3",
     "mongo-sanitize": "^1.0.0",
-    "mongodb": "^3.0.2"
+    "mongodb": "^3.0.2",
+    "simple-node-logger": "^0.93.37"
   },
   "devDependencies": {
     "eslint": "^4.17.0",
