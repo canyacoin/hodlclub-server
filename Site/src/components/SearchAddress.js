@@ -29,7 +29,7 @@ class SearchAddress extends React.Component {
     return (<div className="SearchAddress">
       <div className="searchPanel flexcol">
         <h3>HODL Club Members List</h3>
-        <p>Over the next 6 months HODL Club members will be air-dropped 500,000 CAN tokens at random times. You will also be part of an awesome community via our HODL website and invite only Discord Server.</p>
+        <p>Over the next 6 months HODL Club members will be air-dropped 2.5m CAN tokens at random times. This is across the two HODL Club tiers with 2m tokens going to the OG HODLers (10k CAN entry) and 500k going to tier 2 members (2500 CAN entry) You will also be part of an awesome community via our HODL website and invite only Discord Server.</p>
       </div>
       <div className="searchPanel">
         <h3>Check your HODL status.</h3>

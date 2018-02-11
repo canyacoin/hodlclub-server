@@ -15,7 +15,7 @@ class Home extends React.Component {
       <h2>Joining the CanYa HODL Club is mutually beneficial for a number of reasons:</h2>
       <br />
       <h3>Short term:</h3>
-      <p>Over the next 6 months CanYa HODL Club members will be air-dropped 2 million CAN tokens at random times. They will also be air-dropped our partners tokens over this time frame. You will also be part of an awesome community via our HODL website and invite only Telegram.</p>
+      <p>Over the next 6 months CanYa HODL Club members will be air-dropped 2.5m CAN tokens at random times. This is across the two HODL club tiers with 2m tokens going to the OG HODLers (10k CAN entry) and 500k going to tier 2 members (2500 CAN entry). They will also be air-dropped our partners tokens over this time frame. You will also be part of an awesome community via our HODL website and invite only Telegram.</p>
       <h3>Longer term:</h3>
       <p>Once a year, the rewards pool will air-drop an amount of CAN tokens to those in the HODL Club which will again be based on their token balance. <em><b>This means the longer you are a member of the club, the higher your proportion of air-dropped tokens will be as people leave the club.</b></em> We will also regularly share information on our roadmap execution to our HODL Club and give them breaking news – first.</p>
       <br/>
