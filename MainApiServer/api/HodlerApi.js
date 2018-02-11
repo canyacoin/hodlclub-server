@@ -162,7 +162,7 @@ function isNumber (n) {
  */
 function isValidEmail (emailAddress) {
   if (typeof emailAddress !== 'string') return false
-  let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
   return re.test(emailAddress.toLowerCase())
 }
 
@@ -183,7 +183,7 @@ function isValidEthAddress (ethAddress) {
  *  @return {Boolean} Whether it should be considered a valid discord handle
  */
 function isValidDiscordHandle (discordHandle) {
-  if (!discordHandle) return false
+  if (!discordHandle) return true
   if (typeof discordHandle !== 'string') return false
   return true
 }

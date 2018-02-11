@@ -1,5 +1,7 @@
+const sanitise = require('mongo-sanitize')
+const Log = require('./services/Logger')
 const { applicationTable, hodlerTable, longHodlerTable, blacklistTable } = require('../config/database')
-const CsvService = require('./CsvService')
+const CsvService = require('./services/CsvService')
 const Api = {}
 
 /**
@@ -22,7 +24,7 @@ Api.setDb = (db) => {
 Api.search = async (req, res, next) => {
   let { telegram, email, ethAddress } = req.body
   let queryString = telegram + ' ' + email + ' ' + ethAddress
-  Api.db.collection(applicationTable).find({ $text: { $search: queryString }}).toArray((e, results) => {
+  Api.db.collection(applicationTable).find({ $text: { $search: sanitise(queryString) } }).toArray((e, results) => {
     let applicationResults = results
     let applicationAddresses = []
     if (ethAddress) applicationAddresses.push(ethAddress)
@@ -49,19 +51,24 @@ Api.blacklist = async (req, res, next) => {
   let { ethAddress } = req.body
   if (!ethAddress) return res.status(403).json({success: false, error: 'Please specify an ETH address'})
   const lowerCaseAddress = ethAddress.toLowerCase()
-  let hodler = await Api.db.collection(hodlerTable).findOne({ ethAddress: lowerCaseAddress })
-  let setBlacklistStatus = !hodler.blacklisted
-  if (setBlacklistStatus) {
-    await Api.db.collection(blacklistTable).updateOne({
-      address: lowerCaseAddress
-    }, { $set: { address: lowerCaseAddress } }, { upsert: true })
-  } else {
-    await Api.db.collection(blacklistTable).removeOne({ address: lowerCaseAddress })
+  try {
+    let hodler = await Api.db.collection(hodlerTable).findOne({ ethAddress: lowerCaseAddress })
+    let setBlacklistStatus = !hodler.blacklisted
+    if (setBlacklistStatus) {
+      await Api.db.collection(blacklistTable).updateOne({
+        address: lowerCaseAddress
+      }, { $set: { address: lowerCaseAddress } }, { upsert: true })
+    } else {
+      await Api.db.collection(blacklistTable).removeOne({ address: lowerCaseAddress })
+    }
+    await Api.db.collection(hodlerTable).updateOne({
+      ethAddress: lowerCaseAddress
+    }, { $set: { blacklisted: setBlacklistStatus } })
+    res.json({ success: true })
+  } catch (error) {
+    Log.niceError(error)
+    res.json({ success: false })
   }
-  await Api.db.collection(hodlerTable).updateOne({
-    ethAddress: lowerCaseAddress
-  }, { $set: { blacklisted: setBlacklistStatus }})
-  res.json({ success: true })
 }
 
 /**
@@ -73,24 +80,29 @@ Api.makeOG = async (req, res, next) => {
   let { ethAddress } = req.body
   if (!ethAddress) return res.status(403).json({success: false, error: 'Please specify an ETH address'})
   const lowerCaseAddress = ethAddress.toLowerCase()
-  let hodler = await Api.db.collection(hodlerTable).findOne({ ethAddress: lowerCaseAddress })
-  let setOGStatus = !hodler.isOG
-  await Api.db.collection(longHodlerTable).updateOne(
-    { ethAddress: lowerCaseAddress },
-    { $set: {
-      ethAddress: lowerCaseAddress,
-      balance: hodler.balance,
-      isOG: setOGStatus,
-      becameHodlerAt: hodler.becameHodlerAt
-    } },
-    { upsert: true }
-  )
-  await Api.db.collection(hodlerTable).updateOne(
-    { ethAddress: lowerCaseAddress },
-    { $set: { isOG: setOGStatus } },
-    { upsert: true }
-  )
-  res.json({ success: true })
+  try {
+    let hodler = await Api.db.collection(hodlerTable).findOne({ ethAddress: lowerCaseAddress })
+    let setOGStatus = !hodler.isOG
+    await Api.db.collection(longHodlerTable).updateOne(
+      { ethAddress: lowerCaseAddress },
+      { $set: {
+        ethAddress: lowerCaseAddress,
+        balance: hodler.balance,
+        isOG: setOGStatus,
+        becameHodlerAt: hodler.becameHodlerAt
+      } },
+      { upsert: true }
+    )
+    await Api.db.collection(hodlerTable).updateOne(
+      { ethAddress: lowerCaseAddress },
+      { $set: { isOG: setOGStatus } },
+      { upsert: true }
+    )
+    res.json({ success: true })
+  } catch (error) {
+    Log.niceError(error)
+    res.json({ success: false })
+  }
 }
 
 /**
@@ -99,9 +111,9 @@ Api.makeOG = async (req, res, next) => {
 Api.exportAllHodlers = async (req, res, next) => {
   const cursor = Api.db.collection(hodlerTable).find({})
   const transform = (doc) => {
-    return { 
-      EthAddress: doc.ethAddress, 
-      CANBalance: doc.balance, 
+    return {
+      EthAddress: doc.ethAddress,
+      CANBalance: doc.balance,
       BecameHodlerAt: doc.becameHodlerAt,
       OG: doc.isOG,
       blacklisted: doc.blacklisted ? doc.blacklisted : false
@@ -132,15 +144,15 @@ Api.exportAllMembers = async (req, res, next) => {
  *  Exports everyone from the applications table, joined with the hodlers table
  */
 Api.exportAllApplications = async (req, res, next) => {
-  const cursor = Api.db.collection(applicationTable).aggregate([{ $lookup: { 
+  const cursor = Api.db.collection(applicationTable).aggregate([{ $lookup: {
     from: hodlerTable,
     localField: 'ethAddress',
     foreignField: 'ethAddress',
     as: 'mergeApplications'
-  }}, { 
-    $replaceRoot: { newRoot: { $mergeObjects: [ { $arrayElemAt: ['$mergeApplications', 0] }, "$$ROOT" ] } }
+  }}, {
+    $replaceRoot: { newRoot: { $mergeObjects: [ { $arrayElemAt: ['$mergeApplications', 0] }, '$$ROOT' ] } }
   }, {
-    $project: { mergeApplications: 0 } 
+    $project: { mergeApplications: 0 }
   }])
   const transform = (doc) => {
     return {

@@ -17,7 +17,8 @@ class Join extends React.Component {
       discordNumber: '',
       invalidFields: [],
       disableInputs: false,
-      showAlert: false,
+      showSubmitAlert: false,
+      showInitialAlert: true,
       alert: {
         title: '',
         text: ''
@@ -51,14 +52,14 @@ class Join extends React.Component {
     let result = await ApiService.submitApplication(email, discordHandle, ethAddress)
     if (result.success) {
       // do something nice and clear the inputs
-      this.setState({email: '', ethAddress: '', discordName: '', discordNumber: '', disableInputs: false, showAlert: true})
+      this.setState({email: '', ethAddress: '', discordName: '', discordNumber: '', disableInputs: false, showSubmitAlert: true})
       this.setState({
         alert: {
           title: 'Success!',
           text: this.successHtml}})
     } else {
       // something failed, print the message
-      this.setState({disableInputs: false, showAlert: true, alert: {title: 'Oops!', text: this.renderFailMessage(result.errors[0])}})
+      this.setState({disableInputs: false, showSubmitAlert: true, alert: {title: 'Oops!', text: this.renderFailMessage(result.errors[0])}})
     }
   }
 
@@ -89,6 +90,7 @@ class Join extends React.Component {
   }
 
   validateDiscordName (input) {
+    if (!input.toLowerCase()) return
     let invalidFields = this.state.invalidFields
     let re = /^([^@^:]){2,32}$/
     if (re.test(input.toLowerCase())) return
@@ -97,6 +99,7 @@ class Join extends React.Component {
   }
 
   validateDiscordNumber (input) {
+    if (!input) return
     let invalidFields = this.state.invalidFields
     let re = /^([0-9]){4}$/
     if (re.test(input.toString().toLowerCase())) return
@@ -195,11 +198,18 @@ class Join extends React.Component {
         </div>
         <button className="formButton" type="submit" onClick={this.formSubmit}>Sign Up</button>
         <SweetAlert
-          show={this.state.showAlert}
+          show={this.state.showInitialAlert}
+          title={'Hey there!'}
+          html
+          text={renderToStaticMarkup(<div>If you have already applied for the HODL Club through another platform, you don't need to reapply here.</div>)}
+          onConfirm={() => this.setState({ showInitialAlert: false })}
+        />
+        <SweetAlert
+          show={this.state.showSubmitAlert}
           title={this.state.alert.title}
           html
           text={renderToStaticMarkup(this.state.alert.text)}
-          onConfirm={() => this.setState({ showAlert: false })}
+          onConfirm={() => this.setState({ showSubmitAlert: false })}
         />
       </div>
     )
