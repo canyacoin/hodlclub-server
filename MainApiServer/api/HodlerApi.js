@@ -183,7 +183,7 @@ function isValidEthAddress (ethAddress) {
  *  @return {Boolean} Whether it should be considered a valid discord handle
  */
 function isValidDiscordHandle (discordHandle) {
-  if (!discordHandle) return false
+  if (!discordHandle) return true
   if (typeof discordHandle !== 'string') return false
   return true
 }

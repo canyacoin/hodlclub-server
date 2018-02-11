@@ -89,6 +89,7 @@ class Join extends React.Component {
   }
 
   validateDiscordName (input) {
+    if (!input.toLowerCase()) return
     let invalidFields = this.state.invalidFields
     let re = /^([^@^:]){2,32}$/
     if (re.test(input.toLowerCase())) return
@@ -97,6 +98,7 @@ class Join extends React.Component {
   }
 
   validateDiscordNumber (input) {
+    if (!input) return
     let invalidFields = this.state.invalidFields
     let re = /^([0-9]){4}$/
     if (re.test(input.toString().toLowerCase())) return
