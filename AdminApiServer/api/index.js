@@ -99,9 +99,9 @@ Api.makeOG = async (req, res, next) => {
 Api.exportAllHodlers = async (req, res, next) => {
   const cursor = Api.db.collection(hodlerTable).find({})
   const transform = (doc) => {
-    return { 
-      EthAddress: doc.ethAddress, 
-      CANBalance: doc.balance, 
+    return {
+      EthAddress: doc.ethAddress,
+      CANBalance: doc.balance,
       BecameHodlerAt: doc.becameHodlerAt,
       OG: doc.isOG,
       blacklisted: doc.blacklisted ? doc.blacklisted : false
@@ -132,15 +132,15 @@ Api.exportAllMembers = async (req, res, next) => {
  *  Exports everyone from the applications table, joined with the hodlers table
  */
 Api.exportAllApplications = async (req, res, next) => {
-  const cursor = Api.db.collection(applicationTable).aggregate([{ $lookup: { 
+  const cursor = Api.db.collection(applicationTable).aggregate([{ $lookup: {
     from: hodlerTable,
     localField: 'ethAddress',
     foreignField: 'ethAddress',
     as: 'mergeApplications'
-  }}, { 
-    $replaceRoot: { newRoot: { $mergeObjects: [ { $arrayElemAt: ['$mergeApplications', 0] }, "$$ROOT" ] } }
+  }}, {
+    $replaceRoot: { newRoot: { $mergeObjects: [ { $arrayElemAt: ['$mergeApplications', 0] }, '$$ROOT' ] } }
   }, {
-    $project: { mergeApplications: 0 } 
+    $project: { mergeApplications: 0 }
   }])
   const transform = (doc) => {
     return {

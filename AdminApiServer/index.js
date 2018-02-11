@@ -25,8 +25,9 @@ const basic = auth.basic({
 AdminApiServer.start = async (port, proxyHost = '') => {
   AdminApiServer.proxyHost = proxyHost
   AdminApiServer.bindRoutes()
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     MongoClient.connect(dbConfig.url, (err, client) => {
+      if (err) return reject(Error(err))
       const db = client.db(dbConfig.dbName)
       AdminApi.setDb(db)
       app.listen(port, () => {
@@ -41,7 +42,6 @@ AdminApiServer.start = async (port, proxyHost = '') => {
  *  Binds the routes for this API
  */
 AdminApiServer.bindRoutes = () => {
-
   app.use(cors())
   app.options('*', cors())
   app.use(auth.connect(basic))
@@ -64,7 +64,6 @@ AdminApiServer.bindRoutes = () => {
 
   // @todo use this for the live version
   // app.use('/', express.static(path.resolve('./admin/build')))
-
 }
 
 module.exports = AdminApiServer
