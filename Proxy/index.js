@@ -1,6 +1,7 @@
 const httpProxy = require('http-proxy')
 const https = require('https')
 const fs = require('fs')
+const path = require('path')
 
 const proxy = httpProxy.createProxyServer({ ssl: {
   key: fs.readFileSync(path.resolve('./SSL/wildcard.canya.com.key')),
