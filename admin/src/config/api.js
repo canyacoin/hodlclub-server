@@ -1,3 +1,3 @@
 module.exports = {
-  basePath: 'http://admin.hodl.canya.com:8080/'
+  basePath: 'https://admin.hodl.canya.com:8080/'
 }
