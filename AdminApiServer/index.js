@@ -3,6 +3,8 @@ const MongoClient = require('mongodb').MongoClient
 const path = require('path')
 const express = require('express')
 const app = express()
+const https = require('https')
+const fs = require('fs')
 const cors = require('cors')
 const auth = require('http-auth')
 const AdminApi = require('./api')
@@ -11,10 +13,16 @@ const AdminApiServer = {
   proxyHost: ''
 }
 
-const basic = auth.basic({
+const basicAuth = auth.basic({
   realm: 'Admin Area',
   file: path.resolve('./AdminApiServer/users.htpasswd')
 })
+
+const sslOptions = {
+  key: fs.readFileSync(path.resolve('./SSL/wildcard.canya.com.key')),
+  cert: fs.readFileSync(path.resolve('./SSL/hodl.canya.com.cer')),
+  ca: fs.readFileSync(path.resolve('./SSL/wildcard.canya.com.chain'))
+}
 
 /**
  *  Starts the Admin API server on a given port
@@ -30,7 +38,7 @@ AdminApiServer.start = async (port, proxyHost = '') => {
       if (err) return reject(Error(err))
       const db = client.db(dbConfig.dbName)
       AdminApi.setDb(db)
-      app.listen(port, () => {
+      https.createServer(sslOptions, app).listen(port, () => {
         console.log('Admin server listening on ' + port)
         resolve()
       })
@@ -44,7 +52,7 @@ AdminApiServer.start = async (port, proxyHost = '') => {
 AdminApiServer.bindRoutes = () => {
   app.use(cors())
   app.options('*', cors())
-  app.use(auth.connect(basic))
+  app.use(auth.connect(basicAuth))
   app.use(express.json())
   app.use(express.urlencoded())
 
