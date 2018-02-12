@@ -5,7 +5,8 @@ module.exports = {
     api: 3001,
     admin: 3002,
     adminpanel: 3003,
-    proxy: 8080
+    proxy: 8080,
+    httpProxy: 80
   },
 
   fqdns: {
