@@ -1,15 +1,16 @@
 const https = require('https')
 const qs = require('querystring')
 const fs = require('fs')
+const path = require('path')
 
 const Log = require('../services/Logger')
 const HodlerApi = require('./HodlerApi')
 
 function Router (db, proxy = '') {
   const options = {
-    key: fs.readFileSync('/path/to/privkey.pem'),
-    cert: fs.readFileSync('/path/to/fullchain.pem'),
-    ca: fs.readFileSync('/path/to/chain.pem')
+    key: fs.readFileSync(path.resolve('./SSL/wildcard.canya.com.key')),
+    cert: fs.readFileSync(path.resolve('./SSL/wildcard.canya.com_Expires_01Feb2021.cer')),
+    ca: fs.readFileSync(path.resolve('./SSL/wildcard.canya.com.chain'))
   }
 
   this.proxyHost = proxy
