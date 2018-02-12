@@ -3,17 +3,19 @@ const https = require('https')
 const fs = require('fs')
 const path = require('path')
 
-const proxy = httpProxy.createProxyServer({ ssl: {
+const sslOptions = {
   key: fs.readFileSync(path.resolve('./SSL/wildcard.canya.com.key')),
   cert: fs.readFileSync(path.resolve('./SSL/wildcard.canya.com_Expires_01Feb2021.cer')),
   ca: fs.readFileSync(path.resolve('./SSL/wildcard.canya.com.chain'))
-} })
+}
+
+const proxy = httpProxy.createProxyServer({ ssl: sslOptions })
 
 const RequestProxy = {}
 
 RequestProxy.start = (ports) => {
   return new Promise((resolve) => {
-    const server = https.createServer(options, (req, res) => {
+    const server = https.createServer(sslOptions, (req, res) => {
       let host = req.headers.host
       if (host.indexOf('api.') === 0) {
         proxy.web(req, res, { target: 'http://localhost:' + ports.api })
