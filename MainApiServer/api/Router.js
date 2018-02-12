@@ -1,4 +1,4 @@
-const http = require('http')
+const https = require('https')
 const qs = require('querystring')
 const fs = require('fs')
 
@@ -6,15 +6,15 @@ const Log = require('../services/Logger')
 const HodlerApi = require('./HodlerApi')
 
 function Router (db, proxy = '') {
-  var options = {
-    // key: fs.readFileSync('/path/to/privkey.pem'),
-    // cert: fs.readFileSync('/path/to/fullchain.pem'),
-    // ca: fs.readFileSync('/path/to/chain.pem')
+  const options = {
+    key: fs.readFileSync('/path/to/privkey.pem'),
+    cert: fs.readFileSync('/path/to/fullchain.pem'),
+    ca: fs.readFileSync('/path/to/chain.pem')
   }
 
   this.proxyHost = proxy
 
-  this.server = http.createServer((req, res) => {
+  this.server = https.createServer(options, (req, res) => {
     return this.handleRequest(req, res)
   })
 
