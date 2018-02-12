@@ -3,7 +3,6 @@ const MongoClient = require('mongodb').MongoClient
 const path = require('path')
 const express = require('express')
 const app = express()
-const cors = require('cors')
 const auth = require('http-auth')
 const AdminApi = require('./api')
 
@@ -42,8 +41,6 @@ AdminApiServer.start = async (port, proxyHost = '') => {
  *  Binds the routes for this API
  */
 AdminApiServer.bindRoutes = () => {
-  app.use(cors())
-  app.options('*', cors())
   app.use(auth.connect(basic))
   app.use(express.json())
   app.use(express.urlencoded())
