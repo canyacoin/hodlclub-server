@@ -5,7 +5,7 @@ const path = require('path')
 
 const sslOptions = {
   key: fs.readFileSync(path.resolve('./SSL/wildcard.canya.com.key')),
-  cert: fs.readFileSync(path.resolve('./SSL/wildcard.hodl.canya.com.cer')),
+  cert: fs.readFileSync(path.resolve('./SSL/hodl.canya.com.cer')),
   ca: fs.readFileSync(path.resolve('./SSL/wildcard.canya.com.chain'))
 }
 
@@ -24,7 +24,7 @@ RequestProxy.start = (ports) => {
       } else if (host.indexOf('adminpanel.') === 0) {
         proxy.web(req, res, { target: 'http://localhost:' + ports.adminpanel })
       } else {
-        proxy.web(req, res, { target: 'http://localhost:' + ports.hodl })
+        proxy.web(req, res, { target: 'https://localhost:' + ports.hodl })
       }
     })
 
