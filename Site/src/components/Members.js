@@ -4,17 +4,16 @@ import ListItem from './ListItem'
 import SearchAddress from './SearchAddress'
 import ListHeader from './ListHeader'
 import InfiniteScroll from 'react-infinite-scroller'
+import _ from 'lodash'
 
 class Members extends React.Component {
-
   render() {
     return (
       <div className="Members">
         <SearchAddress search={this.props.search} />
-      {
-        // <ListHeader />
-      }
-
+        {
+          <ListHeader sort={this.props.setSort} />
+        }
         <InfiniteScroll
           pageStart={0}
           loadMore={async (page) => {
