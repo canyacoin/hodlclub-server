@@ -14,11 +14,11 @@ class Nav extends React.Component {
   }
 
   burgerToggle () {
-  		let links = document.querySelector('.mobileLinks');
-  		if (links.style.display === 'flex') {
-  			links.style.display = 'none';
+  		let links = document.getElementsByClassName('mobileLinks')[0]
+  		if (links.classList.contains('hidden')) {
+  			links.classList.remove('hidden')
   		} else {
-  			links.style.display = 'flex';
+  			links.classList.add('hidden')
   		}
   	}
 
@@ -26,7 +26,7 @@ class Nav extends React.Component {
     return (
       <div className="Nav">
         <div className="logo">
-          <img height="50%" alt="HODL_CLUB" src={require('./assets/hodl_logo.jpg')}/>
+          <img height="50%" alt="HODL_CLUB" src={require('./assets/HODL-Logo.png')}/>
         </div>
         <div className="flexrow links">
           <Link to='/'>About</Link>
@@ -42,7 +42,7 @@ class Nav extends React.Component {
     return (
     <div className="Nav">
       <div className="logo">
-        <img height="45px" alt="HODL_CLUB" src={require('./assets/hodl_logo.jpg')}/>
+        <img height="45px" alt="HODL_CLUB" src={require('./assets/HODL-Logo.png')}/>
         <a onClick={this.burgerToggle}><FontAwesome name='bars'size="2x" /></a>
       </div>
       <div className="mobileLinks">

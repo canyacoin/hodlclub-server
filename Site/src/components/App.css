@@ -1,5 +1,11 @@
 
+
+
 @media (max-width: 600px) {
+
+  .hidden {
+    display: none !important
+  }
 
   .walletId {
     font-family: monospace;
@@ -127,6 +133,20 @@
 }
 
 @media (min-width: 600px) {
+
+  .Home {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .homeFlex {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .homePad {
+    margin: auto;
+  }
 
   .listItemStack {
     display: flex;
@@ -257,6 +277,8 @@
 html {
   box-sizing: border-box;
   font-family: 'Montserrat', sans-serif;
+  color: #485f64;
+  font-weight: 500;
 }
 
 a {
@@ -265,19 +287,15 @@ a {
 }
 
 p {
-  font-weight: lighter;
+  font-weight: 300;
   font-size: 14px;
+  line-height: 150%;
 }
 
 b {
   font-weight: 600;
 }
 
-h1, h2, h3 {
-  color: #485f64;
-  font-weight: 500;
-  margin: 10px 0;
-}
 
 h1 {
   font-size: 30px;
@@ -503,5 +521,5 @@ border-bottom: solid 2px #eee;
 }
 
 .sortHeading {
-  cursor: pointer; 
+  cursor: pointer;
 }
