@@ -23,7 +23,6 @@ class App extends React.Component {
       sortByOG: 'days'
     }
   }
-
   componentDidMount () {
     this.getHodlClubMembers()
     this.getHodlOGMembers()
