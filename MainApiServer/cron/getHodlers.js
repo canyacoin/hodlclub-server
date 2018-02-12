@@ -23,6 +23,7 @@ const HODLER_TABLE = dbConfig.hodlerTable
 const LONG_HODLER_TABLE = dbConfig.longHodlerTable
 const HODL_CLUB_APPLICATION_TABLE = dbConfig.applicationTable
 const BLACKLIST_TABLE = dbConfig.blacklistTable
+const FALLEN_HODLERS_TABLE = dbConfig.fallenHodlersTable
 
 const BigNumber = require('bignumber.js')
 const Web3 = require('web3')
@@ -51,14 +52,18 @@ const TOKEN_TRANSFER_EVENT_HASH = '0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c
 const tokenMeta = require('./res/token')
 
 async function main () {
-  let db = await connectToDb()
-  let blacklist = await getBlacklistedAddresses(db)
-  let blockNumber = await getCurrentBlockNumber()
-  let tokenTransferEvents = await getAllTokenTransferEvents(blockNumber)
-  let { hodlers, unfaithful } = await processEvents(tokenTransferEvents, blacklist)
-  let newLongHodlers = await processHodlers(hodlers, blockNumber, blacklist, db)
-  await processUnfaithful(unfaithful, db)
-  await notifyNewLongHolders(newLongHodlers, db)
+  try {
+    let db = await connectToDb()
+    let blacklist = await getBlacklistedAddresses(db)
+    let blockNumber = await getCurrentBlockNumber()
+    let tokenTransferEvents = await getAllTokenTransferEvents(blockNumber)
+    let { hodlers, unfaithful } = await processEvents(tokenTransferEvents, blacklist)
+    let newLongHodlers = await processHodlers(hodlers, blockNumber, blacklist, db)
+    await processUnfaithful(unfaithful, db)
+    await notifyNewLongHolders(newLongHodlers, db)
+  } catch (error) {
+    throw new Error(error)
+  }
   process.exit(1)
 }
 
@@ -110,12 +115,12 @@ async function processEvents (events, blacklist) {
         timestamp = await getBlockTimestamp(event.blockNumber)
         receivers[sendingAddress].timestampOverThreshold = timestamp
       } else {
-        kickedOut[sendingAddress] = true
+        kickedOut[sendingAddress] = timestamp
         delete receivers[sendingAddress]
       }
     }
     if (blacklist.indexOf(receivingAddress) !== -1) {
-      kickedOut[receivingAddress] = true
+      kickedOut[receivingAddress] = timestamp
       continue
     }
     if (!receivers[receivingAddress]) {
@@ -193,13 +198,39 @@ async function processUnfaithful (unfaithful, db) {
   // if we are, delete us from the club
   return new Promise(async (resolve) => {
     let unfaithfulAddresses = Object.keys(unfaithful)
-    try {
-      await db.collection(LONG_HODLER_TABLE).deleteMany({ ethAddress: { $in: unfaithfulAddresses } })
-      await db.collection(HODLER_TABLE).deleteMany({ ethAddress: { $in: unfaithfulAddresses } })
-    } catch (e) {
-      throw new Error(e)
+    await db.collection(HODLER_TABLE).deleteMany({ ethAddress: { $in: unfaithfulAddresses } })
+    for (let unfaithfulAddress of unfaithfulAddresses) {
+      try {
+        await processFallen(unfaithfulAddress, unfaithful[unfaithfulAddress])
+      } catch (e) {
+        throw new Error(e)
+      }
     }
     resolve()
+  })
+}
+
+/**
+ *  Checks whether the user was in the LONG_HODLER table and if they were, adds them to the fallen
+ *  table
+ *  @param address {String} Address of the fallen hodler
+ *  @param timeKickedOut {Number} Timestamp that the hodler left the Hodl Club
+ *  @param db {Object} Database connection object
+ *  @return {Promise<Void>} Resolves when database operations are complete
+ */
+async function processFallen (address, timeKickedOut, db) {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let fallen = await db.collection(LONG_HODLER_TABLE).findOne({ ethAddress: address })
+      if (!fallen) return resolve()
+      await db.collection(LONG_HODLER_TABLE).deleteOne({ ethAddress: address })
+      // should also get the time that they were kicked out of the HODL club
+      await insertIntoDb(FALLEN_HODLERS_TABLE, { ethAddress: address, hodlerUntil: timeKickedOut })
+      console.log(address, timeKickedOut)
+      resolve()
+    } catch (error) {
+      reject(error)
+    }
   })
 }
 

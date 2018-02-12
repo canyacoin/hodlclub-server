@@ -6,5 +6,6 @@ module.exports = {
   applicationTable: 'hodlerApplications',
   hodlerTable: 'hodlers',
   longHodlerTable: 'longHodlers',
-  blacklistTable: 'blacklistedAddresses'
+  blacklistTable: 'blacklistedAddresses',
+  fallenHodlersTable: 'fallenHodlers'
 }
