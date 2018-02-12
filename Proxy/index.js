@@ -35,10 +35,11 @@ RequestProxy.start = (ports) => {
     const httpServer = http.createServer((req, res) => {
       res.writeHead(302, {
         'Location': 'https://hodl.canya.com:' + ports.proxy
-      });
-      res.end();
+      })
+      res.end()
     })
-    server.listen(ports.httpProxy)
+
+    httpServer.listen(ports.httpProxy)
     resolve()
   })
 }
