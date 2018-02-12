@@ -62,8 +62,7 @@ AdminApiServer.bindRoutes = () => {
   app.post('/exportMembers', AdminApi.exportAllMembers)
   app.post('/exportApplications', AdminApi.exportAllApplications)
 
-  // @todo use this for the live version
-  // app.use('/', express.static(path.resolve('./admin/build')))
+  app.use('/', express.static(path.resolve('./admin/build')))
 }
 
 module.exports = AdminApiServer
