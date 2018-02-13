@@ -6,7 +6,7 @@ const path = require('path')
 const Log = require('../services/Logger')
 const HodlerApi = require('./HodlerApi')
 
-const STATIC_PATH = path.resolve('./Site/build/static')
+const STATIC_PATH = path.resolve('./Site/build')
 
 function Router (db, proxy = '') {
   const options = {
