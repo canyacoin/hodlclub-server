@@ -34,7 +34,7 @@ function Router (db, proxy = '') {
 }
 
 Router.prototype.serveStatic = function (req, res) {
-  let filePath = '.' + req.url
+  let filePath = path.join(STATIC_PATH, '.' + req.url)
   if (filePath === './') filePath = path.join(STATIC_PATH, '/index.html')
   let extname = path.extname(filePath)
   let contentType = 'text/html'
