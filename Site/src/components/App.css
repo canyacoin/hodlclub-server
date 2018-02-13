@@ -98,17 +98,19 @@
   }
   .footerContent {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     justify-content: center;
+    padding: 10px;
     text-align: center;
-    padding-top: 10px;
   }
-  .Footer a:visited, .Footer a:active, .Footer a:link {
-    color: #888;
+
+  }
+  .Footer a:visited, .Footer a:active, .Footer a:link, .Footer a {
+    color: #ccc;
   }
   .formError {
     border: 1px solid red;
-  }
+
 }
 
 @media (min-width: 600px) {
