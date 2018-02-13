@@ -21,7 +21,6 @@ HodlerApi.prototype.bestHodlers = (req, res, data) => {
   if (data.skip && !isNumber(data.skip)) return ResponseHandler.badRequest(res, ['skip should be numeric'])
   if (data.sort !== 'days' && data.sort !== 'balance') return ResponseHandler.badRequest(res, ['sort should be either days or balance'])
   let sort = data.sort === 'days' ? [['becameHodlerAt', 1]] : [['balance', -1]]
-  console.log(sort)
   self.db.collection('longHodlers').createIndex({ becameHodlerAt: 1, balance: 1 })
   self.db.collection('longHodlers')
     .find({}, {
