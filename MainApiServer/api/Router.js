@@ -41,18 +41,16 @@ Router.prototype.serveStatic = function (req, res) {
     filePath = path.join(STATIC_PATH, '.' + req.url)
   }
   let extname = path.extname(filePath)
+  if (!extname) filePath = path.join(STATIC_PATH, '/index.html')
   let contentType = 'text/html'
   if (extname === '.js') contentType = 'text/javascript'
   if (extname === '.css') contentType = 'text/css'
   if (extname === '.json') contentType = 'application/json'
   if (extname === '.png') contentType = 'image/png'
   if (extname === '.jpg') contentType = 'image/jpg'
-  console.log(filePath)
   fs.readFile(filePath, function (error, content) {
-    console.log(content)
     if (error) {
       res.end()
-      console.log(error)
       Log.niceError(error)
     } else {
       res.writeHead(200, { 'Content-Type': contentType })
