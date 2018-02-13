@@ -1,15 +1,18 @@
 const http = require('http')
 const qs = require('querystring')
 const fs = require('fs')
+const path = require('path')
 
 const Log = require('../services/Logger')
 const HodlerApi = require('./HodlerApi')
 
+const STATIC_PATH = path.resolve('./Site/build')
+
 function Router (db, proxy = '') {
-  var options = {
-    // key: fs.readFileSync('/path/to/privkey.pem'),
-    // cert: fs.readFileSync('/path/to/fullchain.pem'),
-    // ca: fs.readFileSync('/path/to/chain.pem')
+  const options = {
+    // key: fs.readFileSync(path.resolve('./SSL/wildcard.canya.com.key')),
+    // cert: fs.readFileSync(path.resolve('./SSL/hodl.canya.com.cer')),
+    // ca: fs.readFileSync(path.resolve('./SSL/wildcard.canya.com.chain'))
   }
 
   this.proxyHost = proxy
@@ -20,6 +23,7 @@ function Router (db, proxy = '') {
 
   this.hodlerApi = new HodlerApi(db)
   this.ROUTES = {
+    '/': this.serveStatic,
     '/bestHodlers': this.hodlerApi.bestHodlers,
     '/bestHodlerOGs': this.hodlerApi.bestHodlerOGs,
     '/tokensAirdropped': this.hodlerApi.tokensAirdropped,
@@ -27,6 +31,32 @@ function Router (db, proxy = '') {
     '/submitHodlApplication': this.hodlerApi.submitApplication
   }
   this.ALLOWED_ENDPOINTS = Object.keys(this.ROUTES)
+}
+
+Router.prototype.serveStatic = function (req, res) {
+  let filePath = '.' + req.url
+  if (filePath === './') {
+    filePath = path.join(STATIC_PATH, '/index.html')
+  } else {
+    filePath = path.join(STATIC_PATH, '.' + req.url)
+  }
+  let extname = path.extname(filePath)
+  if (!extname) filePath = path.join(STATIC_PATH, '/index.html')
+  let contentType = 'text/html'
+  if (extname === '.js') contentType = 'text/javascript'
+  if (extname === '.css') contentType = 'text/css'
+  if (extname === '.json') contentType = 'application/json'
+  if (extname === '.png') contentType = 'image/png'
+  if (extname === '.jpg') contentType = 'image/jpg'
+  fs.readFile(filePath, function (error, content) {
+    if (error) {
+      res.end()
+      Log.niceError(error)
+    } else {
+      res.writeHead(200, { 'Content-Type': contentType })
+      res.end(content, 'utf-8')
+    }
+  })
 }
 
 Router.prototype.listen = function (port) {
@@ -93,7 +123,9 @@ Router.prototype.parsePost = function (req) {
 }
 
 Router.prototype.routeRequest = function (req, res, url, data) {
-  if (this.ALLOWED_ENDPOINTS.indexOf(url) !== -1) {
+  if (!url || url === '') {
+    this.ROUTES['/'](req, res)
+  } else if (this.ALLOWED_ENDPOINTS.indexOf(url) !== -1) {
     Log.info('Routing to: ' + url)
     this.ROUTES[url](req, res, data)
   } else {
