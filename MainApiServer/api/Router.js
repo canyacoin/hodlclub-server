@@ -34,8 +34,12 @@ function Router (db, proxy = '') {
 }
 
 Router.prototype.serveStatic = function (req, res) {
-  let filePath = path.join(STATIC_PATH, '.' + req.url)
-  if (filePath === './') filePath = path.join(STATIC_PATH, '/index.html')
+  let filePath = '.' + req.url
+  if (filePath === './') {
+    filePath = path.join(STATIC_PATH, '/index.html')
+  } else {
+    filePath = path.join(STATIC_PATH, '.' + req.url)
+  }
   let extname = path.extname(filePath)
   let contentType = 'text/html'
   if (extname === '.js') contentType = 'text/javascript'
@@ -43,6 +47,7 @@ Router.prototype.serveStatic = function (req, res) {
   if (extname === '.json') contentType = 'application/json'
   if (extname === '.png') contentType = 'image/png'
   if (extname === '.jpg') contentType = 'image/jpg'
+  console.log(filePath)
   fs.readFile(filePath, function (error, content) {
     console.log(content)
     if (error) {
