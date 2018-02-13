@@ -26,6 +26,9 @@ RequestProxy.start = (ports) => {
     })
 
     server.listen(ports.proxy)
+    server.on('error', (err) => {
+      console.log(err)
+    })
     console.log('Proxy listening on ' + ports.proxy)
 
     const httpServer = http.createServer((req, res) => {
@@ -37,6 +40,9 @@ RequestProxy.start = (ports) => {
 
     // @TODO uncomment for go-live
     // httpServer.listen(ports.httpProxy)
+    httpServer.on('error', (err) => {
+      console.log(err)
+    })
     resolve()
   })
 }
