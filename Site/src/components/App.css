@@ -483,6 +483,10 @@ hr {
   cursor: pointer;
 }
 
+.sweet-alert {
+  font-family: "Montserrat-Light", sans-serif;
+}
+
 /* .footer-img {
   position: absolute;
   width: 100%;
