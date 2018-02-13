@@ -21,7 +21,7 @@ RequestProxy.start = (ports) => {
       if (host.indexOf('hodladmin.') === 0) {
         proxy.web(req, res, { target: 'https://localhost:' + ports.admin })
       } else {
-        proxy.web(req, res, { target: 'http://localhost:' + ports.hodl })
+        proxy.web(req, res, { target: 'https://localhost:' + ports.hodl })
       }
     })
 
