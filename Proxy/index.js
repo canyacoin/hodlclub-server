@@ -18,12 +18,8 @@ RequestProxy.start = (ports) => {
   return new Promise((resolve) => {
     const server = https.createServer(sslOptions, (req, res) => {
       let host = req.headers.host
-      if (host.indexOf('api.') === 0) {
-        proxy.web(req, res, { target: 'https://localhost:' + ports.api })
-      } else if (host.indexOf('admin.') === 0) {
+      if (host.indexOf('hodladmin.') === 0) {
         proxy.web(req, res, { target: 'https://localhost:' + ports.admin })
-      } else if (host.indexOf('adminpanel.') === 0) {
-        proxy.web(req, res, { target: 'http://localhost:' + ports.adminpanel })
       } else {
         proxy.web(req, res, { target: 'http://localhost:' + ports.hodl })
       }
