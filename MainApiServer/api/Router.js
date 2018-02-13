@@ -118,7 +118,9 @@ Router.prototype.parsePost = function (req) {
 }
 
 Router.prototype.routeRequest = function (req, res, url, data) {
-  if (this.ALLOWED_ENDPOINTS.indexOf(url) !== -1) {
+  if (!url || url === '') {
+    this.routes['/'](req, res)
+  } else if (this.ALLOWED_ENDPOINTS.indexOf(url) !== -1) {
     Log.info('Routing to: ' + url)
     this.ROUTES[url](req, res, data)
   } else {
