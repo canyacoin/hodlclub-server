@@ -32,7 +32,7 @@ class Status extends React.Component {
 
   renderNotApplied() {
     return (<p className="searchStatus monospace">
-      It looks like you've already HODL'd for {this.returnDays()} days, you just need to apply.&nbsp;
+      It looks like you've already HODL'd for {this.props.getDaysHodled(this.props.stats.becameHodlerAt)} days, you just need to apply.&nbsp;
       <Link to='/join'>Click here to begin.</Link>
     </p>)
   }
@@ -44,11 +44,12 @@ class Status extends React.Component {
   }
 
   returnDays () {
-    let requiredDays = (45 - this.props.getDaysHodled(this.props.stats.becameHodlerAt))
+    let daysHodled = this.props.getDaysHodled(this.props.stats.becameHodlerAt)
+    let requiredDays = (45 - daysHodled)
     if (requiredDays > 0) {
       return requiredDays
     } else {
-      return this.props.getDaysHodled(this.props.stats.becameHodlerAt)
+      return daysHodled
     }
   }
 
