@@ -523,3 +523,11 @@ border-bottom: solid 2px #eee;
 .sortHeading {
   cursor: pointer;
 }
+
+.footer-img {
+  position: absolute;
+}
+
+.footerContent {
+  position: absolute;
+}
