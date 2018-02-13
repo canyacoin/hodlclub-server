@@ -482,3 +482,7 @@ hr {
 .sortHeading {
   cursor: pointer;
 }
+
+.sweet-alert {
+  font-family: "Montserrat-Light", sans-serif;
+}

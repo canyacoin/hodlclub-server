@@ -201,7 +201,11 @@ class Join extends React.Component {
           show={this.state.showInitialAlert}
           title={'Hey there!'}
           html
-          text={renderToStaticMarkup(<div>If you have already applied for the HODL Club through another platform, you don't need to reapply here.</div>)}
+          text={renderToStaticMarkup(<div>
+            <p>If you have already applied for the HODL Club through another platform, you don't need to reapply here.</p>
+            <br/>
+            <p><strong>If you're unsure, please search for your address on the <a href="members">members page</a></strong></p>
+          </div>)}
           onConfirm={() => this.setState({ showInitialAlert: false })}
         />
         <SweetAlert
