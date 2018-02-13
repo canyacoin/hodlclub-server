@@ -14,13 +14,13 @@ class Nav extends React.Component {
   }
 
   burgerToggle () {
-  		let links = document.getElementsByClassName('mobileLinks')[0]
-  		if (links.classList.contains('hidden')) {
-  			links.classList.remove('hidden')
-  		} else {
-  			links.classList.add('hidden')
-  		}
-  	}
+		let links = document.getElementsByClassName('mobileLinks')[0]
+		if (links.classList.contains('hidden')) {
+			links.classList.remove('hidden')
+		} else {
+			links.classList.add('hidden')
+		}
+	}
 
   desktopNav () {
     return (
@@ -40,32 +40,28 @@ class Nav extends React.Component {
 
   burgerNav () {
     return (
-    <div className="Nav">
-      <div className="logo">
-        <img height="45px" alt="HODL_CLUB" src={require('./assets/HODL-Logo.png')}/>
-        <a onClick={this.burgerToggle}><FontAwesome name='bars'size="2x" /></a>
+      <div className="Nav">
+        <div className="logo">
+          <img height="45px" alt="HODL_CLUB" src={require('./assets/HODL-Logo.png')}/>
+          <a onClick={this.burgerToggle}><FontAwesome name='bars'size="2x" /></a>
+        </div>
+        <div className="mobileLinks hidden">
+          <Link onClick={this.burgerToggle} to='/'>About</Link>
+          <Link onClick={this.burgerToggle}  to='/join'>Join the club</Link>
+          <Link onClick={this.burgerToggle} to='/members'>Members</Link>
+          <Link onClick={this.burgerToggle} to='/og-members'>OG Members</Link>
+        </div>
       </div>
-      <div className="mobileLinks">
-      <Link onClick={this.burgerToggle} to='/'>About</Link>
-      <Link onClick={this.burgerToggle}  to='/join'>Join the club</Link>
-      <Link onClick={this.burgerToggle} to='/members'>Members</Link>
-      <Link onClick={this.burgerToggle} to='/og-members'>OG Members</Link>
-      </div>
-    </div>
-   );
+     )
   }
   render() {
 
     return (
-    <Media query="(max-width: 600px)">
-          {matches =>
-            matches ? (
-              this.burgerNav()
-            ) : (
-              this.desktopNav()
-            )
-          }
-        </Media>);
+      <Media query="(max-width: 600px)">
+        {
+          matches => matches ? (this.burgerNav()) : (this.desktopNav())
+        }
+    </Media>);
   }
 }
 
