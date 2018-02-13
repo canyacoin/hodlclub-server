@@ -44,9 +44,11 @@ Router.prototype.serveStatic = function (req, res) {
   if (extname === '.png') contentType = 'image/png'
   if (extname === '.jpg') contentType = 'image/jpg'
   fs.readFile(filePath, function (error, content) {
+    console.log(content)
     if (error) {
       res.end()
-      throw new Error(error)
+      console.log(error)
+      Log.niceError(error)
     } else {
       res.writeHead(200, { 'Content-Type': contentType })
       res.end(content, 'utf-8')
