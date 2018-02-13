@@ -9,7 +9,7 @@ RequestProxy.start = (ports) => {
   return new Promise((resolve) => {
     const server = http.createServer((req, res) => {
       let host = req.headers.host
-      if (host.indexOf('admin.') === 0) {
+      if (host.indexOf('hodladmin.') === 0) {
         proxy.web(req, res, { target: 'http://localhost:' + ports.admin })
       } else {
         proxy.web(req, res, { target: 'http://localhost:' + ports.hodl })
