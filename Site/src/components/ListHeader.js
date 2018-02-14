@@ -1,8 +1,8 @@
-import React from 'react';
-import './App.css';
+import React from 'react'
+import './App.css'
 
 class ListHeader extends React.Component {
-  render() {
+  render () {
     return (
       <div className="ListItem flexrow">
         <div className="listHeader-Wallet flexcol">
@@ -16,8 +16,8 @@ class ListHeader extends React.Component {
             this.props.sort('balance')
           }}><b>Token Balance</b></span>
         </div>
-    </div>);
+      </div>)
   }
 }
 
-export default ListHeader;
+export default ListHeader

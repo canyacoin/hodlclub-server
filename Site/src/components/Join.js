@@ -1,12 +1,11 @@
-import React from 'react';
-import './App.css';
-import { renderToStaticMarkup } from 'react-dom/server';
+import React from 'react'
+import './App.css'
+import { renderToStaticMarkup } from 'react-dom/server'
 import ApiService from '../services/Api'
 import SweetAlert from 'sweetalert-react'
 
 class Join extends React.Component {
-
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.formSubmit = this.formSubmit.bind(this)
     this.submitApplication = this.submitApplication.bind(this)
@@ -27,10 +26,10 @@ class Join extends React.Component {
     this.successHtml =
       <div>
         <div className="alertText">
-          You're in the Hodl Club!, click this Discord link to join the server and an Admin will give 
+          You're in the Hodl Club!, click this Discord link to join the server and an Admin will give
           you access to the exclusive Hodl Club chat!
         </div>
-        <a href="https://discord.gg/55Guqtk" target="_blank">https://discord.gg/55Guqtk</a>
+        <a href="https://discord.gg/55Guqtk" rel="noopener noreferrer" target="_blank">https://discord.gg/55Guqtk</a>
       </div>
   }
 
@@ -75,7 +74,7 @@ class Join extends React.Component {
 
   validateEmail (input) {
     let invalidFields = this.state.invalidFields
-    let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    let re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
     if (re.test(input.toLowerCase())) return
     invalidFields.push('email')
     this.setState({invalidFields: invalidFields})
@@ -107,7 +106,7 @@ class Join extends React.Component {
     this.setState({invalidFields: invalidFields})
   }
 
-  render() {
+  render () {
     return (
       <div className="Join flexcol">
         <h3>Join the HODL Club</h3>
@@ -135,7 +134,7 @@ class Join extends React.Component {
           <div className="formErrorDescription monospace">Email is invalid</div>
         }
         <h2>Your wallet address:</h2>
-        <input 
+        <input
           className={`formInput monospace ${this.state.invalidFields.indexOf('ethAddress') === -1 ? '' : 'formError'}`}
           placeholder="0xfB6916095ca1df60bB79Ce92cE3Ea74c37c5d359"
           value={this.state.ethAddress}
@@ -220,4 +219,4 @@ class Join extends React.Component {
   }
 }
 
-export default Join;
+export default Join

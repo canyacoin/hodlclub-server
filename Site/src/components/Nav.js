@@ -1,12 +1,11 @@
-import React from 'react';
-import './App.css';
+import React from 'react'
+import './App.css'
 import {Link} from 'react-router-dom'
-import Media from "react-media";
-var FontAwesome = require('react-fontawesome');
+import Media from 'react-media'
+var FontAwesome = require('react-fontawesome')
 
 class Nav extends React.Component {
-
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.desktopNav = this.desktopNav.bind(this)
     this.burgerNav = this.burgerNav.bind(this)
@@ -14,13 +13,13 @@ class Nav extends React.Component {
   }
 
   burgerToggle () {
-		let links = document.getElementsByClassName('mobileLinks')[0]
-		if (links.classList.contains('hidden')) {
-			links.classList.remove('hidden')
-		} else {
-			links.classList.add('hidden')
-		}
-	}
+    let links = document.getElementsByClassName('mobileLinks')[0]
+    if (links.classList.contains('hidden')) {
+      links.classList.remove('hidden')
+    } else {
+      links.classList.add('hidden')
+    }
+  }
 
   desktopNav () {
     return (
@@ -47,22 +46,21 @@ class Nav extends React.Component {
         </div>
         <div className="mobileLinks hidden">
           <Link onClick={this.burgerToggle} to='/'>About</Link>
-          <Link onClick={this.burgerToggle}  to='/join'>Join the club</Link>
+          <Link onClick={this.burgerToggle} to='/join'>Join the club</Link>
           <Link onClick={this.burgerToggle} to='/members'>Members</Link>
           <Link onClick={this.burgerToggle} to='/og-members'>OG Members</Link>
         </div>
       </div>
-     )
+    )
   }
-  render() {
-
+  render () {
     return (
       <Media query="(max-width: 600px)">
         {
           matches => matches ? (this.burgerNav()) : (this.desktopNav())
         }
-    </Media>);
+      </Media>)
   }
 }
 
-export default Nav;
+export default Nav

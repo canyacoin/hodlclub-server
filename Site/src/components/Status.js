@@ -1,10 +1,9 @@
-import React from 'react';
-import './App.css';
+import React from 'react'
+import './App.css'
 import { Link } from 'react-router-dom'
 
 class Status extends React.Component {
-
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.renderNotApplied = this.renderNotApplied.bind(this)
     this.renderApplied = this.renderApplied.bind(this)
@@ -20,24 +19,24 @@ class Status extends React.Component {
   renderDefault () {
     return (
       <p className="searchStatus monospace">
-      Search any address in the field above to see it's standing with the HODL Club. <a target="_blank" href='https://blog.canya.com/2018/01/15/canya-hodl-club-update-2/'>Find out about the minimum requirements to join here.</a> </p>
+      Search any address in the field above to see it's standing with the HODL Club. <a rel="noopener noreferrer" target="_blank" href='https://blog.canya.com/2018/01/15/canya-hodl-club-update-2/'>Find out about the minimum requirements to join here.</a> </p>
     )
   }
 
-  renderApplied() {
+  renderApplied () {
     return (<p className="searchStatus monospace">
       Thanks! You've successfully applied to join. You just need to wait {this.returnDays()} Days until you're in the club.
     </p>)
   }
 
-  renderNotApplied() {
+  renderNotApplied () {
     return (<p className="searchStatus monospace">
       It looks like you've already HODL'd for {this.props.getDaysHodled(this.props.stats.becameHodlerAt)} days, you just need to apply.&nbsp;
       <Link to='/join'>Click here to begin.</Link>
     </p>)
   }
 
-  renderIsOG() {
+  renderIsOG () {
     return (<p className="searchStatus monospace">
       You're an {'\uD83D\uDC51'} OG Hodler {'\uD83D\uDC51'}
     </p>)
@@ -53,19 +52,19 @@ class Status extends React.Component {
     }
   }
 
-  returnMember() {
+  returnMember () {
     return (<p className="searchStatus monospace">Approved HODL Club Member.</p>)
   }
 
-  isHodl45() {
+  isHodl45 () {
     return this.props.getDaysHodled(this.props.stats.becameHodlerAt) > 45
   }
 
-  isOG() {
+  isOG () {
     return this.props.stats.isOG
   }
 
-  giveStatus() {
+  giveStatus () {
     let stats = this.props.stats
     if (Object.keys(stats).length !== 0) {
       if (stats.applied) {
@@ -74,8 +73,7 @@ class Status extends React.Component {
         } else {
           return this.renderApplied()
         }
-      }
-      else {
+      } else {
         if (this.isOG()) {
           return (this.renderIsOG())
         } else {
@@ -87,13 +85,13 @@ class Status extends React.Component {
     }
   }
 
-    render() {
-      return (<div className="Status">
-        <div className="flexrow aligncentre">
-        </div>
-        {this.giveStatus()}
-      </div>)
-    }
+  render () {
+    return (<div className="Status">
+      <div className="flexrow aligncentre">
+      </div>
+      {this.giveStatus()}
+    </div>)
   }
+}
 
-  export default Status;
+export default Status

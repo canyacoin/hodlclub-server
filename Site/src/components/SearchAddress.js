@@ -1,9 +1,8 @@
-import React from 'react';
-import './App.css';
+import React from 'react'
+import './App.css'
 import Status from './Status'
 
 class SearchAddress extends React.Component {
-
   constructor (props) {
     super(props)
     this.state = {
@@ -18,14 +17,14 @@ class SearchAddress extends React.Component {
     this.setState({ stats: stats })
   }
 
-  getDaysHodled(timestamp) {
+  getDaysHodled (timestamp) {
     let now = Math.floor(Date.now() / 1000)
     let diff = now - timestamp
     let days = Math.floor(diff / 86400)
     return days
   }
 
-  render() {
+  render () {
     return (<div className="SearchAddress">
       <div className="searchPanel flexcol">
         <h3>HODL Club Members List</h3>
@@ -56,8 +55,8 @@ class SearchAddress extends React.Component {
           </div>
         }
       </div>
-    </div>);
+    </div>)
   }
 }
 
-export default SearchAddress;
+export default SearchAddress

@@ -1,8 +1,8 @@
 import React from 'react'
 
 class Footer extends React.Component {
-  render() {
-    return(
+  render () {
+    return (
       <div className="Footer">
         <div className="footerContent">
           <a><a href="mailto:hello@flexdapps.com">Built by FLEX Dapps.</a>&nbsp;&nbsp;We build neat, self-contained decentralised applications and smart contracts. hello@flexdapps.com</a>
@@ -13,6 +13,3 @@ class Footer extends React.Component {
 }
 
 export default Footer
-
-
-// <img className="footer-img" src={require("./assets/wave.jpg")}/>

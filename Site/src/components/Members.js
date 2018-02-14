@@ -1,13 +1,12 @@
-import React from 'react';
-import './App.css';
+import React from 'react'
+import './App.css'
 import ListItem from './ListItem'
 import SearchAddress from './SearchAddress'
 import ListHeader from './ListHeader'
 import InfiniteScroll from 'react-infinite-scroller'
-import _ from 'lodash'
 
 class Members extends React.Component {
-  render() {
+  render () {
     return (
       <div className="Members">
         <SearchAddress search={this.props.search} />
@@ -30,4 +29,4 @@ class Members extends React.Component {
   }
 }
 
-export default Members;
+export default Members

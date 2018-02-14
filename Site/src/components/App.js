@@ -1,12 +1,12 @@
-import React from 'react';
-import './App.css';
-import Nav from './Nav';
+import React from 'react'
+import './App.css'
+import Nav from './Nav'
 import Main from './Main'
 import Footer from './Footer'
 import ApiService from '../services/Api'
 
 class App extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.getHodlClubMembers = this.getHodlClubMembers.bind(this)
     this.getHodlOGMembers = this.getHodlOGMembers.bind(this)
@@ -54,7 +54,6 @@ class App extends React.Component {
     this.setState({ hodlOG: oldHodlers.concat(OGhodlers), loadingOG: false })
   }
 
-
   async getStats (address) {
     return new Promise(async (resolve) => {
       resolve(await ApiService.getStats(address))
@@ -71,9 +70,9 @@ class App extends React.Component {
     this.getHodlOGMembers(by)
   }
 
-  render() {
+  render () {
     return (<div className="App">
-      <Nav/>
+      <Nav />
       <hr />
       <Main
         hodlClub={this.state.hodlClub}
@@ -86,8 +85,8 @@ class App extends React.Component {
         setSortOG={this.setSortOG}
       />
       <Footer />
-    </div>);
+    </div>)
   }
 }
 
-export default App;
+export default App

@@ -36,7 +36,7 @@ const ApiService = {
     let query = ApiService.url + route.path + '?'
     for (let paramName in params) {
       query += paramName + '=' + params[paramName]
-      if (Object.keys(params)[Object.keys(params).length -1] !== paramName) query += '&'
+      if (Object.keys(params)[Object.keys(params).length - 1] !== paramName) query += '&'
     }
     return new Promise((resolve) => {
       fetch(query).then(response => response.json()).then(json => resolve(json))
