@@ -2,7 +2,6 @@ import React from 'react'
 import { Switch, Route } from 'react-router-dom'
 import './App.css'
 import Members from './Members'
-import OGMembers from './OGMembers'
 import Join from './Join'
 import Home from './Home'
 

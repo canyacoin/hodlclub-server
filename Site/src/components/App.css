@@ -486,3 +486,8 @@ hr {
 .sweet-alert {
   font-family: "Montserrat-Light", sans-serif;
 }
+
+.Members {
+  min-height: 71vh;
+}
+
