@@ -17,21 +17,12 @@ class Home extends React.Component {
         </div>
       </div>
       <div className="homeFlex">
-<<<<<<< HEAD
-      <div className="homePad">
-      <h3>Joining the CanYa HODL Club is mutually beneficial for a number of reasons:</h3>
-      <p>
-      The CanYa ICO has broken away from the current status quo. Our team is sick of seeing ICO after ICO over-promising and under-delivering. We are also sick of seeing ICO tokens get dumped on exchanges at the earliest time possible so people can make a quick buck. CanYa is here for the long-term and we want our ICO contributors to be with us all the way. So what are the benefits of being in the HODL Club?</p>
-      </div>
-      <img className="image" width="40%" src={require('./assets/CAN_home_02.png')}/>
-=======
         <div className="homePad">
           <h3>Joining the CanYa HODL Club is mutually beneficial for a number of reasons:</h3>
           <p>
             The CanYa ICO has broken away from the current status quo. Our team is sick of seeing ICO after ICO over-promising and under-delivering. We are also sick of seeing ICO tokens get dumped on exchanges at the earliest time possible so people can make a quick buck. CanYa is here for the long-term and we want our ICO contributors to be with us all the way. So what are the benefits of being in the HODL Club?</p>
         </div>
         <img className="image" width="40%" src={require('./assets/CAN_home_02.png')}/>
->>>>>>> 901c7b4de5a3728003ed59b67eff2e304694bd96
       </div>
       <div className="homeFlex">
         <div className="Home">
