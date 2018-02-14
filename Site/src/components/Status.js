@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import {Link} from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 class Status extends React.Component {
 
@@ -20,7 +20,7 @@ class Status extends React.Component {
   renderDefault () {
     return (
       <p className="searchStatus monospace">
-      Search any address in the field above to see it's standing with the HODL Club. <Link to='/about'>Find out about the minimum requirements to join here.</Link> </p>
+      Search any address in the field above to see it's standing with the HODL Club. <a target="_blank" href='https://blog.canya.com/2018/01/15/canya-hodl-club-update-2/'>Find out about the minimum requirements to join here.</a> </p>
     )
   }
 
