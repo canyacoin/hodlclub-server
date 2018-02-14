@@ -1,18 +1,18 @@
-import React from 'react';
-import './App.css';
+import React from 'react'
+import './App.css'
 import ListItem from './ListItem'
 import ListHeader from './ListHeader'
 import InfiniteScroll from 'react-infinite-scroller'
 
 class OGMembers extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = {
       hodlClub: []
     }
   }
 
-  render() {
+  render () {
     return (
       <div className="OGMembers">
         <div className="ListItem flexrow">
@@ -36,4 +36,4 @@ class OGMembers extends React.Component {
   }
 }
 
-export default OGMembers;
+export default OGMembers
