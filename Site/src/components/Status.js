@@ -67,6 +67,7 @@ class Status extends React.Component {
   giveStatus () {
     let stats = this.props.stats
     if (Object.keys(stats).length !== 0) {
+      if (this.isOG()) return (this.renderIsOG())
       if (stats.applied) {
         if (this.isHodl45()) {
           return this.returnMember()
@@ -74,11 +75,7 @@ class Status extends React.Component {
           return this.renderApplied()
         }
       } else {
-        if (this.isOG()) {
-          return (this.renderIsOG())
-        } else {
-          return (this.renderNotApplied())
-        }
+        return (this.renderNotApplied())
       }
     } else {
       return this.renderDefault()
