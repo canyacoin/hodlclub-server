@@ -38,8 +38,7 @@ RequestProxy.start = (ports) => {
       res.end()
     })
 
-    // @TODO uncomment for go-live
-    // httpServer.listen(ports.httpProxy)
+    httpServer.listen(ports.httpProxy)
     httpServer.on('error', (err) => {
       console.log(err)
     })
