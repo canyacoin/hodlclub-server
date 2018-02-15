@@ -26,7 +26,7 @@ class ListItem extends Component {
         </div>
         <a className="data">{this.getDaysHodled(hodler.becameHodlerAt)}</a>
         <a className="data">{hodler.isOG ? 'OG' : 'Non-OG'}</a>
-        <a className="data">{hodler.balance}</a>
+        <a className="data">{Number(hodler.balance) / 1000000}</a>
         <div className="flexrow buttons">
           <button className={"resultButton data " + (hodler.isOG ? 'remove' : 'add')} onClick={() => this.props.toggleOG(hodler.ethAddress)}>
             { !hodler.isOG ? 'Make OG' : 'Remove OG' }
