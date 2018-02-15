@@ -44,6 +44,7 @@ async function addressIsHodler (address) {
 async function makeOG (address, hodler) {
   return new Promise(async (resolve) => {
     let OGStatus = hodler.balance >= 5000000000
+    if (!OGStatus) resolve()
     await db.collection(HODLER_TABLE).updateOne({ ethAddress: address }, { $set: { isOG: OGStatus } })
     await db.collection(LONG_HODLER_TABLE).updateOne({ ethAddress: address }, { $set: {
       ethAddress: hodler.ethAddress,
