@@ -11,9 +11,10 @@ async function main () {
   db = await connectToDb()
 
   for (let address in OGHolders) {
+    address = address.toLowerCase()
     let hodler = await addressIsHodler(address)
     if (hodler) {
-      let emailAddress = OGHolders[address]
+      let emailAddress = OGHolders[address] ? OGHolders[address].toLowerCase() : ''
       await makeOG(address, hodler)
       console.log('Inserting ' + emailAddress + ', ' + address)
       await insertApplication(address, emailAddress)
@@ -42,10 +43,11 @@ async function addressIsHodler (address) {
 
 async function makeOG (address, hodler) {
   return new Promise(async (resolve) => {
-    await db.collection(HODLER_TABLE).updateOne({ ethAddress: address }, { $set: { isOG: true } })
+    let OGStatus = hodler.balance >= 5000000000
+    await db.collection(HODLER_TABLE).updateOne({ ethAddress: address }, { $set: { isOG: OGStatus } })
     await db.collection(LONG_HODLER_TABLE).updateOne({ ethAddress: address }, { $set: {
       ethAddress: hodler.ethAddress,
-      isOG: true,
+      isOG: OGStatus,
       becameHodlerAt: hodler.becameHodlerAt,
       balance: hodler.balance
     } }, { upsert: true })
