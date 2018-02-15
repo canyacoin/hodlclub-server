@@ -166,7 +166,6 @@ async function processHodlers (hodlers, currentBlockNumber, blacklist, db) {
       hodlerObj = {
         ethAddress: hodlerAddress.toLowerCase(),
         balance: hodler.balance.toNumber(),
-        isOG: false,
         becameHodlerAt: hodler.timestampOverThreshold
       }
       if (daysSinceBecameHolder >= OPTIONS.hodlDays) {
