@@ -51,7 +51,8 @@ class App extends React.Component {
     let numberToSkip = sort ? 0 : this.state.hodlOG.length
     let OGhodlers = await ApiService.getHodlerOGs(numberToGet, numberToSkip, sort)
     if (OGhodlers.length !== numberToGet) this.setState({ moreToOGLoad: false, loadingOG: false })
-    this.setState({ hodlOG: oldHodlers.concat(OGhodlers), loadingOG: false })
+    let newHolders = sort ? OGhodlers : oldHodlers.concat(OGhodlers)
+    this.setState({ hodlOG: newHolders, loadingOG: false })
   }
 
   async getStats (address) {

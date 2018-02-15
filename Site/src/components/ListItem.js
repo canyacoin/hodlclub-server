@@ -3,6 +3,7 @@ import './App.css'
 import Blockies from 'react-blockies'
 import threewords from 'threewords-happy'
 
+const janSixthTimestamp = 1515196800
 class ListItem extends React.Component {
   getDaysHodled (timestamp) {
     let now = Math.floor(Date.now() / 1000)
@@ -38,7 +39,7 @@ class ListItem extends React.Component {
       </div>
       <div className="listItemRow">
         <div className="listItemBox listItemDays">
-          {this.getDaysHodled(hodler.becameHodlerAt)}
+          { hodler.isOG ? this.getDaysHodled(janSixthTimestamp) : this.getDaysHodled(hodler.becameHodlerAt)}
         &nbsp;Days
         </div>
         <div className="listItemBox listItemBalance">
