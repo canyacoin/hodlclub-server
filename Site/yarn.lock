@@ -6313,9 +6313,9 @@ text-table@0.2.0, text-table@~0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/text-table/-/text-table-0.2.0.tgz#7f5ee823ae805207c00af2df4a84ec3fcfa570b4"
 
-threewords-happy@^0.0.1:
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/threewords-happy/-/threewords-happy-0.0.1.tgz#973f75d895496a8e1de8377a2def3e016432849d"
+threewords-happy@0.0.3:
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/threewords-happy/-/threewords-happy-0.0.3.tgz#2883d48877f23522889ea8d4167d716c748c0d82"
 
 threewords@^0.0.1:
   version "0.0.1"

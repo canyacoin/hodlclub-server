@@ -41,11 +41,15 @@ HodlerApi.prototype.bestHodlers = (req, res, data) => {
  */
 HodlerApi.prototype.bestHodlerOGs = (req, res, data) => {
   if (!isNumber(data.numberOfHodlers)) return ResponseHandler.badRequest(res, ['numberOfHodlers should be numeric'])
+  if (data.skip && !isNumber(data.skip)) return ResponseHandler.badRequest(res, ['skip should be numeric'])
+  if (data.sort !== 'days' && data.sort !== 'balance') return ResponseHandler.badRequest(res, ['sort should be either days or balance'])
+  let sort = data.sort === 'days' ? [['becameHodlerAt', 1]] : [['balance', -1]]
   self.db.collection('longHodlers').createIndex({ becameHodlerAt: 1 })
   self.db.collection('longHodlers')
     .find({ isOG: true }, {
       limit: Number(sanitise(data.numberOfHodlers)),
-      sort: [['becameHodlerAt', 1]]
+      sort: sort,
+      skip: (Number(sanitise(data.skip)) || 0)
     }).toArray((error, results) => {
       if (error) return ResponseHandler.serverError(res)
       if (results.length === 0) return ResponseHandler.success(res, [])
