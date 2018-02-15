@@ -5,7 +5,6 @@ const express = require('express')
 const app = express()
 const https = require('https')
 const fs = require('fs')
-const cors = require('cors')
 const auth = require('http-auth')
 const AdminApi = require('./api')
 
@@ -50,8 +49,6 @@ AdminApiServer.start = async (port, proxyHost = '') => {
  *  Binds the routes for this API
  */
 AdminApiServer.bindRoutes = () => {
-  app.use(cors())
-  app.options('*', cors())
   app.use(auth.connect(basicAuth))
   app.use(express.json())
   app.use(express.urlencoded())
