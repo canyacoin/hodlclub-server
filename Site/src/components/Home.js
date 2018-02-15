@@ -12,8 +12,7 @@ class Home extends React.Component {
           <p>
             The aim of the CanYa HODL Club is to get as many <b>long term believers of the CanYaCoin Token together in an exclusive group while also rewarding them </b>
             for their loyalty with air-dropped tokens from CanYa and our partners.&nbsp;<Link to="/join">Click here to sign up now.</Link>
-            <br/><br/>
-            The CanYa ICO has broken away from the current status quo. Our team is sick of seeing ICO after ICO over-promising and under-delivering. We are also sick of seeing ICO tokens get dumped on exchanges at the earliest time possible so people can make a quick buck. CanYa is here for the long-term and we want our ICO contributors to be with us all the way. So what are the benefits of being in the HODL Club?</p>
+          </p>
         </div>
       </div>
       <div className="homeFlex">
