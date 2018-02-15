@@ -9,8 +9,8 @@ const RequestProxy = require('./Proxy')
 
 async function main () {
   try {
-    await MainApiServer.start(ports.hodl, fqdns.hodl + ':' + ports.proxy)
-    await AdminApiServer.start(ports.admin, fqdns.admin + ':' + ports.proxy)
+    await MainApiServer.start(ports.hodl, fqdns.hodl)
+    await AdminApiServer.start(ports.admin, fqdns.admin)
     await RequestProxy.start(ports)
   } catch (error) {
     throw new Error(error)
