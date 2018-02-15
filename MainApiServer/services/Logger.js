@@ -12,10 +12,10 @@ const log = Log.createRollingFileLogger(opts)
 log.niceError = function (e) {
   if (e.toString) {
     console.log('In Logger string: ' + e.toString())
-    log.error(e.toString())
+    log.warn(e.toString())
   } else {
     console.log('In Logger: ' + e)
-    log.error(e)
+    log.warn(e)
   }
 }
 
