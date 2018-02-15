@@ -37,8 +37,9 @@ class Join extends React.Component {
     return (
       <div>
         <div className="alertText">
-          There was an error submitting your application.<br/>
-          {failText}
+          <p>There was an error submitting your application.</p><br/>
+          <p>{failText}</p><br/>
+          <p>Check your status on the <a href="/members">members page.</a></p>
         </div>
       </div>
     )
