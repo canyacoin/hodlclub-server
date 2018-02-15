@@ -20,7 +20,7 @@ const basicAuth = auth.basic({
 
 const sslOptions = {
   key: fs.readFileSync(path.resolve('./SSL/wildcard.canya.com.key')),
-  cert: fs.readFileSync(path.resolve('./SSL/wildcard.canya.com.cer')),
+  cert: fs.readFileSync(path.resolve('./SSL/hodl.canya.com.cer')),
   ca: fs.readFileSync(path.resolve('./SSL/wildcard.canya.com.chain'))
 }
 
