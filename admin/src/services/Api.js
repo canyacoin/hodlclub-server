@@ -57,7 +57,7 @@ const ApiService = {
       fetch(ApiService.url + route.path, {
         method: 'POST',
         headers: {
-          'Authorization': 'Basic ' + base64.encode('admin:C4nY4H0d'),
+          'Authorization': 'Basic ' + base64.encode('h0dlclub4dm1n:ivre0hw3Ru7B'),
           'Content-Type': 'application/json'
         },
         body: JSON.stringify(params)
