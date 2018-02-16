@@ -5,8 +5,18 @@ import threewords from 'threewords-happy'
 
 const janSixthTimestamp = 1515196800
 class ListItem extends React.Component {
-  getDaysHodled (timestamp) {
+  getDaysHodled (hodler) {
     let now = Math.floor(Date.now() / 1000)
+    let timestamp
+    if (hodler.isOG) {
+      if (hodler.becameHodlerAt < janSixthTimestamp) {
+        timestamp = hodler.becameHodlerAt
+      } else {
+        timestamp = janSixthTimestamp
+      }
+    } else {
+      timestamp = hodler.becameHodlerAt
+    }
     let diff = now - timestamp
     let days = Math.floor(diff / 86400)
     return days
@@ -39,7 +49,7 @@ class ListItem extends React.Component {
       </div>
       <div className="listItemRow">
         <div className="listItemBox listItemDays">
-          { hodler.isOG ? this.getDaysHodled(janSixthTimestamp) : this.getDaysHodled(hodler.becameHodlerAt)}
+          {this.getDaysHodled(hodler)}
         &nbsp;Days
         </div>
         <div className="listItemBox listItemBalance">
