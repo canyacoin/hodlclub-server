@@ -7,6 +7,7 @@ const https = require('https')
 const fs = require('fs')
 const auth = require('http-auth')
 const AdminApi = require('./api')
+const Log = require('./services/Logger')
 
 const AdminApiServer = {
   proxyHost: ''
@@ -45,6 +46,11 @@ AdminApiServer.start = async (port, proxyHost = '') => {
   })
 }
 
+AdminApiServer.logErrors = (err, req, res, next) => {
+  Log.niceError(err)
+  res.status(500).send({ error: 'Something failed!' })
+}
+
 /**
  *  Binds the routes for this API
  */
@@ -52,6 +58,7 @@ AdminApiServer.bindRoutes = () => {
   app.use(auth.connect(basicAuth))
   app.use(express.json())
   app.use(express.urlencoded())
+  app.use(AdminApiServer.logErrors)
 
   app.all('/*', (req, res, next) => {
     if (AdminApiServer.proxyHost && req.headers.host !== AdminApiServer.proxyHost) {
