@@ -57,7 +57,7 @@ class SearchAddress extends React.Component {
           <span>{this.getTotalMembers()}</span>
         </div>
         <div className="monospace">
-          <span>Total CAN in the {this.props.OG ? 'OG ' : ''}Hodl Club: </span>
+          <span>Total CAN in the {this.props.OG ? 'OG ' : ''}HODL Club: </span>
           <span>{this.getTotalCANInClub()}</span>
         </div>
         <br/>
