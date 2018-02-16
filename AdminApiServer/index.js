@@ -7,7 +7,7 @@ const https = require('https')
 const fs = require('fs')
 const auth = require('http-auth')
 const AdminApi = require('./api')
-const Log = require('./services/Logger')
+const Log = require('./api/services/Logger')
 
 const AdminApiServer = {
   proxyHost: ''
