@@ -9,7 +9,7 @@ class Members extends React.Component {
   render () {
     return (
       <div className="Members">
-        <SearchAddress search={this.props.search} />
+        <SearchAddress search={this.props.search} hodlClub={this.props.hodlClub} OG={this.props.OG} />
         {
           <ListHeader sort={this.props.setSort} />
         }
