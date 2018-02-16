@@ -17,6 +17,7 @@ class Main extends React.Component {
               loadMore={this.props.loadMore}
               moreToLoad={this.props.moreToLoad}
               setSort={this.props.setSort}
+              OG={false}
             />
           )} />
           <Route path='/og-members' render={(props) => (
@@ -25,6 +26,7 @@ class Main extends React.Component {
               loadMore={this.props.loadMoreOG}
               search={this.props.search}
               setSort={this.props.setSortOG}
+              OG={true}
             />
           )} />
           <Route path='/join' component={Join}/>

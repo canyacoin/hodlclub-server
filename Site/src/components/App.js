@@ -35,7 +35,7 @@ class App extends React.Component {
     if (this.state.loading) return
     this.setState({ loading: true })
     let oldHodlers = this.state.hodlClub
-    let numberToGet = 500
+    let numberToGet = 5000
     let numberToSkip = sort ? 0 : this.state.hodlClub.length
     let hodlers = await ApiService.getHodlers(numberToGet, numberToSkip, sort)
     if (hodlers.length !== numberToGet) this.setState({ moreToLoad: false, loading: false })
@@ -47,7 +47,7 @@ class App extends React.Component {
     if (this.state.loadingOG) return
     this.setState({ loadingOG: true })
     let oldHodlers = this.state.hodlOG
-    let numberToGet = 500
+    let numberToGet = 5000
     let numberToSkip = sort ? 0 : this.state.hodlOG.length
     let OGhodlers = await ApiService.getHodlerOGs(numberToGet, numberToSkip, sort)
     if (OGhodlers.length !== numberToGet) this.setState({ moreToOGLoad: false, loadingOG: false })
