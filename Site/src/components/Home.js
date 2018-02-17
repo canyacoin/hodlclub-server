@@ -27,7 +27,7 @@ class Home extends React.Component {
         <div className="Home">
           <h3>Short term:</h3>
           <p>
-            Over the next 6 months CanYa HODL Club members will be air-dropped 2.5m CAN tokens at random times. This is across the two HODL club tiers with 2m tokens going to the OG HODLers (10k CAN entry) and 500k going to tier 2 members (2500 CAN entry). They will also be air-dropped our partners tokens over this time frame. You will also be part of an awesome community via our HODL website and invite only Telegram.</p>
+            Over the next 6 months CanYa HODL Club members will be air-dropped 2.5m CAN tokens at random times. This is across the two HODL club tiers with 2m tokens going to the OG HODLers (5k CAN from ICO or 10k CAN after the ICO) and 500k going to tier 2 members (2500 CAN entry). They will also be air-dropped our partners tokens over this time frame. You will also be part of an awesome community via our HODL website and invite only Telegram.</p>
           <p>We also plan to regularly give away CanYa merchandise such as
             <b> CanYa Ledger Nano S wallets, minted CanYaCoins, clothing and more!</b>&nbsp;These are only available to members of the CanYa HODL Club.</p>
           <img className="image" width="100%" src={require('./assets/canya_featured-images-merch.jpg')}/>
