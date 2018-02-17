@@ -82,7 +82,7 @@ HodlerApi.prototype.getHodlStats = async (req, res, data) => {
     Log.niceError(error)
     return ResponseHandler.serverError(res)
   }
-  if (!hodler) return ResponseHandler.notFound(res)
+  if (!hodler) return ResponseHandler.success(res, [])
   if (applicant) hodler.applied = true
   return ResponseHandler.success(res, hodler)
 }

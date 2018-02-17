@@ -8,14 +8,19 @@ class SearchAddress extends React.Component {
     super(props)
     this.state = {
       address: '',
-      stats: {}
+      stats: {},
+      notFound: false
     }
     this.getStats = this.getStats.bind(this)
   }
 
   async getStats (address) {
     let stats = await this.props.search(address)
-    this.setState({ stats: stats })
+    if (stats.length === 0) {
+      this.setState({ notFound: true, stats: [] })
+    } else {
+      this.setState({ stats: stats, notFound: false })
+    }
   }
 
   getDaysHodled (hodler) {
@@ -74,7 +79,7 @@ class SearchAddress extends React.Component {
             Search
           </button>
         </div>
-        <Status getDaysHodled={this.getDaysHodled} stats={this.state.stats}/>
+        <Status getDaysHodled={this.getDaysHodled} stats={this.state.stats} notFound={this.state.notFound} />
         {
           Object.keys(this.state.stats).length !== 0 &&
           <div className="flexrow aligncentre">
