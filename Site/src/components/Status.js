@@ -42,6 +42,12 @@ class Status extends React.Component {
     </p>)
   }
 
+  renderNotFound () {
+    return (<p className="searchStatus monospace">
+      We couldn't find that address, check back when it has more than 2,500 CAN (if it has just gone over 2,500 check back in a couple of hours).
+    </p>)
+  }
+
   returnDays () {
     let daysHodled = this.props.getDaysHodled(this.props.stats)
     let requiredDays = (45 - daysHodled)
@@ -77,6 +83,8 @@ class Status extends React.Component {
       } else {
         return (this.renderNotApplied())
       }
+    } else if (this.props.notFound) {
+      return this.renderNotFound()
     } else {
       return this.renderDefault()
     }
