@@ -174,7 +174,7 @@ async function processHodlers (hodlers, currentBlockNumber, blacklist, db) {
         becameHodlerAt: hodler.timestampOverThreshold
       }
       if (daysSinceBecameHolder >= OPTIONS.hodlDays && hodler.balance.gte(HodlOGTokenThreshold)) {
-        hodler.isOG = true
+        hodlerObj.isOG = true
       } else if (hodler.isOG === false) {
         hodlerObj.isOG = false
       }
