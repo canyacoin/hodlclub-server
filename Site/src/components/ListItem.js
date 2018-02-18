@@ -53,7 +53,7 @@ class ListItem extends React.Component {
         &nbsp;Days
         </div>
         <div className="listItemBox listItemBalance">
-          {Math.floor(hodler.balance / (Math.pow(10, 6)))}&nbsp;
+          {(Math.floor(hodler.balance / (Math.pow(10, 6)))).toLocaleString()}&nbsp;
         CAN
         </div>
       </div>
