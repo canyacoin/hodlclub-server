@@ -491,6 +491,12 @@ hr {
   min-height: 71vh;
 }
 
+
 .navLogo {
   max-width: 200px;
+}
+
+.sortHeading,
+.listHeader-Wallet {
+  padding: 5px;
 }
