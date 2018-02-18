@@ -61,18 +61,18 @@ class SearchAddress extends React.Component {
         <p>
           {
             this.props.OG ? (
-            <div>
-              <p>Over the next 6 months HODL Club Tier 2 members will be air-dropped 500k CAN tokens at random times.<br/>
-              2500 CAN is required to enter this tier. You must also have held your tokens in your registered address for greater than 45 days to meet our ‘proof of HODL’.<br/>
-              You will also be part of an awesome community via our HODL website and invite only Discord Server.<br/>
-              Note: Pending members will not appear here</p>
-            </div>) :
-            (<div>
-              <p>Over the next 6 months HODL Club OG members will be air-dropped 2m CAN tokens at random times.<br/>
-              To be a HODL OG you needed 5k CAN or more from the crowd sale or 10k CAN or more after the crowd sale. You must also have held your tokens in your registered address for greater than 45 days to meet our ‘proof of HODL’.<br/>
-              You will also be part of an awesome community via our HODL website and invite only Discord Server.<br/>
-              Note: Pending members will not appear here</p>
-            </div>)
+              <div>
+                <p>Over the next 6 months HODL Club Tier 2 members will be air-dropped 500k CAN tokens at random times.<br/>
+                2500 CAN is required to enter this tier. You must also have held your tokens in your registered address for greater than 45 days to meet our ‘proof of HODL’.<br/>
+                You will also be part of an awesome community via our HODL website and invite only Discord Server.<br/>
+                Note: Pending members will not appear here</p>
+              </div>) : (
+              <div>
+                <p>Over the next 6 months HODL Club OG members will be air-dropped 2m CAN tokens at random times.<br/>
+                To be a HODL OG you needed 5k CAN or more from the crowd sale or 10k CAN or more after the crowd sale. You must also have held your tokens in your registered address for greater than 45 days to meet our ‘proof of HODL’.<br/>
+                You will also be part of an awesome community via our HODL website and invite only Discord Server.<br/>
+                Note: Pending members will not appear here</p>
+              </div>)
           }
         </p>
         <div className="monospace">
