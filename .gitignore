@@ -1,4 +1,5 @@
 MainApiServer/log/*
+MainApiServer/cron/getHodlers.js
 AdminApiServer/log/*
 Site/node_modules/*
 Site/src/config/api.js
