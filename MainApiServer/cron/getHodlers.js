@@ -16,9 +16,10 @@
  *
  */
 
-const Email = require('../services/Email')
+const Email = require('/home/tom/hodlclub/MainApiServer/services/Email')
 const MongoClient = require('mongodb').MongoClient
-const dbConfig = require('../config/database')
+const dbConfig = require('/home/tom/hodlclub/MainApiServer/config/database')
+const PARITY_IPC_PATH = '/home/tom/parity/jsonrpc.ipc'
 const HODLER_TABLE = dbConfig.hodlerTable
 const LONG_HODLER_TABLE = dbConfig.longHodlerTable
 const HODL_CLUB_APPLICATION_TABLE = dbConfig.applicationTable
@@ -26,7 +27,7 @@ const BLACKLIST_TABLE = dbConfig.blacklistTable
 
 const BigNumber = require('bignumber.js')
 const Web3 = require('web3')
-const web3 = new Web3(new Web3.providers.IpcProvider(process.env.PARITY_IPC_PATH, require('net')))
+const web3 = new Web3(new Web3.providers.IpcProvider(PARITY_IPC_PATH, require('net')))
 const HodlClubTokenThreshold = new BigNumber(2500000000)
 
 const commandLineArgs = require('command-line-args')
@@ -109,6 +110,7 @@ async function processEvents (events, blacklist) {
       if (receivers[sendingAddress].balance.gte(HodlClubTokenThreshold)) {
         timestamp = await getBlockTimestamp(event.blockNumber)
         receivers[sendingAddress].timestampOverThreshold = timestamp
+        receivers[sendingAddress].isOG = false
       } else {
         kickedOut[sendingAddress] = true
         delete receivers[sendingAddress]
@@ -168,6 +170,7 @@ async function processHodlers (hodlers, currentBlockNumber, blacklist, db) {
         balance: hodler.balance.toNumber(),
         becameHodlerAt: hodler.timestampOverThreshold
       }
+      if (hodler.isOG === false) hodlerObj.isOG = false
       if (daysSinceBecameHolder >= OPTIONS.hodlDays) {
         // now put it in the db
         let newLongHodler = await insertIntoDb(LONG_HODLER_TABLE, hodlerObj, db)
