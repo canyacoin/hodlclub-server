@@ -19,7 +19,7 @@ class Status extends React.Component {
   renderDefault () {
     return (
       <p className="searchStatus monospace">
-      Search any address in the field above to see it's standing with the HODL Club. <a rel="noopener noreferrer" target="_blank" href='https://blog.canya.com/2018/01/15/canya-hodl-club-update-2/'>Find out about the minimum requirements to join here.</a> </p>
+      Search any address in the field above to see its standing with the HODL Club. <a rel="noopener noreferrer" target="_blank" href='https://blog.canya.com/2018/01/15/canya-hodl-club-update-2/'>Find out about the minimum requirements to join here.</a> </p>
     )
   }
 

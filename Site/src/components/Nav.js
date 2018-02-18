@@ -30,8 +30,8 @@ class Nav extends React.Component {
         <div className="flexrow links">
           <Link to='/'>About</Link>
           <Link to='/join'>Join the club</Link>
-          <Link to='/members'>Members</Link>
-          <Link to='/og-members'>OG Members</Link>
+          <Link to='/og-members'>HODL OG</Link>
+          <Link to='/members'>Tier 2</Link>
         </div>
       </div>
     )

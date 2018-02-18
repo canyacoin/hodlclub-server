@@ -55,14 +55,32 @@ class SearchAddress extends React.Component {
   render () {
     return (<div className="SearchAddress">
       <div className="searchPanel flexcol">
-        <h3>HODL Club Members List</h3>
-        <p>Over the next 6 months HODL Club members will be air-dropped 2.5m CAN tokens at random times. This is across the two HODL Club tiers with 2m tokens going to the OG HODLers (5k CAN from ICO or 10k CAN after the ICO) and 500k going to tier 2 members (2500 CAN entry) You will also be part of an awesome community via our HODL website and invite only Discord Server.</p>
+        <h3>
+          {this.props.OG ? 'HODL OG Member List' : 'HODL Club Tier 2 Member List'}
+        </h3>
+        <p>
+          {
+            this.props.OG ? (
+              <div>
+                <p>Over the next 6 months HODL Club Tier 2 members will be air-dropped 500k CAN tokens at random times.<br/>
+                2500 CAN is required to enter this tier. You must also have held your tokens in your registered address for greater than 45 days to meet our ‘proof of HODL’.<br/>
+                You will also be part of an awesome community via our HODL website and invite only Discord Server.<br/>
+                Note: Pending members will not appear here</p>
+              </div>) : (
+              <div>
+                <p>Over the next 6 months HODL Club OG members will be air-dropped 2m CAN tokens at random times.<br/>
+                To be a HODL OG you needed 5k CAN or more from the crowd sale or 10k CAN or more after the crowd sale. You must also have held your tokens in your registered address for greater than 45 days to meet our ‘proof of HODL’.<br/>
+                You will also be part of an awesome community via our HODL website and invite only Discord Server.<br/>
+                Note: Pending members will not appear here</p>
+              </div>)
+          }
+        </p>
         <div className="monospace">
-          <span>Total {this.props.OG ? 'OG ' : ''}Hodlers: </span>
+          <span>Total {this.props.OG ? 'OG ' : 'Tier 2'} Hodlers: </span>
           <span>{this.getTotalMembers()}</span>
         </div>
         <div className="monospace">
-          <span>Total CAN in the {this.props.OG ? 'OG ' : ''}HODL Club: </span>
+          <span>Total CAN in the {this.props.OG ? 'OG ' : 'Tier 2'} HODL Club: </span>
           <span>{this.getTotalCANInClub()}</span>
         </div>
         <br/>
