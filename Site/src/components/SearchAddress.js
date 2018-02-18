@@ -58,11 +58,11 @@ class SearchAddress extends React.Component {
         <h3>HODL Club Members List</h3>
         <p>Over the next 6 months HODL Club members will be air-dropped 2.5m CAN tokens at random times. This is across the two HODL Club tiers with 2m tokens going to the OG HODLers (5k CAN from ICO or 10k CAN after the ICO) and 500k going to tier 2 members (2500 CAN entry) You will also be part of an awesome community via our HODL website and invite only Discord Server.</p>
         <div className="monospace">
-          <span>Total {this.props.OG ? 'OG ' : ''}Hodlers: </span>
+          <span>Total {this.props.OG ? 'OG ' : 'Tier 2'} Hodlers: </span>
           <span>{this.getTotalMembers()}</span>
         </div>
         <div className="monospace">
-          <span>Total CAN in the {this.props.OG ? 'OG ' : ''}HODL Club: </span>
+          <span>Total CAN in the {this.props.OG ? 'OG ' : 'Tier 2'} HODL Club: </span>
           <span>{this.getTotalCANInClub()}</span>
         </div>
         <br/>
