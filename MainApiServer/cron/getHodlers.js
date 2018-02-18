@@ -178,11 +178,21 @@ async function processHodlers (hodlers, currentBlockNumber, blacklist, db) {
         let newLongHodler = await insertIntoDb(LONG_HODLER_TABLE, hodlerObj, db)
         if (newLongHodler) newLongHodlers.push(hodlerObj)
       }
+      if (daysSinceBecameHolder < OPTIONS.hodlDays) {
+        await removeLongHodler(hodlerObj.ethAddress, db)
+      }
       await insertIntoDb(HODLER_TABLE, hodlerObj, db)
       count++
     }
     console.log('Processed ' + count + ' hodlers')
     resolve(newLongHodlers)
+  })
+}
+
+async function removeLongHodler (ethAddress, db) {
+  return new Promise(async (resolve) => {
+    await db.collection(LONG_HODLER_TABLE).deleteOne({ ethAddress: ethAddress, isOG: false })
+    resolve()
   })
 }
 
