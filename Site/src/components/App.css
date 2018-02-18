@@ -491,3 +491,6 @@ hr {
   min-height: 71vh;
 }
 
+.navLogo {
+  max-width: 200px;
+}
