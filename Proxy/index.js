@@ -18,6 +18,7 @@ RequestProxy.start = (ports) => {
   return new Promise((resolve) => {
     const server = https.createServer(sslOptions, (req, res) => {
       let host = req.headers.host
+      console.log(host)
       if (host.indexOf('hodladmin.') === 0) {
         proxy.web(req, res, { target: 'https://localhost:' + ports.admin })
       } else {
@@ -27,6 +28,7 @@ RequestProxy.start = (ports) => {
 
     server.listen(ports.proxy)
     server.on('error', (err) => {
+      console.log('Error in https proxy')
       console.log(err)
     })
     console.log('Proxy listening on ' + ports.proxy)
@@ -40,6 +42,7 @@ RequestProxy.start = (ports) => {
 
     httpServer.listen(ports.httpProxy)
     httpServer.on('error', (err) => {
+      console.log('Error in http proxy')
       console.log(err)
     })
     resolve()
