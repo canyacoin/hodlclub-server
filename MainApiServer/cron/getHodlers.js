@@ -169,7 +169,10 @@ async function processHodlers (hodlers, currentBlockNumber, blacklist, db) {
         balance: hodler.balance.toNumber(),
         becameHodlerAt: hodler.timestampOverThreshold
       }
-      if (hodler.isOG === false) hodlerObj.isOG = false
+      if (hodler.isOG === false) {
+        console.log(hodlerObj.ethAddress)
+        hodlerObj.isOG = false
+      }
       if (daysSinceBecameHolder >= OPTIONS.hodlDays) {
         // now put it in the db
         let newLongHodler = await insertIntoDb(LONG_HODLER_TABLE, hodlerObj, db)
