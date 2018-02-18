@@ -45,6 +45,8 @@ if (OPTIONS.sendEmails) {
   console.log('Emails are set to OFF.')
 }
 
+console.log('Current time: ' + new Date())
+
 const CAN_DEPLOYMENT_BLOCK = 4332959
 const SECONDS_IN_DAY = 86400
 const TOKEN_TRANSFER_EVENT_HASH = '0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef'
@@ -171,7 +173,7 @@ async function processHodlers (hodlers, currentBlockNumber, blacklist, db) {
         becameHodlerAt: hodler.timestampOverThreshold
       }
       if (hodler.isOG === false) hodlerObj.isOG = false
-      if (daysSinceBecameHolder >= OPTIONS.hodlDays) {
+      if ((daysSinceBecameHolder >= OPTIONS.hodlDays) || hodlerObj.isOG === false) {
         // now put it in the db
         let newLongHodler = await insertIntoDb(LONG_HODLER_TABLE, hodlerObj, db)
         if (newLongHodler) newLongHodlers.push(hodlerObj)
