@@ -141,6 +141,20 @@ Api.exportAllMembers = async (req, res, next) => {
 }
 
 /**
+ *  Exports everyone from the longHodlers table as a CSV
+ */
+Api.exportBlacklist = async (req, res, next) => {
+  const cursor = Api.db.collection(blacklistTable).find({})
+  const transform = (doc) => {
+    return {
+      EthAddress: doc.address
+    }
+  }
+  const filename = 'HodlClubBlacklist-Export-' + new Date()
+  CsvService.download(cursor, transform, filename, res)
+}
+
+/**
  *  Exports everyone from the applications table, joined with the hodlers table
  */
 Api.exportAllApplications = async (req, res, next) => {

@@ -49,6 +49,9 @@ class Filter extends Component {
             <button className="filterButton actionButton" onClick={this.props.downloadApplications}>
               <FA name="download" /> Applications
             </button>
+            <button className="filterButton actionButton" onClick={this.props.downloadBlacklist}>
+              <FA name="download" /> Blacklist
+            </button>
           </div>
         </div>
       </div>

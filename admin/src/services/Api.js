@@ -13,7 +13,8 @@ const ApiService = {
     makeOG: { type: 'POST', path: 'makeOG' },
     exportHodlers: { type: 'POST', path: 'exportHodlers', download: true },
     exportMembers: { type: 'POST', path: 'exportMembers', download: true },
-    exportApplications: { type: 'POST', path: 'exportApplications', download: true }
+    exportApplications: { type: 'POST', path: 'exportApplications', download: true },
+    exportBlacklist: { type: 'POST', path: 'exportBlacklist', download: true }
   },
 
   /**
@@ -154,6 +155,18 @@ const ApiService = {
     return new Promise(async (resolve) => {
       let csvFile = await ApiService.call(ApiService.routes.exportApplications)
       saveAs(csvFile, 'HodlClubApplications-Export-' + new Date() + '.csv')
+      resolve()
+    })
+  },
+
+  /**
+   *  Downloads a list of all blacklisted addresses
+   *  @return {Promise<Void>} Resolves when the download is complete/cancelled
+   */
+  exportBlacklist: async () => {
+    return new Promise(async (resolve) => {
+      let csvFile = await ApiService.call(ApiService.routes.exportBlacklist)
+      saveAs(csvFile, 'HodlClubBlacklist-Export-' + new Date() + '.csv')
       resolve()
     })
   }

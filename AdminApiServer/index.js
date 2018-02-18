@@ -73,6 +73,7 @@ AdminApiServer.bindRoutes = () => {
   app.post('/exportHodlers', AdminApi.exportAllHodlers)
   app.post('/exportMembers', AdminApi.exportAllMembers)
   app.post('/exportApplications', AdminApi.exportAllApplications)
+  app.post('/exportBlacklist', AdminApi.exportBlacklist)
 
   app.use('/', express.static(path.resolve('./admin/build')))
 }
