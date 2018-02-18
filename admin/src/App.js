@@ -45,7 +45,11 @@ class App extends Component {
 
   async downloadApplications () {
     await ApiService.exportApplications()
-  } 
+  }
+
+  async downloadBlacklist () {
+    await ApiService.exportBlacklist() 
+  }
 
   render() {
     return (
@@ -56,6 +60,7 @@ class App extends Component {
           downloadAll={this.downloadAll}
           downloadMembers={this.downloadMembers}
           downloadApplications={this.downloadApplications}
+          downloadBlacklist={this.downloadBlacklist}
         />
         <List
           results={this.state.results}
