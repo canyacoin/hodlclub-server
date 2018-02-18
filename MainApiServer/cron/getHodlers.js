@@ -28,6 +28,7 @@ const BigNumber = require('bignumber.js')
 const Web3 = require('web3')
 const web3 = new Web3(new Web3.providers.IpcProvider(process.env.PARITY_IPC_PATH, require('net')))
 const HodlClubTokenThreshold = new BigNumber(2500000000)
+const HodlOGTokenThreshold = new BigNumber(10000000000)
 
 const commandLineArgs = require('command-line-args')
 const optionDefinitions = [
@@ -169,11 +170,12 @@ async function processHodlers (hodlers, currentBlockNumber, blacklist, db) {
         balance: hodler.balance.toNumber(),
         becameHodlerAt: hodler.timestampOverThreshold
       }
-      if (hodler.isOG === false) {
-        console.log(hodlerObj.ethAddress)
+      if (daysSinceBecameHolder >= OPTIONS.hodlDays && hodler.balance.gte(HodlOGTokenThreshold)) {
+        hodler.isOG = true
+      } else if (hodler.isOG === false) {
         hodlerObj.isOG = false
       }
-      if (daysSinceBecameHolder >= OPTIONS.hodlDays) {
+      if ((daysSinceBecameHolder >= OPTIONS.hodlDays) || hodlerObj.isOG === false) {
         // now put it in the db
         let newLongHodler = await insertIntoDb(LONG_HODLER_TABLE, hodlerObj, db)
         if (newLongHodler) newLongHodlers.push(hodlerObj)
