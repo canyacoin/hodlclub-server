@@ -109,6 +109,7 @@ async function processEvents (events, blacklist) {
       if (receivers[sendingAddress].balance.gte(HodlClubTokenThreshold)) {
         timestamp = await getBlockTimestamp(event.blockNumber)
         receivers[sendingAddress].timestampOverThreshold = timestamp
+        receivers[sendingAddress].isOG = false
       } else {
         kickedOut[sendingAddress] = true
         delete receivers[sendingAddress]
@@ -168,6 +169,7 @@ async function processHodlers (hodlers, currentBlockNumber, blacklist, db) {
         balance: hodler.balance.toNumber(),
         becameHodlerAt: hodler.timestampOverThreshold
       }
+      if (hodler.isOG === false) hodlerObj.isOG = false
       if (daysSinceBecameHolder >= OPTIONS.hodlDays) {
         // now put it in the db
         let newLongHodler = await insertIntoDb(LONG_HODLER_TABLE, hodlerObj, db)
