@@ -95,14 +95,17 @@ HodlerApi.prototype.getHodlStats = async (req, res, data) => {
  */
 HodlerApi.prototype.submitApplication = async (req, res, data) => {
   let errors = []
-  if (!isValidEmail(sanitise(data.emailAddress))) errors.push('Invalid email address')
-  if (!isValidEthAddress(sanitise(data.ethAddress))) errors.push('Invalid Ethereum address')
-  if (!isValidDiscordHandle(sanitise(data.discordHandle))) errors.push('Invalid Discord handle')
+  let sanitisedEthAddress = sanitise(data.ethAddress).toLowerCase()
+  let sanitisedEmail = sanitise(data.emailAddress).toLowerCase()
+  let sanitisedDiscord = sanitise(data.discordHandle).toLowerCase()
+  if (!isValidEmail(sanitisedEmail)) errors.push('Invalid email address')
+  if (!isValidEthAddress(sanitisedEthAddress)) errors.push('Invalid Ethereum address')
+  if (!isValidDiscordHandle(sanitisedDiscord)) errors.push('Invalid Discord handle')
   if (errors.length > 0) return ResponseHandler.fail(res, errors)
 
   let isValidHodler
   try {
-    isValidHodler = await HodlApplication.isValid(self.db, sanitise(data.ethAddress))
+    isValidHodler = await HodlApplication.isValid(self.db, sanitisedEthAddress)
   } catch (error) {
     Log.niceError(error)
     return ResponseHandler.serverError(res)
@@ -113,7 +116,7 @@ HodlerApi.prototype.submitApplication = async (req, res, data) => {
   // if it is, chuck out an email to CanYa
   let alreadyApplied
   try {
-    alreadyApplied = await HodlApplication.exists(self.db, { ethAddress: sanitise(data.ethAddress), discordHandle: sanitise(data.discordHandle), emailAddress: sanitise(data.emailAddress) })
+    alreadyApplied = await HodlApplication.exists(self.db, { ethAddress: sanitisedEthAddress, discordHandle: sanitisedDiscord, emailAddress: sanitisedEmail })
   } catch (error) {
     Log.niceError(error)
     return ResponseHandler.serverError(res)
@@ -125,7 +128,7 @@ HodlerApi.prototype.submitApplication = async (req, res, data) => {
 
   let canJoinInstantly
   try {
-    canJoinInstantly = await HodlApplication.canJoinInstantly(self.db, { ethAddress: sanitise(data.ethAddress) })
+    canJoinInstantly = await HodlApplication.canJoinInstantly(self.db, { ethAddress: sanitisedEthAddress })
   } catch (error) {
     Log.niceError(error)
     return ResponseHandler.serverError(res)
@@ -139,9 +142,9 @@ HodlerApi.prototype.submitApplication = async (req, res, data) => {
     await HodlApplication.insert(
       self.db,
       {
-        ethAddress: sanitise(data.ethAddress),
-        discordHandle: sanitise(data.discordHandle),
-        emailAddress: sanitise(data.emailAddress)
+        ethAddress: sanitisedEthAddress,
+        discordHandle: sanitisedDiscord,
+        emailAddress: sanitisedEmail
       }
     )
   } catch (error) {

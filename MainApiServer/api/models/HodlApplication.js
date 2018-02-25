@@ -38,7 +38,7 @@ HodlApplication.isValid = async (db, ethAddress) => {
   return new Promise(async (resolve, reject) => {
     let hodler
     try {
-      hodler = await db.collection(HODLER_TABLE).findOne({ethAddress: sanitise(ethAddress)})
+      hodler = await db.collection(HODLER_TABLE).findOne({ethAddress: sanitise(ethAddress).toLowerCase()})
     } catch (error) {
       return reject(Error(error))
     }
