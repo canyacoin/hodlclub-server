@@ -13,14 +13,14 @@ let HodlApplication = {}
  */
 HodlApplication.exists = async (db, data) => {
   let { ethAddress, discordHandle, emailAddress } = data
-  let queryObj = {}
-  if (ethAddress) queryObj.ethAddress = sanitise(ethAddress)
-  if (discordHandle) queryObj.discordHandle = sanitise(discordHandle)
-  if (emailAddress) queryObj.emailAddress = sanitise(emailAddress)
+  let orConditions = []
+  if (ethAddress) orConditions.push({ ethAddress: sanitise(ethAddress).toLowerCase() })
+  if (discordHandle) orConditions.push({ discordHandle: sanitise(discordHandle).toLowerCase() })
+  if (emailAddress) orConditions.push({ emailAddress: sanitise(emailAddress).toLowerCase() })
 
-  if (Object.keys(queryObj).length === 0) return false
+  if (orConditions.length === 0) return false
   return new Promise((resolve, reject) => {
-    db.collection(APPLICATION_TABLE).find({$or: [queryObj]}).toArray((error, results) => {
+    db.collection(APPLICATION_TABLE).find({$or: orConditions}).toArray((error, results) => {
       if (error) return reject(Error(error))
       if (results.length === 0) return resolve(false)
       return resolve(true)
