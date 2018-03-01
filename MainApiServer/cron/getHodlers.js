@@ -107,9 +107,14 @@ async function processEvents (events, blacklist) {
     let receivingAddress = event.args.to.toLowerCase()
     let canAmount = event.args.value
     if (receivers[sendingAddress]) {
-      // kick this user out of the club
-      // @TODO don't kick them out if they have more than 2.5k CAN, just reset the timer
+      // don't kick them out if they have more than 2.5k CAN, just reset the timer
       receivers[sendingAddress].balance = receivers[sendingAddress].balance.sub(canAmount)
+      if (receivers[sendingAddress].balance.gte(HodlOGTokenThreshold)) {
+        timestamp = await getBlockTimestamp(event.blockNumber)
+        receivers[sendingAddress].timestampOverOGThreshold = timestamp
+        receivers[sendingAddress].isOG = false
+      }
+      // also reset their normal hodl club timer
       if (receivers[sendingAddress].balance.gte(HodlClubTokenThreshold)) {
         timestamp = await getBlockTimestamp(event.blockNumber)
         receivers[sendingAddress].timestampOverThreshold = timestamp
@@ -125,6 +130,10 @@ async function processEvents (events, blacklist) {
     }
     if (!receivers[receivingAddress]) {
       // we don't have this user yet
+      if (canAmount.gte(HodlOGTokenThreshold)) {
+        timestamp = await getBlockTimestamp(event.blockNumber)
+        receiver.timestampOverOGThreshold = timestamp
+      }
       if (canAmount.gte(HodlClubTokenThreshold)) {
         // this person has enough to be in the hodl club at this point!!!
         timestamp = await getBlockTimestamp(event.blockNumber)
@@ -136,6 +145,10 @@ async function processEvents (events, blacklist) {
     } else {
       receiver = receivers[receivingAddress]
       receiver.balance = receiver.balance.add(canAmount)
+      if (!receiver.timestampOverOGThreshold && receiver.balance.gte(HodlOGTokenThreshold)) {
+        timestamp = await getBlockTimestamp(event.blockNumber)
+        receiver.timestampOverOGThreshold = timestamp
+      }
       if (!receiver.timestampOverThreshold && receiver.balance.gte(HodlClubTokenThreshold)) {
         timestamp = await getBlockTimestamp(event.blockNumber)
         receiver.timestampOverThreshold = timestamp
@@ -168,12 +181,19 @@ async function processHodlers (hodlers, currentBlockNumber, blacklist, db) {
       if (!hodler.timestampOverThreshold) continue
       let becameHodler = new BigNumber(hodler.timestampOverThreshold)
       let daysSinceBecameHolder = getDaysBetween(currentBlockTimestamp, becameHodler)
+      let becameOG
+      let daysSinceBecameOG
+      if (hodler.timestampOverOGThreshold) {
+        becameOG = new BigNumber(hodler.timestampOverOGThreshold)
+        daysSinceBecameOG = getDaysBetween(currentBlockTimestamp, becameOG)
+      }
       hodlerObj = {
         ethAddress: hodlerAddress.toLowerCase(),
         balance: hodler.balance.toNumber(),
         becameHodlerAt: hodler.timestampOverThreshold
       }
-      if (daysSinceBecameHolder >= OPTIONS.hodlDays && hodler.balance.gte(HodlOGTokenThreshold)) {
+      if (daysSinceBecameOG) hodlerObj.becameOGAt = becameOG.toNumber()
+      if (daysSinceBecameOG >= OPTIONS.hodlDays) {
         hodlerObj.isOG = true
       } else if (hodler.isOG === false) {
         hodlerObj.isOG = false
