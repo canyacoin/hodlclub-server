@@ -115,8 +115,7 @@ Api.exportAllHodlers = async (req, res, next) => {
       EthAddress: doc.ethAddress,
       CANBalance: doc.balance,
       BecameHodlerAt: doc.becameHodlerAt,
-      OG: doc.isOG,
-      blacklisted: doc.blacklisted ? doc.blacklisted : false
+      OG: doc.isOG
     }
   }
   const filename = 'Hodlers-Export-' + new Date()
