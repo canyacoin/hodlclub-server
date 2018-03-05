@@ -24,7 +24,7 @@ Api.setDb = (db) => {
 Api.search = async (req, res, next) => {
   let { telegram, email, ethAddress } = req.body
   let queryString = telegram + ' ' + email + ' ' + ethAddress
-  Api.db.collection(applicationTable).find({ $text: { $search: sanitise(queryString) } }).toArray((e, results) => {
+  Api.db.collection(applicationTable).find({ $text: { $search: sanitise(queryString).toLowerCase() } }).toArray((e, results) => {
     let applicationResults = results
     let applicationAddresses = []
     if (ethAddress) applicationAddresses.push(ethAddress)
