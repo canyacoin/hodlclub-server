@@ -27,7 +27,7 @@ Api.search = async (req, res, next) => {
   Api.db.collection(applicationTable).find({ $text: { $search: sanitise(queryString).toLowerCase() } }).toArray((e, results) => {
     let applicationResults = results
     let applicationAddresses = []
-    if (ethAddress) applicationAddresses.push(ethAddress)
+    if (ethAddress) applicationAddresses.push(ethAddress.toLowerCase())
     for (let application of applicationResults) {
       applicationAddresses.push(application.ethAddress)
     }
