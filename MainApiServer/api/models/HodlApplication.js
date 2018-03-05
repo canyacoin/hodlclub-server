@@ -15,7 +15,7 @@ HodlApplication.exists = async (db, data) => {
   let { ethAddress, discordHandle, emailAddress } = data
   let orConditions = []
   if (ethAddress) orConditions.push({ ethAddress: sanitise(ethAddress).toLowerCase() })
-  if (discordHandle) orConditions.push({ discordHandle: sanitise(discordHandle).toLowerCase() })
+  if (discordHandle !== '#') orConditions.push({ discordHandle: sanitise(discordHandle).toLowerCase() })
   if (emailAddress) orConditions.push({ emailAddress: sanitise(emailAddress).toLowerCase() })
 
   if (orConditions.length === 0) return false
