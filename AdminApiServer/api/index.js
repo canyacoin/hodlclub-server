@@ -174,9 +174,8 @@ Api.exportAllApplications = async (req, res, next) => {
       CANBalance: doc.balance,
       BecameHodlerAt: doc.becameHodlerAt,
       OG: doc.isOG,
-      blacklisted: doc.blacklisted ? doc.blacklisted : false,
-      telegramHandle: doc.telegramHandle,
-      emailAddress: doc.emailAddress
+      TelegramHandle: doc.telegramHandle,
+      EmailAddress: doc.emailAddress
     }
   }
   const filename = 'HodlClubApplications-Export-' + new Date()
