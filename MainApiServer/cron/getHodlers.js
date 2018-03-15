@@ -181,23 +181,28 @@ async function processHodlers (hodlers, currentBlockNumber, blacklist, db) {
     let newLongHodlers = []
     let hodlerObj = {}
     let count = 0
-    let toDelete = false
+    let toDelete = []
     for (let hodlerAddress in hodlers) {
       if (hodlerAddress === '0xdf7c3d9c8cac69e0ae881d1784ed99eb2ba8d11f') {
         console.log(hodlers[hodlerAddress])
       }
-      if (blacklist.indexOf(hodlerAddress) !== -1) toDelete = true
+      if (blacklist.indexOf(hodlerAddress) !== -1) {
+        toDelete.push(hodlerAddress)
+        continue
+      }
       let hodler = hodlers[hodlerAddress]
-      if (!hodler.timestampOverThreshold) toDelete = true
-      if (hodler.balance.lt(HodlClubTokenThreshold)) toDelete = true
+      if (!hodler.timestampOverThreshold) {
+        toDelete.push(hodlerAddress)
+        continue
+      }
+      if (hodler.balance.lt(HodlClubTokenThreshold)) {
+        toDelete.push(hodlerAddress)
+        continue
+      }
       let becameHodler = new BigNumber(hodler.timestampOverThreshold)
       let daysSinceBecameHolder = getDaysBetween(currentBlockTimestamp, becameHodler)
-      if (daysSinceBecameHolder < OPTIONS.hodlDays) toDelete = true
-      if (toDelete) {
-        let deleteObj = {}
-        deleteObj[hodlerAddress] = 1
-        await processUnfaithful(deleteObj, db)
-        console.log(deleteObj)
+      if (daysSinceBecameHolder < OPTIONS.hodlDays) {
+        toDelete.push(hodlerAddress)
         continue
       }
       let becameOG
@@ -228,6 +233,12 @@ async function processHodlers (hodlers, currentBlockNumber, blacklist, db) {
       await insertIntoDb(HODLER_TABLE, hodlerObj, db)
       count++
     }
+    let deleteObj = {}
+    for (let address of toDelete) {
+      deleteObj[address] = 1
+      continue
+    }
+    await processUnfaithful(deleteObj, db)
     console.log('Processed ' + count + ' hodlers')
     resolve(newLongHodlers)
   })
