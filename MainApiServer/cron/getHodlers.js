@@ -185,7 +185,7 @@ async function processHodlers (hodlers, currentBlockNumber, blacklist, db) {
     let count = 0
     let toDelete = []
     for (let hodlerAddress in hodlers) {
-      if (hodlerAddress === '0xdf7c3d9c8cac69e0ae881d1784ed99eb2ba8d11f') {
+      if (hodlerAddress === '0x75FFE478eF64c4A8297Afd3e7F5a709C4cE90a8d') {
         console.log(hodlers[hodlerAddress])
       }
       if (blacklist.indexOf(hodlerAddress) !== -1) {
@@ -263,7 +263,6 @@ async function processUnfaithful (unfaithful, db) {
   // if we are, delete us from the club
   return new Promise(async (resolve) => {
     let unfaithfulAddresses = Object.keys(unfaithful)
-    console.log(unfaithfulAddresses)
     try {
       await db.collection(LONG_HODLER_TABLE).deleteMany({ ethAddress: { $in: unfaithfulAddresses } })
       await db.collection(HODLER_TABLE).deleteMany({ ethAddress: { $in: unfaithfulAddresses } })
