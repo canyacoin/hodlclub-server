@@ -121,7 +121,9 @@ async function processEvents (events, blacklist) {
         receivers[sendingAddress].isOG = false
       } else {
         kickedOut[sendingAddress] = true
-        delete receivers[sendingAddress]
+        delete receivers[sendingAddress].timestampOverOGThreshold
+        delete receivers[sendingAddress].timestampOverThreshold
+        delete receivers[sendingAddress].isOG
       }
     }
     if (blacklist.indexOf(receivingAddress) !== -1) {
