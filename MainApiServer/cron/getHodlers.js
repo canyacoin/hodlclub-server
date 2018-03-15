@@ -181,14 +181,25 @@ async function processHodlers (hodlers, currentBlockNumber, blacklist, db) {
     let newLongHodlers = []
     let hodlerObj = {}
     let count = 0
+    let toDelete = false
     for (let hodlerAddress in hodlers) {
-      if (blacklist.indexOf(hodlerAddress) !== -1) continue
+      if (hodlerAddress === '0xdf7c3d9c8cac69e0ae881d1784ed99eb2ba8d11f') {
+        console.log(hodlers[hodlerAddress])
+      }
+      if (blacklist.indexOf(hodlerAddress) !== -1) toDelete = true
       let hodler = hodlers[hodlerAddress]
-      if (!hodler.timestampOverThreshold) continue
-      if (hodler.balance.lt(HodlClubTokenThreshold)) continue
+      if (!hodler.timestampOverThreshold) toDelete = true
+      if (hodler.balance.lt(HodlClubTokenThreshold)) toDelete = true
       let becameHodler = new BigNumber(hodler.timestampOverThreshold)
       let daysSinceBecameHolder = getDaysBetween(currentBlockTimestamp, becameHodler)
-      if (daysSinceBecameHolder < OPTIONS.hodlDays) continue
+      if (daysSinceBecameHolder < OPTIONS.hodlDays) toDelete = true
+      if (toDelete) {
+        let deleteObj = {}
+        deleteObj[hodlerAddress] = 1
+        await processUnfaithful(deleteObj)
+        console.log(deleteObj)
+        continue
+      }
       let becameOG
       let daysSinceBecameOG
       if (hodler.timestampOverOGThreshold) {
@@ -240,6 +251,7 @@ async function processUnfaithful (unfaithful, db) {
   // if we are, delete us from the club
   return new Promise(async (resolve) => {
     let unfaithfulAddresses = Object.keys(unfaithful)
+    console.log(unfaithfulAddresses)
     try {
       await db.collection(LONG_HODLER_TABLE).deleteMany({ ethAddress: { $in: unfaithfulAddresses } })
       await db.collection(HODLER_TABLE).deleteMany({ ethAddress: { $in: unfaithfulAddresses } })
