@@ -196,7 +196,7 @@ async function processHodlers (hodlers, currentBlockNumber, blacklist, db) {
       if (toDelete) {
         let deleteObj = {}
         deleteObj[hodlerAddress] = 1
-        await processUnfaithful(deleteObj)
+        await processUnfaithful(deleteObj, db)
         console.log(deleteObj)
         continue
       }
