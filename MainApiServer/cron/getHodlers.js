@@ -121,7 +121,6 @@ async function processEvents (events, blacklist) {
         receivers[sendingAddress].isOG = false
       } else {
         kickedOut[sendingAddress] = true
-        delete receivers[sendingAddress]
       }
     }
     if (blacklist.indexOf(receivingAddress) !== -1) {
