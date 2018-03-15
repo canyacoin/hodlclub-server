@@ -23,7 +23,7 @@ HodlerApi.prototype.bestHodlers = (req, res, data) => {
   let sort = data.sort === 'days' ? [['becameHodlerAt', 1]] : [['balance', -1]]
   self.db.collection('longHodlers').createIndex({ becameHodlerAt: 1, balance: 1 })
   self.db.collection('longHodlers')
-    .find({$or: [ { isOG: null }, { isOG: false } ]}, {
+    .find({$or: [ { isOG: null }, { isOG: false } ], balance: { $gt: 2500000000 }}, {
       limit: Number(sanitise(data.numberOfHodlers)),
       sort: sort,
       skip: (Number(sanitise(data.skip)) || 0)
