@@ -138,10 +138,12 @@ async function processEvents (events, blacklist) {
         // this person has enough to be in the hodl club at this point!!!
         timestamp = await getBlockTimestamp(event.blockNumber)
         receiver.timestampOverThreshold = timestamp
+        delete kickedOut[receivingAddress]
+      } else {
+        kickedOut[receivingAddress] = true
       }
       receiver.balance = canAmount
       receivers[receivingAddress] = receiver
-      delete kickedOut[receivingAddress]
     } else {
       receiver = receivers[receivingAddress]
       receiver.balance = receiver.balance.add(canAmount)
@@ -153,8 +155,12 @@ async function processEvents (events, blacklist) {
         timestamp = await getBlockTimestamp(event.blockNumber)
         receiver.timestampOverThreshold = timestamp
       }
+      if (receiver.balance.gte(HodlClubTokenThreshold)) {
+        delete kickedOut[receivingAddress]
+      } else {
+        kickedOut[receivingAddress] = true
+      }
       receivers[receivingAddress] = receiver
-      delete kickedOut[receivingAddress]
     }
   }
   return { hodlers: receivers, unfaithful: kickedOut }
