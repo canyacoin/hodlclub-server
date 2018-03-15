@@ -120,6 +120,7 @@ async function processEvents (events, blacklist) {
         receivers[sendingAddress].timestampOverThreshold = timestamp
         receivers[sendingAddress].isOG = false
       } else {
+        receivers[sendingAddress].timestampOverThreshold = undefined
         kickedOut[sendingAddress] = true
       }
     }
@@ -178,8 +179,10 @@ async function processHodlers (hodlers, currentBlockNumber, blacklist, db) {
       if (blacklist.indexOf(hodlerAddress) !== -1) continue
       let hodler = hodlers[hodlerAddress]
       if (!hodler.timestampOverThreshold) continue
+      if (hodler.balance.lt(HodlClubTokenThreshold)) continue
       let becameHodler = new BigNumber(hodler.timestampOverThreshold)
       let daysSinceBecameHolder = getDaysBetween(currentBlockTimestamp, becameHodler)
+      if (daysSinceBecameHolder < OPTIONS.hodlDays) continue
       let becameOG
       let daysSinceBecameOG
       if (hodler.timestampOverOGThreshold) {
