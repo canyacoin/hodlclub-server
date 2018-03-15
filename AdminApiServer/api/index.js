@@ -173,7 +173,7 @@ Api.exportAllApplications = async (req, res, next) => {
       CANBalance: doc.balance,
       BecameHodlerAt: doc.becameHodlerAt,
       OG: doc.isOG,
-      TelegramHandle: doc.telegramHandle,
+      DiscordHandle: doc.discordHandle,
       EmailAddress: doc.emailAddress
     }
   }
