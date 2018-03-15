@@ -120,8 +120,8 @@ async function processEvents (events, blacklist) {
         receivers[sendingAddress].timestampOverThreshold = timestamp
         receivers[sendingAddress].isOG = false
       } else {
-        receivers[sendingAddress].timestampOverThreshold = undefined
         kickedOut[sendingAddress] = true
+        delete receivers[sendingAddress]
       }
     }
     if (blacklist.indexOf(receivingAddress) !== -1) {
