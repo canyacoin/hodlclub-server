@@ -204,8 +204,8 @@ async function processHodlers (hodlers, currentBlockNumber, blacklist, db) {
       let becameHodler = new BigNumber(hodler.timestampOverThreshold)
       let daysSinceBecameHolder = getDaysBetween(currentBlockTimestamp, becameHodler)
       if (daysSinceBecameHolder < OPTIONS.hodlDays) {
-        toDelete.push(hodlerAddress)
-        continue
+        // toDelete.push(hodlerAddress)
+        // continue
       }
       let becameOG
       let daysSinceBecameOG
