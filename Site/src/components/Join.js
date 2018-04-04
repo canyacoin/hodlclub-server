@@ -29,7 +29,7 @@ class Join extends React.Component {
           You're in the Hodl Club!, click this Discord link to join the server and an Admin will give
           you access to the exclusive Hodl Club chat!
         </div>
-        <a href="https://discord.gg/55Guqtk" rel="noopener noreferrer" target="_blank">https://discord.gg/55Guqtk</a>
+        <a href="https://discord.gg/3mM8nm2" rel="noopener noreferrer" target="_blank">https://discord.gg/55Guqtk</a>
       </div>
   }
 
