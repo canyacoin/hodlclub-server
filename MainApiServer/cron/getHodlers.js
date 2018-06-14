@@ -16,6 +16,7 @@
  *
  */
 
+const fs = require('fs')
 const Email = require('/home/tom/hodlclub/MainApiServer/services/Email')
 const MongoClient = require('mongodb').MongoClient
 const dbConfig = require('/home/tom/hodlclub/MainApiServer/config/database')
@@ -58,8 +59,13 @@ async function main () {
   let db = await connectToDb()
   let blacklist = await getBlacklistedAddresses(db)
   let blockNumber = await getCurrentBlockNumber()
-  let tokenTransferEvents = await getAllTokenTransferEvents(blockNumber)
-  let { hodlers, unfaithful } = await processEvents(tokenTransferEvents, blacklist)
+  let tte = fs.readFileSync('./cachefile')
+  let cachedTokenTransferEvents = JSON.parse(tte)
+  let lastBlockNumberCached = cachedTokenTransferEvents[cachedTokenTransferEvents.length - 1].blockNumber
+  let newTokenTransferEvents = await getAllTokenTransferEvents(lastBlockNumberCached, blockNumber)
+  let completeTokenTransferList = cachedTokenTransferEvents.concat(newTokenTransferEvents)
+  fs.writeFileSync('./cachefile', JSON.stringify(completeTokenTransferList))
+  let { hodlers, unfaithful } = await processEvents(completeTokenTransferList, blacklist)
   let newLongHodlers = await processHodlers(hodlers, blockNumber, blacklist, db)
   await processUnfaithful(unfaithful, db)
   await notifyNewLongHolders(newLongHodlers, db)
@@ -71,12 +77,12 @@ async function main () {
  *  @param upToBlock {Number} Block number up to which to get events
  *  @return {Promise} Resolves to the array of transfer events
  */
-async function getAllTokenTransferEvents (upToBlock) {
+async function getAllTokenTransferEvents (fromBlock, toBlock) {
   let tokenContract = web3.eth.contract(tokenMeta.abi).at(tokenMeta.address)
   return new Promise((resolve) => {
     tokenContract.allEvents({
-      fromBlock: CAN_DEPLOYMENT_BLOCK,
-      toBlock: upToBlock,
+      fromBlock: fromBlock + 1,
+      toBlock: toBlock,
       topics: [TOKEN_TRANSFER_EVENT_HASH]
     }).get((e, events) => {
       resolve(events)
